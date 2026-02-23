@@ -1,0 +1,310 @@
+---
+title: "Performance Issues"
+description: "Resolving slow responses and performance problems"
+---
+
+# Performance Issues
+
+If X21 is responding slowly or experiencing performance issues, this guide helps identify and resolve the cause.
+
+## Slow AI Responses
+
+### Symptoms
+
+- Long wait for response to start
+- Slow streaming of text
+- Delayed tool execution
+- Timeouts
+
+### Common Causes & Solutions
+
+**1. Token Limit Approaching**
+
+**Cause**: Conversation near 200,000 token limit
+
+**Check**: Look at token counter in status bar
+
+**Solution**:
+```
+📊 Tokens: 185,000 / 200,000 ← Close to limit
+```
+- Start a new conversation
+- X21 will auto-compact, but new chat is faster
+
+---
+
+**2. Large Attachments**
+
+**Cause**: Processing big PDFs or many images
+
+**Check**: File size and page count
+
+**Solution**:
+- Reduce PDF to relevant pages only
+- Compress images
+- Attach fewer files per request
+- Split large documents
+
+---
+
+**3. Complex Operations**
+
+**Cause**: Operation requires extensive thinking
+
+**Check**: Thinking block duration
+
+**Solution**:
+- Break into smaller steps
+- Simplify prompt
+- Provide more specific instructions
+- Use slash commands for common tasks
+
+---
+
+**4. Network Issues**
+
+**Cause**: Slow internet connection to API
+
+**Check**: Network speed, other apps
+
+**Solution**:
+- Check internet connection
+- Close bandwidth-heavy applications
+- Wait for better connectivity
+- Try smaller requests
+
+## When to Start New Conversation
+
+### Signs You Should Start Fresh
+
+1. **Token usage high** (over 150,000 tokens)
+2. **Responses getting slower** over time
+3. **Unrelated to previous conversation**
+4. **Context no longer relevant**
+5. **Performance degraded**
+
+### Benefits of New Conversation
+
+- **Faster responses**: Less history to process
+- **Better focus**: Clear context for AI
+- **Token efficiency**: Start with low usage
+- **Organized history**: Easier to find later
+
+### How to Start New
+
+1. Click **New Chat** button
+2. Confirms if ongoing requests
+3. Previous conversation auto-saved
+4. Fresh start with full token budget
+
+## Conversation Compacting
+
+### What It Does
+
+When conversation reaches 200,000 tokens:
+1. **Summarizes** old messages
+2. **Preserves** recent context
+3. **Reduces** token usage
+4. **Continues** seamlessly
+
+### When It Happens
+
+- Automatic at token limit
+- No user action required
+- Brief pause during compacting
+- Notice appears in conversation
+
+### Impact
+
+**Benefits**:
+- Continue same conversation
+- Maintain context
+- No data loss
+
+**Trade-offs**:
+- Old details summarized
+- Some nuance may be lost
+- Still slower than new conversation
+
+**Recommendation**: Start new conversation instead of relying on compacting for better performance.
+
+## Tool Execution Speed
+
+### Slow Tool Execution
+
+**Causes**:
+- Large data ranges
+- Many concurrent tools
+- Complex VBA operations
+- Excel busy with other tasks
+
+**Solutions**:
+1. **Batch operations** more efficiently
+2. **Smaller ranges** per operation
+3. **Sequential execution** rather than parallel
+4. **Close other Excel workbooks**
+5. **Disable Excel add-ins** temporarily
+
+### Tool Optimization
+
+**Efficient patterns**:
+```
+✓ Single write_values with 2D array
+✗ Multiple write_values for individual cells
+```
+
+```
+✓ Batch formatting operations
+✗ Format one cell at a time
+```
+
+```
+✓ Use drag_formula for patterns
+✗ Write each formula individually
+```
+
+## Workbook Performance
+
+### Large Workbooks
+
+**Impact**: Slower Excel operations
+
+**Solutions**:
+- Work on smaller worksheets
+- Clear unused data/formatting
+- Disable automatic calculations temporarily
+- Close other workbooks
+- Archive old data
+
+### External References
+
+**Impact**: Slower when referencing other workbooks
+
+**Solutions**:
+- Break external links if not needed
+- Copy data into current workbook
+- Close source workbooks
+
+## System Performance
+
+### Resource Usage
+
+**Check**:
+- Task Manager (Windows)
+- Activity Monitor (Mac)
+- Look for high CPU/memory usage
+
+**Optimize**:
+- Close unused applications
+- Restart Excel if memory high
+- Restart Deno server
+- Reboot computer if needed
+
+### Disk Space
+
+**Impact**: Low disk space slows everything
+
+**Check**: Available disk space
+
+**Solution**:
+- Ensure 5+ GB free space
+- Clear temp files
+- Archive old log files
+- Clean up downloads
+
+## Network Performance
+
+### Checking Connection
+
+**Test**:
+1. Visit [Anthropic status](https://status.anthropic.com)
+2. Check general internet speed
+3. Test other online services
+
+**If slow**:
+- Wait for better connectivity
+- Work offline where possible
+- Schedule large operations for better network times
+
+### Port Issues
+
+**Check ports**:
+- Port 8000: Deno server
+- Port 8080: VSTO add-in
+- Ensure not blocked by firewall
+
+## Monitoring Performance
+
+### Token Usage
+
+Watch the token counter:
+```
+📊 Tokens: X / 200,000
+```
+
+**Guidelines**:
+- fewer than 50,000: Excellent
+- 50,000-100,000: Good
+- 100,000-150,000: Consider new chat soon
+- 150,000-200,000: Start new chat for best performance
+- over 200,000: Auto-compacting occurs
+
+### Response Times
+
+**Expected**:
+- First response: 2-5 seconds
+- Streaming: Continuous flow
+- Tool execution: 1-3 seconds per tool
+- Thinking: 1-10 seconds depending on complexity
+
+**Concerning**:
+- First response: >10 seconds
+- Streaming: Stuttering or stops
+- Tool execution: >10 seconds
+- Thinking: >30 seconds
+
+## Best Practices
+
+### Proactive Management
+
+1. **Start new conversations** for new tasks
+2. **Monitor token usage** regularly
+3. **Batch similar operations**
+4. **Optimize attachments** before sending
+5. **Close unused workbooks**
+
+### Efficient Workflows
+
+**Good**:
+```
+1. New conversation
+2. Specific prompt
+3. Batch operations
+4. Review and approve
+5. New conversation for next task
+```
+
+**Avoid**:
+```
+1. Long-running conversation
+2. Mix unrelated tasks
+3. Large attachments
+4. Individual operations
+5. Letting tokens max out
+```
+
+### When Performance Matters
+
+For time-sensitive work:
+- Start fresh conversation
+- Use slash commands
+- Enable auto-approve
+- Prepare data in advance
+- Work during off-peak hours
+
+## Related Topics
+
+- [Rate Limits & Quotas](../reference/rate-limits-quotas) - Understanding limits
+- [Best Practices: Performance Optimization](../best-practices/performance-optimization) - Optimization strategies
+- [Error Types](./error-types) - Timeout and overload errors
+- [Connection Status](./connection-status) - Network troubleshooting

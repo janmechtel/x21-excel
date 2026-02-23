@@ -1,0 +1,41 @@
+# VBA Macro Capabilities
+
+X21 can read, create, and update VBA modules through dedicated tools. These capabilities are labelled experimental because they require elevated trust settings and can modify code behind the workbook.
+
+## Prerequisites
+
+- Enable **Trust access to the VBA project object model** in Excel’s macro security settings.
+- Ensure the workbook is saved as a macro-enabled format (`.xlsm`).
+- If your organisation restricts code execution, coordinate with IT before enabling these tools.
+
+## Available Tools
+
+- **`vba_read`**
+  - Parameters: `workbookName`, `moduleType` (`Module`, `ClassModule`, `Worksheet`, `Workbook`), `moduleName`.
+  - Returns the full code contents and metadata such as module type and line count.
+- **`vba_create`**
+  - Creates a new module with supplied `code` and `moduleName`.
+  - The Excel API backs up existing modules to `%TEMP%` before insertion for recovery.
+- **`vba_update`**
+  - Replaces the contents of an existing module. Accepts `code` and optional `overwrite` flags.
+  - Generates a diff summary to help reviewers understand the change.
+
+## Safe Usage Patterns
+
+- Review generated code thoroughly before approving. Claude typically includes comments explaining what each routine does.
+- Use `vba_read` to snapshot the current module before making changes so you can quickly revert if necessary.
+- Combine VBA updates with natural language explanations in the chat to maintain an audit trail.
+
+## Error Handling
+
+- If trust settings are disabled, the tool returns an error instructing you to enable programmatic access.
+- Invalid module names or syntax errors trigger descriptive exceptions, surfaced in the UI as `tool:error`.
+- The API stores temporary backups when writing modules. If something goes wrong, you can restore from the backup path printed in the logs.
+
+## Governance Recommendations
+
+- Limit macro tools to experienced users or require secondary approval when Claude proposes VBA changes.
+- Maintain version control by exporting modules after approval and storing them in your repository.
+- Consider disabling the VBA tool set in environments where macros are prohibited; see [Tool Selection](../configuration/tool-selection) for configuration guidance.
+
+With the right safeguards, VBA integration unlocks advanced automations—such as custom worksheet functions or event handlers—without leaving the X21 chat experience.

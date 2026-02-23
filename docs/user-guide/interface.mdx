@@ -1,0 +1,38 @@
+# Chat Interface
+
+The X21 task pane is designed to mirror the structure of a modern chat application while exposing spreadsheet-focused controls. This guide walks through each section of the interface and how it maps to backend behaviour.
+
+## Layout Overview
+
+- **Header Bar** – Shows the connection status to the local Deno server, quick settings (auto-approve, streaming toggle), and user profile actions such as sign out.
+- **Prompt Composer** – A rich textarea with Markdown support where you enter instructions. It supports keyboard shortcuts (see [Keyboard Shortcuts](./keyboard-shortcuts)) and drag-and-drop attachments.
+- **Conversation Timeline** – Displays alternating assistant and user messages. Assistant responses stream in real time, and code/JSON snippets are syntax highlighted.
+- **Pending Actions Panel** – Appears when Claude proposes tool calls. Each card lists the tool name, target workbook/worksheet/range, and a summarized diff.
+- **Activity Footer** – Provides quick access to cancel, restart conversation, or submit feedback (thumbs up/down).
+
+## Message Anatomy
+
+- **Assistant Responses** – Streamed via `stream:delta`, updated in place, and collapsed into a final message when `stream:end` arrives. When a tool runs, the assistant references its results using inline callouts.
+- **User Messages** – Include your prompt and any tool results that were generated during the associated request (added by the backend when approvals complete).
+- **System Notices** – Special messages for connection issues, auto-approvals, reverts, or warnings about exceeded token limits.
+
+## Working with Attachments
+
+- Add files by drag-and-drop or the attachment button under the composer.
+- Supported types: PDFs, PNGs, JPEGs (mirrors backend support in `parseDocumentFromRequest`).
+- File metadata (name, MIME type, size, estimated PDF page count) is shown in the request preview, and the backend stores it in Langfuse metadata.
+
+## Managing Tools from the UI
+
+- Each tool card includes actions to **View**, **Approve**, **Reject**, **Revert**, and **Apply** later.
+- Badges indicate status: Pending (gray), Viewing (blue), Approved (green), Reverted (yellow), Error (red).
+- Bulk actions: **Approve All** sends a grouped `tool:permission:response`; **Reject All** is available when multiple tools need review.
+- Auto-approve toggle triggers the UI to immediately respond to `tool:permission` with approved decisions for whitelisted tools (`tools.ts`).
+
+## Error Handling
+
+- Connection drops surface as banners with a “Reconnect” button. Behind the scenes, `webSocketChatService.tryReconnect()` attempts to re-establish the socket.
+- Tool failures include the exception message returned by the backend. Use **View Details** to inspect serialized errors and retry if necessary.
+- If Claude reports no available tools or token limits are reached, the UI links to the relevant troubleshooting entry.
+
+The interface balances conversational flexibility with explicit controls, ensuring analysts always understand what the X21 plans to do before Excel is modified.

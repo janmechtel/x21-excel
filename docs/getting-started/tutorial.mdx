@@ -1,0 +1,224 @@
+---
+title: "Tutorial"
+description: "Step-by-step tutorial to master X21's core features"
+---
+
+# X21 Tutorial
+
+This hands-on tutorial guides you through X21's essential features using practical examples. Follow along with your own workbook to learn how to interact with the AI assistant effectively.
+
+## Prerequisites
+
+- X21 installed and running (see [Installation](getting-started/installation))
+- Microsoft Excel with an active workbook
+- Sample data (create a simple table with headers if needed)
+
+## Part 1: Your First AI Interaction
+
+### Step 1: Open the AI Chat
+
+1. Launch Excel and open a workbook
+2. Click the **X21** ribbon tab
+3. Click **AI Chat** to display the task pane
+4. Verify the connection status shows "Connected"
+
+### Step 2: Select Your Data
+
+1. Select a range of cells in your worksheet (e.g., A1:D10)
+2. Notice the selected range badge appears in the input area
+3. The AI is now aware of your selection
+
+### Step 3: Send a Simple Request
+
+Type this in the input area:
+
+```
+Summarize what data is in my selection
+```
+
+**What happens:**
+- The AI reads your selection
+- It streams a response in real-time
+- You see "thinking blocks" showing the AI's reasoning process
+
+## Part 2: Working with Tools
+
+### Understanding Tool Permissions
+
+When the AI needs to modify your workbook, it requests permission first.
+
+**Try this:**
+
+```
+Make the first row bold and add a light gray background
+```
+
+**You'll see:**
+1. A pending tool card appears
+2. It shows what changes will be made
+3. You can View, Approve, or Reject
+
+### Viewing Changes Before Applying
+
+1. Click **View** on the pending tool
+2. Changes are applied temporarily
+3. Review the results in Excel
+4. Click **Apply** to keep or **Revert** to undo
+
+## Part 3: Using Slash Commands
+
+Slash commands provide quick access to common operations.
+
+### Try the Format Command
+
+1. Select a data range
+2. Type `/format` in the input
+3. The slash command palette appears
+4. Press Enter to execute
+
+**Other useful commands:**
+- `/summarize_selection` - Get insights about your data
+- `/clean_up_data` - Find and fix data quality issues
+- `/generate_chart_plan` - Get chart recommendations
+
+## Part 4: Working with References
+
+### Sheet Mentions
+
+Reference specific sheets using the `@` symbol:
+
+```
+Compare the totals in @Sales with @Forecast
+```
+
+**Features:**
+- Type `@` to open sheet picker
+- Search and select sheets
+- Click sheet pills to navigate
+
+### Range References
+
+Insert your current selection:
+
+```
+Calculate the average of [click insert range button]
+```
+
+The selected range appears as an interactive pill.
+
+## Part 5: Managing Conversations
+
+### Starting Fresh
+
+- Click **New Chat** to start a new conversation
+- Previous conversations are automatically saved
+- Access history with `Ctrl+H`
+
+### Editing and Retrying
+
+1. Hover over any message you sent
+2. Click the **Edit** button
+3. Modify your prompt and resend
+
+### Providing Feedback
+
+Help improve X21:
+- Click thumbs up 👍 for helpful responses
+- Click thumbs down 👎 to provide feedback
+- Add specific comments about issues
+
+## Part 6: Advanced Features
+
+### Attaching Files
+
+Analyze external data:
+
+1. Click the paperclip icon or drag files into the input
+2. Supported: PDFs (up to 100 pages), images (PNG, JPG)
+3. Ask questions about the attached content
+
+**Example:**
+```
+Compare this PDF invoice with the data in my spreadsheet
+```
+
+### Auto-Approve Mode
+
+For trusted operations:
+
+1. Toggle **Auto-approve** in the input area
+2. Read and write tools execute immediately
+3. Use for repetitive tasks
+
+**Warning:** Only enable for well-tested prompts
+
+### Tool Management
+
+Customize which tools are available:
+
+1. Press `Ctrl+Shift+T` to open tools panel
+2. Toggle individual tools on/off
+3. See which tools auto-approve (marked AUTO)
+
+## Part 7: Best Practices
+
+### Effective Prompting
+
+**Be specific:**
+```
+✓ "Make cells A1:A10 bold and increase font size to 12"
+✗ "Make it look better"
+```
+
+**Provide context:**
+```
+✓ "The 'Revenue' column contains sales data. Calculate year-over-year growth."
+✗ "Calculate growth"
+```
+
+**Break down complex tasks:**
+```
+✓ Step 1: "Extract unique customer names"
+✓ Step 2: "Count orders per customer"
+✗ "Do everything with customers and orders"
+```
+
+### Performance Tips
+
+- Start new conversations for different tasks (avoids token limits)
+- Use slash commands for common operations
+- Batch similar operations in one request
+
+### When Things Go Wrong
+
+- If disconnected, click **Reconnect**
+- Cancel streaming responses with the Stop button
+- Check [Troubleshooting](../troubleshooting/common-issues) for common issues
+
+## Next Steps
+
+Now that you've completed the tutorial:
+
+1. Explore [Use Cases & Excel Operations](../use-cases/data-analysis) for specific scenarios
+2. Review [Best Practices](../best-practices/effective-prompting) for expert tips
+3. Check the [Reference](../reference/available-tools) for all available tools
+
+## Practice Exercises
+
+### Exercise 1: Data Cleanup
+1. Create a table with inconsistent formatting
+2. Use `/clean_up_data` to identify issues
+3. Let the AI fix formatting problems
+
+### Exercise 2: Analysis Pipeline
+1. Select a data table
+2. Ask for summary statistics
+3. Request a chart recommendation
+4. Have the AI format the results
+
+### Exercise 3: Multi-Sheet Workflow
+1. Create two sheets with related data
+2. Use `@sheet` mentions to reference both
+3. Ask the AI to compare or combine data
+
+Practice these exercises to build confidence with X21's capabilities.

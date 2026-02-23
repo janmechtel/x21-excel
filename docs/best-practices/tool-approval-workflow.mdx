@@ -1,0 +1,35 @@
+# Tool Approval Workflow
+
+Approvals are where human judgment meets AI automation. Use these guidelines to operate safely and efficiently.
+
+## Establish a Review Checklist
+
+- **Validate the range** – Ensure the proposed tool targets the correct worksheet and cells. Cross-check with the selection or metadata summary.
+- **Assess the impact** – Determine whether the tool is read-only, formatting-only, or destructive (deletes data, overwrites formulas).
+- **Confirm preconditions** – For structural changes, verify that dependent formulas or pivot tables won’t break.
+
+## When to Use Preview
+
+- Always **View** large write operations (>500 cells), structural changes, and VBA updates.
+- Use previews to inspect before/after snapshots returned by the tool (`oldValues` vs `newValues`).
+- After viewing, decide whether to approve or revert. Reverts cleanly restore the prior state.
+
+## Handling Batches
+
+- Approve read operations in bulk to reduce latency, but inspect each write tool individually.
+- Reject or comment on problematic tools to guide Claude’s next attempt. Provide actionable feedback such as “Range should be D2:D50, not C2:C50.”
+- If a batch contains a failed tool, monitor Claude’s follow-up message; it often suggests alternatives automatically.
+
+## Governance Tips
+
+- Assign **secondary approval** for high-risk macros or structural changes in shared workbooks.
+- Use the **conversation transcript** as an audit log. Export results or copy the chat for record keeping after critical operations.
+- Rotate the auto-approve list sparingly. Limit it to tools proved safe in your environment.
+
+## Recovery Playbook
+
+- If an approval goes wrong, click **Revert** immediately. The backend uses stored `inputDataRevert` payloads to undo the change.
+- For complex scenarios, restart the conversation to clear pending tool history and avoid reapplying stale operations.
+- Document lessons learned in your team’s knowledge base so future approvals become easier.
+
+A disciplined approval workflow turns X21 into a reliable assistant rather than an unpredictable script engine.

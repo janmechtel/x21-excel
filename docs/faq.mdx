@@ -1,0 +1,41 @@
+# FAQ
+
+Find quick answers to common questions about X21. For troubleshooting steps, visit the [Troubleshooting](./troubleshooting/common-issues) section.
+
+## General
+
+**Which versions of Excel are supported?**\
+X21 supports Microsoft Excel 2016 or later on Windows (32-bit or 64-bit). Web, Mac, and mobile editions are not currently supported.
+
+**Does X21 work offline?**\
+No, you need to have a network connection to the LLM. However most functionality runs locally. The Deno backend, Excel API, and UI communicate over localhost. Only, Claude integrations require internet access unless you route through an on-prem proxy.
+
+**How is my data used?**\
+Workbook data stays on your machine. Prompts and tool payloads go to Anthropic’s Claude service for processing. Attachment content is sent only when you explicitly attach files. Telemetry (Langfuse/PostHog) records metadata, not raw cell contents, unless you customise it otherwise.
+
+## Technical
+
+**What ports does X21 use?**\
+The Excel API defaults to 8080, the Deno HTTP server to 8000, and the WebSocket server to 8085. Each service scans for the next available port and writes the final value to `%LOCALAPPDATA%\X21`.
+
+**Can I disable specific tools?**\
+Yes. Remove tools via UI also lets you deselect tools per request.
+
+**Does X21 support other languages apart from English for prompts and formula syntax?**\
+Yes. X21 supports multilingual prompts and automatically adapts to Excel's display language for formula syntax. When you change Excel's display language, formulas are generated using the corresponding localized function names. For example, if Excel is set to German, X21 will create formulas using `=WENN` instead of `=IF`. While some edge cases may occur with certain language combinations, these are generally resolvable as the system respects Excel's native localization framework.
+
+**Why do I need to restart Excel after installation?**\
+When ClickOnce updates the add-in or the WebView2 runtime installs, Excel needs a restart to load the new binaries.
+
+## Billing & Licensing
+
+**What does X21 cost?**\
+Contact Kontext21 for licensing details.
+
+**Can I run X21 on multiple machines?**\
+Yes. ClickOnce supports per-user installation. Ensure each machine has appropriate certificates and prerequisites installed.
+
+**Is there an enterprise deployment guide?**\
+Yes—see [Deployment](./deployment/installation-methods) for packaging, signing, and distribution practices. For SCCM or Intune deployments, use the ProductionLocal zip and script the installer.
+
+Still have questions? Reach out to the support team at [support@kontext21.com](mailto:jan@kontext21.com).

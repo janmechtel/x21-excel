@@ -1,0 +1,38 @@
+# Visualization
+
+X21 helps analysts create presentation-ready visuals directly from Excel data without manual chart tweaking. Here are a few scenarios.
+
+## Executive Dashboards
+
+- Prompt: “Create a dashboard on a new sheet summarising revenue, margin, and pipeline by region.”
+- Workflow:
+  1. `add_sheets` creates `Executive Dashboard`.
+  2. `write_values` inserts KPI tables and supporting metrics.
+  3. `create_chart` adds stacked column and line charts for trends.
+  4. `write_format` aligns titles, colours, and number formats for consistency.
+- Claude annotates the dashboard with descriptive text blocks so stakeholders understand the visuals at a glance.
+
+## Before/After Comparisons
+
+- Use attachments for design comps or previous reports. Ask Claude to “Recreate the attached chart style using the current data.”
+- The assistant mirrors colours, chart type, and layout, optionally inserting helper columns for calculated measures.
+- Run `write_format` on chart elements (axis, legend) to match branding requirements.
+
+## Heatmaps & Conditional Formatting
+
+- Request: “Highlight the top quartile of performance using a colour scale.”
+- Tools:
+  - `write_format` applies conditional formatting rules across the selected range.
+  - `read_values` confirms thresholds and ensures no cells were missed.
+- Tip: Provide the exact percentile or thresholds to avoid ambiguity.
+
+## Storytelling with Narrative
+
+- Combine charts with text summaries. Prompt: “Create a waterfall chart explaining the change in EBITDA and narrate the key drivers.”
+- The assistant builds the chart, adds callouts via `write_values` (text boxes or annotations), and summarises the story in the chat.
+
+## Interactive Scenarios
+
+- For what-if analysis, ask Claude to generate buttons or simple macros that toggle between views. It can use `vba_create` to insert lightweight controls while respecting approval workflows.
+
+Leverage X21’s visualization capabilities when you need polished outputs quickly but still want the assurance of human oversight on every change.

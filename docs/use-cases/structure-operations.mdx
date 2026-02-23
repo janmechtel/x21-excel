@@ -1,0 +1,36 @@
+# Structure Operations
+
+Structural tools let X21 reshape worksheets—adding or removing rows, columns, and sheets—while preserving undo/redo information. These tools are especially useful when Claude recommends restructuring data before analysis.
+
+## Row Operations
+
+- **`add_rows`** – Inserts rows at a specified index. Parameters include:
+  - `worksheet`
+  - `startRow` (1-based)
+  - `rowCount`
+  - Optional `shiftExisting` flag to control whether existing data moves downward.
+- **`remove_rows`** – Deletes a contiguous block of rows. The Excel API captures the deleted cells so reverts can restore them if needed.
+
+## Column Operations
+
+- **`add_columns`** – Works similarly to `add_rows` but for columns (using Excel column letters). Useful for inserting calculated fields or staging columns for new data.
+- **`remove_columns`** – Removes one or more columns and records both values and formatting for rollback.
+
+## Sheet Operations
+
+- **`add_sheets`** – Creates new worksheets with optional names. If a name already exists, Excel automatically appends a suffix (captured in the response for clarity).
+- **`remove_sheets`** – Deletes specified worksheets. Safety checks ensure you cannot delete the only remaining sheet in a workbook.
+- Both tools update `requestMetadata.worksheets` so Claude’s view of the workbook remains accurate.
+
+## Suggested Workflows
+
+- When migrating raw data to a reporting layout, use `add_sheets` to create a staging sheet, then `write_values` to populate it.
+- Combine structural operations with batch data writes. For example: insert two columns, write headers and formulas, then format them.
+- Use **View** mode before approving destructive actions like `remove_rows` to preview the result.
+
+## Error Handling
+
+- Attempting to remove non-existent sheets or out-of-range rows/columns throws an error that is surfaced to the UI.
+- Protected worksheets prevent structural changes; the error message indicates that protection must be lifted first.
+
+Because each structural tool records both the requested changes and the prior state, reverting is just as simple as approving—handy when experimenting with different layouts.

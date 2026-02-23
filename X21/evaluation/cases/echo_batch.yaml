@@ -1,0 +1,45 @@
+datasetName: "echo-batch"
+cases:
+  - &echo_base
+    id: "echo_01"
+    inputWorkbook: "../data/batch/Project_X21_WTS_Classification_ECHO.xlsx"
+    prompt: |-
+      You are an expert finance professional and transaction advisor for a German Transaction advisory firm. Help classify all Profit and loss accounts using the
+      - Account number (Column A)
+      - German account name Account DE (column B)
+      - Account and English Translation Account EN (column C)
+      Write a short but carefully thought out explanation the "rationale" in column D add a questionmark if you have low confidence about the assigned category and then assign the actual P&L categories in column E
+      The primary signal is the account number & name. Do all classification according to the German Standard Chart of Account "SKR 03 Kapitalgesellschaft". If you think multiple accounts don't match at all, alert the user.
+      3. Review available categories on Sheet "Kontenkategorisierung" (A1:B12) to understand the allowed categories and their meaning and usual account range.
+      4. Classify only the blank rows in column E for the rows you were given. For every account/row, place it into exactly one of the categories and use the exact spelling only. Always keep to these categories, never invent new ones
+      Only work on the rows provided to you--external batching or Excel reading is handled elsewhere, and each batch contains at most 100 rows.
+      Do not confirm the column with the user unless you can't find them in the sheet.
+      7. Never overwrite non-empty values without asking the user.
+      8. Summarize your decisions but do not repeat all of it. Just a brief summary (< 50 words)
+
+  - <<: *echo_base
+    id: "echo_02"
+
+  - <<: *echo_base
+    id: "echo_03"
+
+  - <<: *echo_base
+    id: "echo_04"
+
+  # - <<: *echo_base
+  #   id: "echo_05"
+
+  # - <<: *echo_base
+  #   id: "echo_06"
+
+  # - <<: *echo_base
+  #   id: "echo_07"
+
+  # - <<: *echo_base
+  #   id: "echo_08"
+
+  # - <<: *echo_base
+  #   id: "echo_09"
+
+  # - <<: *echo_base
+  #   id: "echo_10"

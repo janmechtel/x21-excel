@@ -1,0 +1,47 @@
+# Quick Start Guide
+
+Get productive with X21 in minutes. This walkthrough assumes X21 is installed otherwise [download](https://dl.kontext21.com/x21-setup.exe) now (or see [Installation](./installation) if you still need to set that up).
+
+## 1. Open the X21 Task Pane
+
+- Launch Excel and create or open a workbook.
+- Navigate to the **X21** ribbon and click **AI Chat**. The WebView2 task pane loads the React UI.
+- Confirm the status indicator shows **Connected**. If not, click **Reconnect** to re-establish the WebSocket connection to the local Deno server.
+
+## 2. Sign In
+
+- Use the Supabase-powered login form in the pane. You can authenticate with email + magic link or SSO if configured.
+- After authentication, X21 stores the refreshed session token in WebView local storage. The backend immediately requests your email via `user:email_request` and caches it for Langfuse traces.
+
+## 3. Open the AI Chat Task Pane
+
+- Click X21 AI Chat in the ribbon to open the chat interface.
+
+## 4. Send Your First Prompt
+
+1. Enter a natural language request such as:
+
+```
+Tell me a joke about spreadsheets and add it to cell A1.
+```
+
+2. Click **Send**. The UI:
+
+## 5. Review and Approve Tool Calls
+
+- After thinking about your request and reading spreadsheet context X21 will insert suggest changes
+- Toggle **Viewing** to unstage the changes or re-apply them.
+- Choose **Approve** to commit the change, **Reject** with feedback, or **Revert** to undo a previously applied tool.
+- Enable **Auto-approve** if you trust the tools, or click **Approve All** for batch approvals.
+
+## 6. Inspect Results
+
+- Approved tool executions update the worksheet in place. X21 stores both old and new values (`write_values` returns before/after snapshots) so you can roll back if necessary.
+- Claude continues the conversation after each approval, referencing intermediate results.
+- Provide a **thumbs up/down** and leave optional feedback.
+
+## Next Explorations
+
+- Learn more about available tools in [Excel Operations](../excel-operations/data-operations).
+- Understand how conversations are managed in [AI Capabilities](../ai-capabilities/conversation-management).
+- Review the [Troubleshooting](../troubleshooting/common-issues) guide if you encounter connectivity issues.

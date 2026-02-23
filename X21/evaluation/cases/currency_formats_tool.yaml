@@ -1,0 +1,48 @@
+cases:
+  - id: "currency_usd"
+    name: "Currency USD format"
+    inputWorkbook: "../data/test-cases/CopyPaste-init.xlsx"
+    prompt: "Using write_values_batch, write 1234.56 to Target!G2 with numberFormat '$#,##0.00'."
+    selectedTools:
+      - write_values_batch
+    assertions:
+      - sheet: "Target"
+        cell: "G2"
+        equalsNumber: 1234.56
+      - sheet: "Target"
+        cell: "G2"
+        equalsFormat: "\\$#,##0.00"
+
+  - id: "currency_eur"
+    name: "Currency EUR format"
+    inputWorkbook: "../data/test-cases/CopyPaste-init.xlsx"
+    prompt: "Using write_values_batch, write 9876.5 to Target!G3 with numberFormat #,##0.0\"€\"."
+    selectedTools:
+      - write_values_batch
+    assertions:
+      - sheet: "Target"
+        cell: "G3"
+        equalsNumber: 9876.5
+      - sheet: "Target"
+        cell: "G3"
+        equalsFormat: "#,##0.0\"€\""
+
+  - id: "currency_gbp_jpy"
+    name: "Currency GBP and JPY formats"
+    inputWorkbook: "../data/test-cases/CopyPaste-init.xlsx"
+    prompt: "Using write_values_batch, write 2500 to Target!G4 with numberFormat \"£#,##0\" and write 123456 to Target!G5 with numberFormat #,##0\"¥\"."
+    selectedTools:
+      - write_values_batch
+    assertions:
+      - sheet: "Target"
+        cell: "G4"
+        equalsNumber: 2500
+      - sheet: "Target"
+        cell: "G4"
+        equalsFormat: "\\£#,##0"
+      - sheet: "Target"
+        cell: "G5"
+        equalsNumber: 123456
+      - sheet: "Target"
+        cell: "G5"
+        equalsFormat: "#,##0\"¥\""

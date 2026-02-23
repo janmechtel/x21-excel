@@ -1,0 +1,20 @@
+# Log Files
+
+When issues persist, use the following techniques to diagnose the root cause. The goal is to capture enough evidence (logs, traces, repro steps) for quick resolution.
+
+Log files can be opened from the ribbon by clicking the Version split button and then the log file commands.
+
+![2026 01 20 13 15](/images/2026-01-20_13-15.png)
+
+## Inspect Logs
+
+- **VSTO Logs** – `%LOCALAPPDATA%\X21\Logs\X21.log`. Look for Excel API warnings, HTTP listener errors, or WebView bridge issues.
+- **Deno Logs** – `%LOCALAPPDATA%\X21\X21-deno\Logs\deno-<machine>.log`. Check for router errors, Claude API failures, or tool execution details.
+
+## WebView Diagnostics
+
+- Press `Ctrl` + `Shift` + `I` inside the task pane (if developer tools are enabled) to open DevTools for network inspection and console logging.
+- Inspect WebSocket frames to verify message payloads between the UI and backend.
+- Confirm Supabase auth responses and storage writes using the Application panel.
+
+Collecting detailed diagnostics shortens turnaround time when collaborating with engineering or support teams.

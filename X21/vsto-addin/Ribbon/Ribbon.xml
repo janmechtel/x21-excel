@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="Ribbon_Load">
+  <ribbon>
+    <tabs>
+      <!-- Custom X21 Tab -->
+      <tab id="X21" getLabel="OnGetTabLabel">
+        <group id="AI" label="AI">
+          <button id="CommandToggleTaskPane"
+                  getLabel="OnGetLabel"
+                  onAction="OnAction"
+                  getEnabled="OnGetEnabled"
+                  getImage="OnGetImage"
+                  size="large"
+                  />
+        </group>
+        <group id="Other" label="Other">
+          <button id="CommandTutorial"
+                  getLabel="OnGetLabel"
+                  onAction="OnAction"
+                  getEnabled="OnGetEnabled"
+                  imageMso="TipWizardHelp"
+                  size="normal"
+                  />
+          <button id="CommandHelp"
+                  getLabel="OnGetLabel"
+                  onAction="OnAction"
+                  getEnabled="OnGetEnabled"
+                  imageMso="Help"
+                  size="normal"
+                  />
+          <button id="CommandWhatsNew"
+                  getLabel="OnGetLabel"
+                  onAction="OnAction"
+                  getEnabled="OnGetEnabled"
+                  imageMso="Info"
+                  size="normal"
+                  />
+          <button id="CommandFeedback"
+                  getLabel="OnGetLabel"
+                  onAction="OnAction"
+                  getEnabled="OnGetEnabled"
+                  imageMso="HappyFace"
+                  size="normal"
+                  />
+          <button id="CommandCreateSlashCommandsSheet"
+                  getLabel="OnGetLabel"
+                  onAction="OnAction"
+                  getEnabled="OnGetEnabled"
+                  imageMso="TableInsert"
+                  size="normal"
+                  />
+          <splitButton id="FolderCommands" size="normal">
+                <button id="VersionLabel"
+                        getLabel="OnGetVersionLabel"
+                        onAction="OnAction"
+                        imageMso="V"
+                        />
+            <menu id="FolderCommandsMenu">
+                <button id="CommandOpenExcelLogFolder"
+                        getLabel="OnGetLabel"
+                        onAction="OnAction"
+                        getEnabled="OnGetEnabled"
+                        imageMso="FindPublicFolder"
+                        />
+                <button id="CommandOpenDenoLogFolder"
+                        getLabel="OnGetLabel"
+                        onAction="OnAction"
+                        getEnabled="OnGetEnabled"
+                        imageMso="FindPublicFolder"
+                        />
+                <button id="CommandOpenBinaryFolder"
+                        getLabel="OnGetLabel"
+                        onAction="OnAction"
+                        getEnabled="OnGetEnabled"
+                        imageMso="FindPublicFolder"
+                        />
+                <button id="CommandOpenLocalDataFolder"
+                        getLabel="OnGetLabel"
+                        onAction="OnAction"
+                        getEnabled="OnGetEnabled"
+                        imageMso="FindPublicFolder"
+                        />
+                </menu>
+          </splitButton>
+        </group>
+      </tab>
+
+      <!-- Home Tab Customization -->
+      <tab idMso="TabHome">
+        <group id="X21AIGroup" label="X21" insertAfterMso="GroupClipboard">
+          <button id="CommandToggleTaskPaneHome"
+                  getLabel="OnGetLabel"
+                  onAction="OnAction"
+                  getEnabled="OnGetEnabled"
+                  getImage="OnGetImage"
+                  getVisible="OnGetVisible"
+                  size="large"
+                  />
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

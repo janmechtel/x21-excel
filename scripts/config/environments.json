@@ -1,0 +1,63 @@
+{
+  "Dev": {
+    "AutoIncrementRevision": true,
+    "Configuration": "Release",
+    "ManifestCertificateThumbprint": "7c8b744a56c51d5d99f74865c1bfaa3d6edd9dd3",
+    "PublishDir": ".\\publish\\dev\\",
+    "PublishUrl": ".\\publish\\dev\\",
+    "RequiredBranch": "*",
+    "SkipGitOperations": true,
+    "SkipUpload": true,
+    "SupportUrl": "https://kontext21.com/excel",
+    "UpdateUrl": ".\\publish\\dev\\"
+  },
+  "Internal": {
+    "AutoIncrementRevision": true,
+    "Configuration": "Release",
+    "InstallUrl": "https://dl.kontext21.com/internal/",
+    "ManifestCertificateThumbprint": "2fedae05b4c33f4ce548488017ce7055bf6de41b",
+    "PublishDir": ".\\publish\\internal\\",
+    "PublishUrl": "https://dl.kontext21.com/internal/",
+    "RcloneBucket": "x21/internal",
+    "RequiredBranch": "*",
+    "SupportUrl": "https://kontext21.com/excel",
+    "UpdateUrl": "https://dl.kontext21.com/internal/"
+  },
+  "Production": {
+    "AutoIncrementRevision": false,
+    "Configuration": "Release",
+    "InstallUrl": "https://dl.kontext21.com/",
+    "ManifestCertificateThumbprint": "2fedae05b4c33f4ce548488017ce7055bf6de41b",
+    "PublishDir": ".\\publish\\production\\",
+    "PublishUrl": "https://dl.kontext21.com/",
+    "RcloneBucket": "x21",
+    "RequiredBranch": "production",
+    "SupportUrl": "https://kontext21.com/excel",
+    "UpdateUrl": "https://dl.kontext21.com/"
+  },
+  "ProductionLocal": {
+    "AutoIncrementRevision": false,
+    "ClearBeforeBuild": true,
+    "Configuration": "Release",
+    "CreateZip": true,
+    "ManifestCertificateThumbprint": "2fedae05b4c33f4ce548488017ce7055bf6de41b",
+    "PublishDir": "C:\\x21\\",
+    "PublishUrl": "C:\\x21\\",
+    "RcloneBucket": "x21/local",
+    "RequiredBranch": "*",
+    "SupportUrl": "https://kontext21.com/excel",
+    "UpdateUrl": "C:\\x21\\"
+  },
+  "Staging": {
+    "AutoIncrementRevision": false,
+    "Configuration": "Release",
+    "InstallUrl": "https://dl.kontext21.com/staging/",
+    "ManifestCertificateThumbprint": "2fedae05b4c33f4ce548488017ce7055bf6de41b",
+    "PublishDir": ".\\publish\\staging\\",
+    "PublishUrl": "https://dl.kontext21.com/staging/",
+    "RcloneBucket": "x21/staging",
+    "RequiredBranch": "staging",
+    "SupportUrl": "https://kontext21.com/excel/",
+    "UpdateUrl": "https://dl.kontext21.com/staging/"
+  }
+}

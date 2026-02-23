@@ -1,0 +1,65 @@
+# Installation Methods
+
+X21 supports several deployment methods tailored to development, internal testing, staging, and production environments. All builds originate from the ClickOnce pipeline managed by `Publish.ps1`.
+
+## Standard ClickOnce Deployment
+
+- **Usage** – Recommended for most users. Provides auto-updates, signing, and rollback support.
+
+# Auto-Update System
+
+ClickOnce handles automatic updates for X21, ensuring users always run the latest approved version without manual intervention.
+
+## Update Workflow
+
+1. On Excel startup, ClickOnce checks the deployment manifest hosted at the environment URL.
+2. If a newer version exists, it installs after downloading
+
+## Choosing an Installation Channel
+
+X21 publishes multiple ClickOnce channels through the `Publish.ps1` script:
+
+- **Staging** – Pre-production validation (`https://dl.kontext21.com/staging/x21-staging-setup.exe`). Requires branch `dev`.
+- **Production** – Main customer channel served from `https://dl.kontext21.com/x21-setup.exe`. Requires branch `dev` and a valid signing certificate.
+- **ProductionLocal** – Creates a versioned `x21-setup-vX.Y.Z.W.zip` in `C:\x21\` for air-gapped deployment.
+
+Double-check the `Publish.ps1` environment config before distributing builds.
+
+## Installing via ClickOnce
+
+1. Navigate to the ClickOnce URL for your target channel or run the generated `setup.exe` from the publish directory.
+2. Click **Install**. The bootstrapper installs the VSTO add-in, registers necessary registry keys, and places the backend binaries under `%LOCALAPPDATA%\X21`.
+3. Launch Excel. The first run may take ~10 seconds while WebView2 caches assets and the Deno backend writes its port files.
+4. Look for the **X21** ribbon tab. Open the task pane using the **AI Chat** button.
+
+## ProductionLocal Packages
+
+- **Usage** – Air-gapped or controlled networks where internet distribution isn’t allowed.
+- **Process**
+  1. Close Excel
+  1. Download https://dl.kontext21.com/local/x21-setup-v1.6.0.0.zip
+  1. Extract the .zip directly to C:\\ (This would result in C:\\x21\\ that is required, no other installation location will work)
+  1. Double click C:\\x21\\x21.vsto to run the installer
+
+[Quick Video](https://www.loom.com/share/3f92458a21bd4f02ae1666b5e0e55471?sid=4380eda1-e507-4f7c-bb65-1976a445b38e)\
+For Updates you need to download the newer version and extract it, then restart excel.
+
+## Prerequisites
+
+Usually all those are installed by default on modern Windows systems:
+
+- Windows 10 (build 19045+) or Windows 11 with **Excel 2016 or later** (desktop edition).
+- **.NET Framework 4.8** – required by the VSTO runtime.
+- WebView2 Runtime (usually installed with Microsoft Edge). If missing, download from Microsoft.
+- Required ports available on localhost: `8000+` for the Deno API, `8085+` for WebSockets, and `8080+` for the Excel API bridge. The add-in automatically finds a free port close to these defaults and writes it to `%LOCALAPPDATA%\X21\deno-*`.
+
+## Uninstalling
+
+1. close Excel (optional)
+2. Go to Windows Add / Remove Programs
+
+   ![Image](/images/uninstall_add_remove.png)
+3. Search for "X21"
+4. Click ... \> Uninstall
+
+![Uninstall Uninstall](/images/uninstall_uninstall.png)

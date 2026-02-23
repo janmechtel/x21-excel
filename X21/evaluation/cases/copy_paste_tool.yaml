@@ -1,0 +1,41 @@
+cases:
+  - id: "copy_paste_optimistic"
+    name: "Copy paste optimistic"
+    inputWorkbook: "../data/test-cases/CopyPaste-init.xlsx"
+    prompt: "Use copy_paste to copy Source!A1:B2 into Target!D4:E5."
+    selectedTools:
+      - copy_paste
+    assertions:
+      - sheet: "Target"
+        cell: "D4"
+        equalsText: "S1"
+      - sheet: "Target"
+        cell: "E4"
+        equalsText: "S2"
+      - sheet: "Target"
+        cell: "D5"
+        equalsNumber: 10
+      - sheet: "Target"
+        cell: "E5"
+        equalsNumber: 20
+
+  - id: "copy_paste_revert"
+    name: "Copy paste revert"
+    inputWorkbook: "../data/test-cases/CopyPaste-init.xlsx"
+    prompt: "Use copy_paste to copy Source!A1:B2 into Target!D4:E5."
+    selectedTools:
+      - copy_paste
+    revertAfterTool: true
+    assertions:
+      - sheet: "Target"
+        cell: "D4"
+        equalsText: "T1"
+      - sheet: "Target"
+        cell: "E4"
+        equalsText: "T2"
+      - sheet: "Target"
+        cell: "D5"
+        equalsNumber: 100
+      - sheet: "Target"
+        cell: "E5"
+        equalsNumber: 200

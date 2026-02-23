@@ -1,0 +1,303 @@
+---
+title: "Error Types & Recovery"
+description: "Understanding and resolving X21 errors"
+---
+
+# Error Types & Recovery
+
+X21 provides clear error messages to help you understand and resolve issues. This guide covers common error types and recovery steps.
+
+## API Errors
+
+### Rate Limit Error
+
+**Message**:
+```
+⚠️ Rate limit reached. Please wait 30 seconds.
+```
+
+**Cause**: Too many requests to Claude API in short time
+
+**Recovery**:
+1. Wait the indicated time (usually 30-60 seconds)
+2. Retry your request
+3. If persistent, spread out requests
+
+**Prevention**: Pace your requests, avoid rapid-fire submissions
+
+---
+
+### Request Too Large
+
+**Message**:
+```
+⚠️ Request exceeds size limit. Try removing attachments or starting a new conversation.
+```
+
+**Cause**: Request exceeds API limits (file size, tokens, etc.)
+
+**Recovery**:
+1. Remove or compress attachments
+2. Start a new conversation
+3. Break into smaller requests
+4. Check token usage
+
+**Prevention**: Monitor token counter, optimize attachments
+
+---
+
+### Service Overloaded
+
+**Message**:
+```
+⚠️ Service overloaded. Please try again in a moment.
+```
+
+**Cause**: Anthropic API experiencing high load
+
+**Recovery**:
+1. Wait 1-2 minutes
+2. Retry request
+3. If persistent, check [Anthropic status](https://status.anthropic.com)
+
+**Prevention**: Use during off-peak hours for large operations
+
+---
+
+### Invalid Request Error
+
+**Message**:
+```
+⚠️ Invalid request. Check your input and try again.
+```
+
+**Cause**: Malformed request or unsupported operation
+
+**Recovery**:
+1. Review your prompt for special characters
+2. Check file attachments are supported types
+3. Simplify your request
+4. Try a different approach
+
+**Prevention**: Use supported file types, validate inputs
+
+## Tool Execution Errors
+
+### Range Error
+
+**Message**:
+```
+❌ Error executing write_values
+Range 'Sheet1!A1:A1000000' exceeds worksheet limits
+```
+
+**Cause**: Invalid or out-of-bounds range specification
+
+**Recovery**:
+1. Check range is within Excel limits (1,048,576 rows × 16,384 columns)
+2. Verify sheet name spelling
+3. Use correct range notation (A1:B10)
+
+**Prevention**: Validate ranges before operations
+
+---
+
+### Sheet Not Found
+
+**Message**:
+```
+❌ Error: Sheet 'Sales' does not exist
+```
+
+**Cause**: Referenced sheet doesn't exist or name mismatch
+
+**Recovery**:
+1. Check sheet name spelling (case-sensitive)
+2. Verify sheet hasn't been deleted
+3. Use `@sheet` autocomplete for accuracy
+
+**Prevention**: Use sheet mention autocomplete
+
+---
+
+### Permission Denied
+
+**Message**:
+```
+❌ Permission denied: Operation requires approval
+```
+
+**Cause**: Attempted write operation without approval
+
+**Recovery**:
+1. Review pending tool approvals
+2. Approve the required tool
+3. Retry operation
+
+**Prevention**: Enable auto-approve for trusted operations
+
+---
+
+### VBA Error
+
+**Message**:
+```
+❌ VBA execution failed: Syntax error in generated code
+```
+
+**Cause**: Generated VBA code has errors
+
+**Recovery**:
+1. Review the generated VBA code
+2. Manually fix syntax issues
+3. Request AI to regenerate with corrections
+4. Test in VBA editor first
+
+**Prevention**: Always review VBA before approval, test on copies
+
+## Connection Errors
+
+### Cannot Connect to Server
+
+**Message**:
+```
+⚠️ Cannot connect to Deno server. Check that the backend is running.
+```
+
+**Cause**: Deno backend not running or unreachable
+
+**Recovery**:
+1. Check if Deno process is running
+2. Restart X21 add-in
+3. Verify port 8000 is not blocked
+4. Check firewall settings
+
+**See**: [Connection Status](./connection-status) for detailed troubleshooting
+
+---
+
+### WebSocket Disconnected
+
+**Message**:
+```
+⚠️ Connection lost. Click Reconnect to restore.
+```
+
+**Cause**: Network interruption or server restart
+
+**Recovery**:
+1. Click **Reconnect** button
+2. If fails, restart Excel
+3. Check network connectivity
+4. Verify Deno server is running
+
+**Prevention**: Stable network, keep servers running
+
+---
+
+### Timeout Error
+
+**Message**:
+```
+⚠️ Request timed out. Please try again.
+```
+
+**Cause**: Operation took too long to complete
+
+**Recovery**:
+1. Retry with smaller data set
+2. Check network speed
+3. Simplify operation
+4. Break into smaller requests
+
+**Prevention**: Work with reasonable data sizes
+
+## Data Errors
+
+### Cancelled Request
+
+**Message**:
+```
+ℹ️ Request cancelled by user
+```
+
+**Cause**: You clicked Cancel during streaming
+
+**Recovery**:
+- No action needed
+- Start new request if desired
+- Previous state preserved
+
+**Note**: Cancellation is recorded in analytics
+
+---
+
+### Data Validation Error
+
+**Message**:
+```
+❌ Invalid data format in range A1:A10
+```
+
+**Cause**: Data doesn't match expected format
+
+**Recovery**:
+1. Review data format requirements
+2. Clean data first
+3. Use `/clean_up_data` command
+4. Convert data types as needed
+
+**Prevention**: Validate data before operations
+
+## Recovery Strategies
+
+### General Approach
+
+1. **Read the error message** carefully
+2. **Check obvious causes** (connectivity, permissions, data)
+3. **Try the suggested recovery** steps
+4. **Simplify and retry** if unsuccessful
+5. **Contact support** if persistent
+
+### When to Retry
+
+**Safe to retry immediately**:
+- Connection errors
+- Timeout errors
+- Cancelled requests
+
+**Wait before retry**:
+- Rate limit errors (wait indicated time)
+- Service overloaded (wait 1-2 minutes)
+
+**Don't retry automatically**:
+- Invalid data errors (fix first)
+- Permission errors (approve first)
+- VBA errors (review code first)
+
+### Escalation Path
+
+1. **Self-service**: Use this documentation
+2. **Restart**: Restart Excel/X21
+3. **Logs**: Check log files for details
+4. **Support**: Contact support with error details
+
+## Error Logging
+
+All errors are logged to:
+- Local log files (see [Log Files](./log-files))
+- Analytics (Langfuse, if enabled)
+- Excel error console (dev mode)
+
+**Include when reporting issues**:
+- Exact error message
+- Steps to reproduce
+- Relevant log excerpts
+- Conversation ID (if available)
+
+## Related Topics
+
+- [Connection Status](./connection-status) - Connection troubleshooting
+- [Performance Issues](./performance-issues) - Speed problems
+- [Common Issues](./common-issues) - Frequent problems
+- [Log Files](./log-files) - Reading logs

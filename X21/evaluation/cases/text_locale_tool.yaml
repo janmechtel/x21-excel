@@ -1,0 +1,127 @@
+datasetName: "locale-tools"
+cases:
+  - id: "text_locale_german_extensive"
+    name: "TEXT() locale formatting (numbers + dates) - German"
+    inputWorkbook: "../data/test-cases/TextLocale-init.xlsx"
+    prompt: >-
+      I am a German user (decimalSeparator="," thousandsSeparator="." dateLanguage="german").
+      Input values are in Source!A1:A7. Use TEXT() to create localized display strings
+      in Target!B1:B7 without changing Source!A1:A7.
+
+      Write these formulas with write_values_batch:
+      - Target!B1 should be formatted as "1.234,56"
+      - Target!B2 should be formatted as "(1.234,50)"
+      - Target!B3 should be formatted as "7,89%"
+      - Target!B4 should be formatted as "31.12.2025"
+      - Target!B5 should be formatted as "21.12.2023 15:04"
+      - Target!B6 should be formatted as "1.000"
+      - Target!B7 should be formatted as "21-12-2023"
+
+      Important:
+      - Do NOT use DATEVALUE().
+    selectedTools:
+      - read_values_batch
+      - write_values_batch
+    assertions:
+      # expected results
+      - sheet: "Target"
+        cell: "B1"
+        equalsText: "1.234,56"
+      - sheet: "Target"
+        cell: "B2"
+        equalsText: "(1.234,50)"
+      - sheet: "Target"
+        cell: "B3"
+        equalsText: "7,89%"
+      - sheet: "Target"
+        cell: "B4"
+        equalsText: "31.12.2025"
+      - sheet: "Target"
+        cell: "B5"
+        equalsText: "21.12.2023 15:04"
+      - sheet: "Target"
+        cell: "B6"
+        equalsText: "1.000"
+      - sheet: "Target"
+        cell: "B7"
+        equalsText: "21-12-2023"
+
+  - id: "coerce_text_numbers_de_decimal"
+    name: "Convert text numbers (German + US separators) to numbers"
+    inputWorkbook: "../data/test-cases/LocaleNumberCoercion-init.xlsx"
+    prompt: >-
+      hey diese zeile ist irgendwie nicht als zahl formatiert. kannst du das ändern?
+      Input values are TEXT and are in Source!A1:E2.
+      Row 1 uses German decimal commas:
+      678000 | 2559,12 | 2555,85 | 7320,89 | 2579,23
+      Row 2 uses US separators (thousands comma + decimal dot), e.g. copied from a doc:
+      678,000 | 2,559.12 | 2,555.85 | 7,320.89 | 2,579.23
+      Convert both rows to real numbers and write the results to Target!A1:E2.
+      Do NOT modify Source!A1:E2.
+    selectedTools:
+      - read_values_batch
+      - write_values_batch
+    assertions:
+      # input values
+      - sheet: "Source"
+        cell: "A1"
+        equalsText: "678000"
+      - sheet: "Source"
+        cell: "B1"
+        equalsText: "2559,12"
+      - sheet: "Source"
+        cell: "C1"
+        equalsText: "2555,85"
+      - sheet: "Source"
+        cell: "D1"
+        equalsText: "7320,89"
+      - sheet: "Source"
+        cell: "E1"
+        equalsText: "2579,23"
+      - sheet: "Source"
+        cell: "A2"
+        equalsText: "678,000"
+      - sheet: "Source"
+        cell: "B2"
+        equalsText: "2,559.12"
+      - sheet: "Source"
+        cell: "C2"
+        equalsText: "2,555.85"
+      - sheet: "Source"
+        cell: "D2"
+        equalsText: "7,320.89"
+      - sheet: "Source"
+        cell: "E2"
+        equalsText: "2,579.23"
+
+      # expected results
+      - sheet: "Target"
+        cell: "A1"
+        equalsNumber: 678000
+      - sheet: "Target"
+        cell: "B1"
+        equalsNumber: 2559.12
+      - sheet: "Target"
+        cell: "C1"
+        equalsNumber: 2555.85
+      - sheet: "Target"
+        cell: "D1"
+        equalsNumber: 7320.89
+      - sheet: "Target"
+        cell: "E1"
+        equalsNumber: 2579.23
+      - sheet: "Target"
+        cell: "A2"
+        equalsNumber: 678000
+      - sheet: "Target"
+        cell: "B2"
+        equalsNumber: 2559.12
+      - sheet: "Target"
+        cell: "C2"
+        equalsNumber: 2555.85
+      - sheet: "Target"
+        cell: "D2"
+        equalsNumber: 7320.89
+      - sheet: "Target"
+        cell: "E2"
+        equalsNumber: 2579.23

@@ -1,0 +1,341 @@
+---
+title: "Slash Commands"
+description: "Quick-access commands for common Excel operations"
+---
+
+# Slash Commands
+
+Slash commands provide instant access to pre-configured workflows. Type `/` in the input area to see available commands.
+
+## How to Use
+
+1. Type `/` in the input area
+2. Command palette appears
+3. Browse or search for a command
+4. Press **Enter** to execute
+5. Follow any additional prompts
+
+### Keyboard Navigation
+
+- **Up/Down arrows**: Navigate commands
+- **Type to search**: Filter by keywords
+- **Enter**: Select and execute
+- **Escape**: Close palette
+
+## Built-in Commands
+
+X21 includes 8 ready-to-use commands:
+
+### /summarize_selection
+
+**What it does**: Analyzes your selected data and highlights key findings or anomalies.
+
+**Best for**:
+- Quick data overviews
+- Identifying outliers
+- Finding patterns
+
+**Example usage**:
+1. Select a data table
+2. Type `/summarize_selection`
+3. Press Enter
+4. Review insights
+
+**Requires input**: No
+
+---
+
+### /format
+
+**What it does**: Applies consistent, professional formatting to make data visually appealing.
+
+**Best for**:
+- Cleaning up messy spreadsheets
+- Preparing reports
+- Making data presentable
+
+**Example usage**:
+1. Select range to format
+2. Type `/format`
+3. Press Enter
+4. Approve formatting changes
+
+**Requires input**: No
+
+---
+
+### /clean_up_data
+
+**What it does**: Inspects selection for data quality issues and proposes fixes.
+
+**Finds**:
+- Inconsistent formatting
+- Duplicate values
+- Missing data
+- Invalid entries
+- Formatting inconsistencies
+
+**Example usage**:
+1. Select questionable data
+2. Type `/clean_up_data`
+3. Review identified issues
+4. Approve fixes
+
+**Requires input**: No
+
+---
+
+### /generate_chart_plan
+
+**What it does**: Recommends the best chart types to visualize your selected data.
+
+**Provides**:
+- Chart type suggestions
+- Rationale for each option
+- Best practices guidance
+
+**Example usage**:
+1. Select data for charting
+2. Type `/generate_chart_plan`
+3. Review recommendations
+4. Create charts manually or ask AI to help
+
+**Requires input**: No
+
+---
+
+### /formula_help
+
+**What it does**: Explains or troubleshoots formulas in your selection.
+
+**Best for**:
+- Understanding complex formulas
+- Debugging formula errors
+- Learning Excel functions
+
+**Example usage**:
+1. Select cell with formula
+2. Type `/formula_help`
+3. Describe your question (e.g., "Why is this returning #VALUE?")
+4. Press Enter
+5. Get explanation
+
+**Requires input**: Yes - describe your question or issue
+
+---
+
+### /meeting_notes
+
+**What it does**: Converts selected text into crisp meeting notes with action items.
+
+**Transforms**:
+- Raw notes → Structured format
+- Extracts action items
+- Identifies owners
+- Highlights deadlines
+
+**Example usage**:
+1. Select meeting notes text
+2. Type `/meeting_notes`
+3. Press Enter
+4. Review formatted output
+
+**Requires input**: No
+
+---
+
+### /auto_fill
+
+**What it does**: Fills blank labels by learning patterns from descriptions with ≥90% confidence.
+
+**Best for**:
+- Categorizing data
+- Filling missing labels
+- Applying consistent tags
+
+**Example usage**:
+1. Select data with some labels
+2. Type `/auto_fill`
+3. Describe the pattern (e.g., "Fill Category based on Product Description")
+4. AI learns and fills blanks
+5. Review and approve
+
+**Requires input**: Yes - describe the filling pattern
+
+---
+
+### /classify
+
+**What it does**: Classifies rows using strict accounting rules with Buchungstext, Reason, and Category columns.
+
+**Specific use case**:
+- Accounting data classification
+- Transaction categorization
+- Rule-based labeling
+
+**Requirements**:
+- Must have appropriate columns
+- Accounting context
+
+**Example usage**:
+1. Select transaction data
+2. Type `/classify`
+3. Specify classification rules
+4. Review classifications
+5. Approve
+
+**Requires input**: Yes - specify classification criteria
+
+## Custom Commands
+
+### Workbook-Specific Commands
+
+X21 can load custom commands from your Excel workbook. These appear alongside built-in commands in the palette.
+
+**How to create custom commands**:
+See your IT administrator or developer documentation for adding custom slash commands to workbooks.
+
+**Benefits**:
+- Team-specific workflows
+- Project-specific operations
+- Reusable complex tasks
+
+## Command Features
+
+### Keyword Search
+
+Commands have associated keywords for faster discovery:
+
+```
+/summary, /analyze → finds /summarize_selection
+/tidy, /fix → finds /clean_up_data
+/help, /explain → finds /formula_help
+```
+
+### Auto-Execution
+
+Some commands execute immediately:
+- `/summarize_selection`
+- `/format`
+- `/clean_up_data`
+- `/generate_chart_plan`
+- `/meeting_notes`
+
+Others prompt for additional input:
+- `/formula_help` - asks for your question
+- `/auto_fill` - asks for pattern description
+- `/classify` - asks for classification criteria
+
+### Tool Approval
+
+Commands still respect tool permissions:
+1. Command executes
+2. AI proposes tools
+3. You review and approve
+4. Changes apply
+
+## Best Practices
+
+### When to Use Commands
+
+**Use slash commands for**:
+- Frequent operations
+- Standardized workflows
+- Quick actions
+- Learning X21 capabilities
+
+**Use natural language for**:
+- Unique requests
+- Complex custom tasks
+- Exploratory analysis
+- One-off operations
+
+### Command Discovery
+
+Explore commands by:
+1. Type `/` and browse the list
+2. Try commands on sample data first
+3. Learn which commands fit your workflow
+4. Create mental shortcuts
+
+### Combining Commands
+
+Chain commands for workflows:
+
+```
+1. /clean_up_data - Fix issues
+2. /format - Apply styling
+3. /summarize_selection - Review results
+4. /generate_chart_plan - Visualize
+```
+
+## Command Tips
+
+### /summarize_selection
+- Works best with tabular data
+- Include headers in selection
+- More data = better insights
+
+### /format
+- Backs up original formatting
+- Can be reverted
+- Consistent style across team
+
+### /clean_up_data
+- Run before important analysis
+- Review suggested fixes carefully
+- May require multiple passes
+
+### /generate_chart_plan
+- Include all relevant columns
+- Provide context in selection
+- Consider audience for charts
+
+### /formula_help
+- Select the problematic cell
+- Describe what you expected
+- Include error messages if any
+
+### /meeting_notes
+- Works with bullet points or paragraphs
+- Extracts action items automatically
+- Formats for sharing
+
+### /auto_fill
+- Needs examples to learn from
+- Higher confidence = better results
+- Review fills before approving
+
+### /classify
+- Accounting-specific
+- Requires structured data
+- Follows strict business rules
+
+## Troubleshooting
+
+### Command Not Found
+
+- Check spelling
+- Try keywords instead
+- Ensure command is enabled
+- Contact admin for custom commands
+
+### Command Does Nothing
+
+- Check your selection is valid
+- Verify tools are enabled
+- Look for error messages
+- Try with simpler data first
+
+### Unexpected Results
+
+- Review command description
+- Check selection includes right data
+- Provide more context in prompt
+- Use natural language for custom needs
+
+## Related Topics
+
+- [Reference: Slash Commands](../reference/slash-commands-reference) - Complete command reference
+- [Effective Prompting](../best-practices/effective-prompting) - When to use commands vs natural language
+- [Tool Permissions](./tool-permissions) - Understanding approval workflow

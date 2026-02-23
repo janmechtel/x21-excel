@@ -1,0 +1,171 @@
+---
+title: "Slash Commands Reference"
+description: "Quick reference for all built-in slash commands"
+---
+
+# Slash Commands Reference
+
+Complete reference for X21's 8 built-in slash commands.
+
+## Command List
+
+| Command | Input Required | Auto-Execute | Tools Used |
+|---------|---------------|--------------|------------|
+| /summarize_selection | No | Yes | read_values, read_format |
+| /format | No | Yes | write_format |
+| /clean_up_data | No | Yes | read_values, write_values, write_format |
+| /generate_chart_plan | No | Yes | read_values |
+| /formula_help | Yes | No | read_values |
+| /meeting_notes | No | Yes | read_values, write_values |
+| /auto_fill | Yes | No | read_values, write_values |
+| /classify | Yes | No | read_values, write_values |
+
+## Command Details
+
+### /summarize_selection
+
+**Purpose**: Analyze selected data and highlight key findings or anomalies
+
+**Usage**:
+1. Select data range
+2. Type `/summarize_selection`
+3. Press Enter
+
+**Output**: Statistical summary, patterns, outliers, recommendations
+
+**Keywords**: summary, analyze, inspect, review
+
+---
+
+### /format
+
+**Purpose**: Apply professional formatting automatically
+
+**Usage**:
+1. Select range to format
+2. Type `/format`
+3. Press Enter
+4. Approve formatting changes
+
+**Output**: Consistent styling, header emphasis, aligned data
+
+**Keywords**: style, beautify, clean, tidy
+
+---
+
+### /clean_up_data
+
+**Purpose**: Find and fix data quality issues
+
+**Usage**:
+1. Select data to clean
+2. Type `/clean_up_data`
+3. Press Enter
+4. Review and approve fixes
+
+**Finds**: Duplicates, inconsistencies, missing values, formatting issues
+
+**Keywords**: fix, repair, validate, clean
+
+---
+
+### /generate_chart_plan
+
+**Purpose**: Recommend best chart types for data visualization
+
+**Usage**:
+1. Select data for charting
+2. Type `/generate_chart_plan`
+3. Press Enter
+
+**Output**: Chart type recommendations with rationale
+
+**Keywords**: chart, visualize, graph, plot
+
+---
+
+### /formula_help
+
+**Purpose**: Explain or troubleshoot formulas
+
+**Usage**:
+1. Select cell with formula
+2. Type `/formula_help`
+3. Enter your question
+4. Press Enter
+
+**Input Examples**:
+- "Why is this returning #VALUE?"
+- "Explain this formula"
+- "How can I make this calculate correctly?"
+
+**Keywords**: formula, function, calculate, help
+
+---
+
+### /meeting_notes
+
+**Purpose**: Convert text into structured meeting notes with action items
+
+**Usage**:
+1. Select meeting notes text
+2. Type `/meeting_notes`
+3. Press Enter
+
+**Output**: Formatted notes, extracted action items, identified owners
+
+**Keywords**: notes, minutes, actions, meeting
+
+---
+
+### /auto_fill
+
+**Purpose**: Fill blank labels by learning from existing data patterns
+
+**Usage**:
+1. Select data with some labels
+2. Type `/auto_fill`
+3. Describe the pattern
+4. Review fills (≥90% confidence)
+5. Approve
+
+**Input Examples**:
+- "Fill Category based on Product Description"
+- "Classify transactions by type"
+
+**Keywords**: fill, complete, categorize, label
+
+---
+
+### /classify
+
+**Purpose**: Classify rows using accounting rules (Buchungstext, Reason, Category)
+
+**Usage**:
+1. Select transaction data
+2. Type `/classify`
+3. Specify classification rules
+4. Review classifications
+5. Approve
+
+**Requirements**: Accounting data structure
+
+**Keywords**: classify, categorize, accounting, transactions
+
+## Keyboard Shortcuts
+
+- **Type /**: Open command palette
+- **Arrow keys**: Navigate commands
+- **Type to search**: Filter by keyword
+- **Enter**: Execute command
+- **Escape**: Close palette
+
+## Custom Commands
+
+Workbook-specific custom commands appear alongside built-in commands. Contact your administrator for custom command creation.
+
+## Related Topics
+
+- [Slash Commands Guide](../user-guide/slash-commands) - Detailed usage guide
+- [Available Tools](./available-tools) - Tools used by commands
+- [Best Practices](../best-practices/effective-prompting) - When to use commands

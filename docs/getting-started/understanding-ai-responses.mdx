@@ -1,0 +1,336 @@
+---
+title: "Understanding AI Responses"
+description: "Learn how X21's AI processes requests and generates responses"
+---
+
+# Understanding AI Responses
+
+X21 uses Claude Sonnet 4, Anthropic's advanced AI model, to understand your requests and interact with Excel. This guide explains how responses work and what to expect.
+
+## The AI Model
+
+### Claude Sonnet 4
+
+X21 is powered by **Claude Sonnet 4** (claude-sonnet-4-20250514), which provides:
+
+- Advanced reasoning about spreadsheet operations
+- Understanding of complex data relationships
+- Natural language processing for Excel tasks
+- Multi-step problem solving
+
+### Capabilities
+
+- **Context awareness**: Understands your workbook structure, selected ranges, and sheet names
+- **Tool orchestration**: Breaks down complex requests into appropriate Excel operations
+- **Explanation**: Provides reasoning for its decisions
+- **Learning**: Adapts responses based on your feedback
+
+## Response Streaming
+
+### Real-Time Updates
+
+When you send a request, responses arrive in real-time:
+
+1. **Immediate start**: Text begins appearing within seconds
+2. **Token-by-token**: Words stream as the AI generates them
+3. **Live updates**: No waiting for complete responses
+4. **Cancellation**: Stop generation anytime with the Cancel button
+
+### What You See
+
+```
+User: Analyze the sales data in my selection
+
+AI: [streaming starts]
+I'll analyze your selection...
+[more text appears]
+[thinking block expands]
+[response continues]
+```
+
+The streaming format makes interactions feel conversational and responsive.
+
+## Thinking Blocks
+
+### What Are Thinking Blocks?
+
+Thinking blocks show the AI's reasoning process before it acts:
+
+**Example:**
+```
+💭 Thinking...
+I need to read the selected range first to understand
+the data structure. Then I'll calculate statistics and
+identify patterns. I'll use the read_values tool.
+```
+
+### Why They're Useful
+
+- **Transparency**: See how the AI approaches your request
+- **Trust**: Understand the logic behind actions
+- **Learning**: Discover better ways to phrase requests
+- **Debugging**: Identify when the AI misunderstands
+
+### Thinking Duration
+
+- Complex requests: Longer thinking (5-10 seconds)
+- Simple operations: Brief thinking (1-2 seconds)
+- The AI has a 1,600 token "thinking budget" per request
+
+## Response Components
+
+### Text Blocks
+
+Plain text explanations and answers:
+
+```
+Your selection contains sales data for Q1 2024.
+I found 150 transactions with a total revenue of $45,230.
+```
+
+**Features:**
+- Markdown formatting (bold, italic, lists)
+- Syntax highlighting for code
+- Excel range links (clickable)
+
+### Tool Use Blocks
+
+When the AI proposes Excel operations:
+
+```
+🔧 write_values
+Status: Pending Approval
+Target: Sheet1!A1:A10
+Operation: Update values
+```
+
+**States:**
+- **Pending**: Awaiting your approval
+- **Approved**: Ready to execute
+- **Rejected**: Declined by you
+- **Completed**: Successfully executed
+- **Errored**: Failed with error message
+
+### Code Blocks
+
+Formula examples and references:
+
+```excel
+=SUMIF(A:A, "Complete", B:B)
+```
+
+With syntax highlighting for readability.
+
+## Token Usage
+
+### What Are Tokens?
+
+Tokens are units of text the AI processes:
+- ~4 characters = 1 token
+- "Hello" = 1 token
+- "spreadsheet" = 2 tokens
+
+### Token Counter
+
+The status bar shows real-time token usage:
+
+```
+📊 Tokens: 1,234 / 200,000
+```
+
+### Token Limits
+
+- **Conversation limit**: 200,000 tokens total
+- **Output reserve**: 32,000 tokens per response
+- **Thinking budget**: 1,600 tokens for reasoning
+
+### What Counts Toward Tokens
+
+- Your prompts
+- AI responses
+- Tool definitions (background)
+- Previous conversation messages
+- Attached files (estimated: 100KB per PDF page)
+
+### When Limits Are Reached
+
+At 200,000 tokens, X21 automatically:
+1. **Compacts** the conversation (summarizes old messages)
+2. **Preserves** recent context
+3. **Continues** without interruption
+
+**Tip**: Start a new conversation for unrelated tasks to manage tokens efficiently.
+
+## Reading AI Responses
+
+### Range References
+
+The AI mentions Excel ranges as clickable links:
+
+```
+The formula in B5 calculates the total from A1:A4.
+```
+
+Click `B5` or `A1:A4` to navigate directly to those cells.
+
+### Sheet References
+
+Sheet names appear as interactive pills:
+
+```
+Comparing @Sales data with @Forecast...
+```
+
+Click to switch to that sheet.
+
+### Tool Results
+
+After approval, the AI references tool outcomes:
+
+```
+✓ Updated 10 cells in Sheet1!A1:A10
+The values now range from 100 to 500.
+```
+
+## Response Patterns
+
+### Read-Then-Act
+
+Common pattern for safety:
+
+1. AI reads your selection first
+2. Analyzes the data
+3. Proposes specific changes
+4. Waits for approval
+5. Executes and confirms
+
+### Explanation-First
+
+For complex operations:
+
+1. AI explains its approach
+2. Breaks down steps
+3. Executes each part
+4. Summarizes results
+
+### Batch Operations
+
+For efficiency:
+
+```
+I'll perform three operations:
+1. Read current values
+2. Calculate new values
+3. Write updated values
+```
+
+Multiple tools execute sequentially after approval.
+
+## What the AI Knows
+
+### Automatic Context
+
+Every request includes:
+- **Active sheet** name
+- **Selected range** (if any)
+- **All sheet names** in the workbook
+- **Used range** (data boundaries)
+- **Workbook name**
+- **Display language** (for localization)
+
+### What It Doesn't Know
+
+- Data from other workbooks (unless you tell it)
+- Your intent beyond the current prompt
+- External systems or databases
+- Previous conversations (unless in same session)
+
+## Error Messages
+
+### Common Errors
+
+**Rate Limit:**
+```
+⚠️ Rate limit reached. Please wait 30 seconds.
+```
+The Anthropic API has usage limits. Retry shortly.
+
+**Request Too Large:**
+```
+⚠️ Request exceeds size limit. Try removing attachments or starting a new conversation.
+```
+Reduce complexity or attached files.
+
+**Connection Lost:**
+```
+⚠️ Cannot connect to Deno server. Check that the backend is running.
+```
+The local server needs to be started.
+
+### Tool Errors
+
+When operations fail:
+```
+❌ Error executing write_values
+Range 'Sheet1!A1:A1000000' exceeds worksheet limits
+```
+
+The AI will often suggest corrections.
+
+## Best Practices
+
+### Clear Requests
+
+Help the AI understand by being specific:
+
+```
+✓ "Make cells A1:A10 bold"
+✗ "Format this"
+```
+
+### Context Provision
+
+Provide relevant details:
+
+```
+✓ "Column C contains prices in USD. Convert to EUR using 0.85 rate."
+✗ "Convert column C"
+```
+
+### Verify Complex Changes
+
+For important data:
+1. Use **View** to preview changes
+2. Review the modified cells
+3. **Apply** only if correct
+4. Use **Revert** if needed
+
+### Provide Feedback
+
+Help improve responses:
+- 👍 Thumbs up for accurate results
+- 👎 Thumbs down with comments for issues
+- Specific feedback helps refine the system
+
+## Advanced Understanding
+
+### Model Limitations
+
+Claude Sonnet 4 is powerful but:
+- May occasionally misinterpret ambiguous requests
+- Works best with clear, structured data
+- Requires approval for safety on writes
+- Has token limits for very long conversations
+
+### Continuous Improvement
+
+Your feedback trains the system:
+- Ratings influence future responses
+- Comments help identify issues
+- Usage patterns inform tool improvements
+
+## Next Steps
+
+- Learn about [Tool Management](../user-guide/tool-management) to control what the AI can do
+- Explore [Tool Permissions](../user-guide/tool-permissions) to understand approval workflows
+- Read [Best Practices](../best-practices/effective-prompting) for expert prompting tips

@@ -1,0 +1,34 @@
+# Keyboard Shortcuts
+
+Keyboard shortcuts keep you in flow while working with X21. The following commands are available today, with more on the roadmap. Shortcuts are handled in the React task pane and do not interfere with Excel built-ins.
+
+## Chat Shortcuts
+
+- `Ctrl` + `Shift` + `A` – Focus the prompt composer. Use this after approving tools to jump back to typing without touching the mouse.
+- `Esc` – Cancel a streaming response if one is in progress. This triggers `stream:cancel` and stops the Claude generation.
+- `Ctrl` + `Enter` – Send the current prompt. Matches common messaging apps and avoids Excel’s `Enter` behaviour in cells.
+
+## Tool Review Shortcuts
+
+- `Alt` + `V` – View the highlighted tool request (equivalent to clicking **View**).
+- `Alt` + `A` – Approve the highlighted tool request.
+- `Alt` + `R` – Reject the highlighted tool request and open the message box for optional feedback.
+- `Alt` + `Z` – Revert the most recent approved tool (invokes `tool:revert`).
+
+## Navigation Shortcuts
+
+- `Ctrl` + `L` – Toggle auto-approve (think “lock/unlock”). The UI updates the badge to show the current mode.
+- `Ctrl` + `Shift` + `H` – Open the help flyout with links to documentation and troubleshooting pages.
+- `Ctrl` + `Shift` + `.` – Expand or collapse the tool history panel.
+
+> Note: Some shortcuts are context sensitive. When the composer is focused, `Ctrl + Enter` sends the prompt. When a tool card is focused, `Alt` combinations act on that card.
+
+## Customising Shortcuts
+
+Shortcuts are defined in the UI layer (`src/components`). To customise them:
+
+1. Update the key map in the relevant component (e.g., `ChatInput` or `ToolList`).
+2. Ensure the handler respects focus so Excel doesn’t receive unintended keystrokes.
+3. Rebuild the web UI and republish the add-in. The WebView automatically loads the updated bundle.
+
+Keep an eye on the [Changelog](../changelog) for new shortcuts introduced in future releases.

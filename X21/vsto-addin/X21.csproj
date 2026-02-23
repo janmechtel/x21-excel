@@ -1,0 +1,636 @@
+<Project ToolsVersion="17.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!--
+    This section defines project-level properties.
+
+    AssemblyName
+      Name of the output assembly.
+    Configuration
+      Specifies a default value for debug.
+    OutputType
+      Must be "Library" for VSTO.
+    Platform
+      Specifies what CPU the output of this project can run on.
+    NoStandardLibraries
+      Set to "false" for VSTO.
+    RootNamespace
+      In C#, this specifies the namespace given to new files. In VB, all objects are
+      wrapped in this namespace at runtime.
+  -->
+  <PropertyGroup>
+    <ProjectTypeGuids>{BAA0C2D2-18E2-41B9-852F-F413020CAA33};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F3180526-464D-4B60-A6EA-15A33013144C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <RootNamespace>X21</RootNamespace>
+    <!-- Set DeployEnvironment early so it can be used in AssemblyName -->
+    <DeployEnvironment Condition="'$(DeployEnvironment)' == ''">Dev</DeployEnvironment>
+    <AddInName Condition="'$(DeployEnvironment)' == 'Production'">X21</AddInName>
+    <AddInName Condition="'$(DeployEnvironment)' != 'Production'">X21-$(DeployEnvironment)</AddInName>
+    <AssemblyName>$(AddInName)</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
+    <DefineConstants>VSTO40;UseOfficeInterop</DefineConstants>
+    <ResolveComReferenceSilent>true</ResolveComReferenceSilent>
+    <IsWebBootstrapper>True</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <CreateDeployment>true</CreateDeployment>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <PublishUrl>C:\Users\jmech\deploy2\</PublishUrl>
+    <InstallUrl />
+    <TargetCulture>en</TargetCulture>
+    <ApplicationVersion>1.8.0.0</ApplicationVersion>
+    <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateInterval>0</UpdateInterval>
+    <UpdateIntervalUnits>days</UpdateIntervalUnits>
+    <PublisherName>Kontext21</PublisherName>
+    <SupportUrl>https://kontext21.com/excel</SupportUrl>
+    <LoadBehavior>3</LoadBehavior>
+  </PropertyGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft Visual Studio 2010 Tools for Office Runtime %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <PropertyGroup>
+    <!--
+      OfficeApplication
+        Add-in host application
+    -->
+    <OfficeApplication>Excel</OfficeApplication>
+  </PropertyGroup>
+  <!--
+    This section defines properties that are set when the "Debug" configuration is selected.
+
+    DebugSymbols
+      If "true", create symbols (.pdb). If "false", do not create symbols.
+    DefineConstants
+      Constants defined for the preprocessor.
+    EnableUnmanagedDebugging
+      If "true", starting the debugger will attach both managed and unmanaged debuggers.
+    Optimize
+      If "true", optimize the build output. If "false", do not optimize.
+    OutputPath
+      Output path of project relative to the project file.
+    WarningLevel
+      Warning level for the compiler.
+  -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <!-- Override assembly name for Debug to avoid conflicts with installed versions -->
+    <AssemblyName>X21-Debug</AssemblyName>
+    <ProductName>X21-Debug</ProductName>
+    <FriendlyName>X21-Debug</FriendlyName>
+    <OfficeApplicationDescription>X21-Debug Excel add-in (Development)</OfficeApplicationDescription>
+  </PropertyGroup>
+  <!--
+    This section defines properties that are set when the "Release" configuration is selected.
+
+    DebugSymbols
+      If "true", create symbols (.pdb). If "false", do not create symbols.
+    DefineConstants
+      Constants defined for the preprocessor.
+    EnableUnmanagedDebugging
+      If "true", starting the debugger will attach both managed and unmanaged debuggers.
+    Optimize
+      If "true", optimize the build output. If "false", do not optimize.
+    OutputPath
+      Output path of project relative to the project file.
+    WarningLevel
+      Warning level for the compiler.
+  -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--
+    This section specifies references for the project.
+  -->
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="DocumentFormat.OpenXml, Version=2.19.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DocumentFormat.OpenXml.2.19.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.5\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\packages\Google.Protobuf.3.22.5\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration">
+      <HintPath>..\..\packages\Microsoft.Extensions.Configuration.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+      <HintPath>..\..\packages\Microsoft.Extensions.Configuration.Abstractions.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder">
+      <HintPath>..\..\packages\Microsoft.Extensions.Configuration.Binder.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection">
+      <HintPath>..\..\packages\Microsoft.Extensions.DependencyInjection.8.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.8.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Diagnostics.Abstractions">
+      <HintPath>..\..\packages\Microsoft.Extensions.Diagnostics.Abstractions.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Diagnostics.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging">
+      <HintPath>..\..\packages\Microsoft.Extensions.Logging.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>..\..\packages\Microsoft.Extensions.Logging.Abstractions.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Configuration">
+      <HintPath>..\..\packages\Microsoft.Extensions.Logging.Configuration.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options">
+      <HintPath>..\..\packages\Microsoft.Extensions.Options.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options.ConfigurationExtensions">
+      <HintPath>..\..\packages\Microsoft.Extensions.Options.ConfigurationExtensions.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives">
+      <HintPath>..\..\packages\Microsoft.Extensions.Primitives.8.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Vbe.Interop, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.3296.44, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.WebView2.1.0.3296.44\lib\net462\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.3296.44, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.WebView2.1.0.3296.44\lib\net462\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NLog.5.4.0\lib\net46\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTelemetry">
+      <HintPath>..\..\packages\OpenTelemetry.1.9.0\lib\netstandard2.0\OpenTelemetry.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTelemetry.Api">
+      <HintPath>..\..\packages\OpenTelemetry.Api.1.9.0\lib\netstandard2.0\OpenTelemetry.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTelemetry.Api.ProviderBuilderExtensions">
+      <HintPath>..\..\packages\OpenTelemetry.Api.ProviderBuilderExtensions.1.9.0\lib\netstandard2.0\OpenTelemetry.Api.ProviderBuilderExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol">
+      <HintPath>..\..\packages\OpenTelemetry.Exporter.OpenTelemetryProtocol.1.9.0\lib\netstandard2.0\OpenTelemetry.Exporter.OpenTelemetryProtocol.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource">
+      <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.8.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Pipelines.9.0.5\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Text.Encodings.Web.9.0.5\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Text.Json.9.0.5\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Tools.Applications.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="$([System.String]::Copy(&quot;;$(DefineConstants);&quot;).ToLower().Contains(';useofficeinterop;')) or $([System.String]::Copy(&quot;,$(DefineConstants),&quot;).ToLower().Contains(',useofficeinterop,'))">
+      <ItemGroup>
+        <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+          <Private>False</Private>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </Reference>
+        <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+          <Private>False</Private>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <COMReference Include="Microsoft.Office.Core">
+          <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+          <VersionMajor>2</VersionMajor>
+          <VersionMinor>7</VersionMinor>
+          <Lcid>0</Lcid>
+          <WrapperTool>tlbimp</WrapperTool>
+          <Isolated>False</Isolated>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </COMReference>
+        <COMReference Include="Microsoft.Office.Interop.Excel">
+          <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+          <VersionMajor>1</VersionMajor>
+          <VersionMinor>8</VersionMinor>
+          <Lcid>0</Lcid>
+          <WrapperTool>tlbimp</WrapperTool>
+          <Isolated>False</Isolated>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </COMReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <!--
+    This section defines the user source files that are part of the project.
+
+    A "Compile" element specifies a source file to compile.
+    An "EmbeddedResource" element specifies an .resx file for embedded resources.
+    A "None" element specifies a file that is not to be passed to the compiler (for instance,
+    a text file or XML file).
+    The "AppDesigner" element specifies the directory where the application properties files
+    can be found.
+  -->
+  <ItemGroup>
+    <Compile Include="Constants\ExcelToolNames.cs" />
+    <Compile Include="Constants\OperationStatusValues.cs" />
+    <Compile Include="Constants\WorkbookResolutionPaths.cs" />
+    <Compile Include="Constants\ApiEndpoints.cs" />
+    <Compile Include="Constants\ChartTypes.cs" />
+    <Compile Include="Constants\ErrorCodes.cs" />
+    <Compile Include="Common\Commands\CommandOpenLocalDataFolder.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\ToolExecutionRequest.cs" />
+    <Compile Include="Models\Cell.cs" />
+    <Compile Include="Services\BackendConfigService.cs" />
+    <Compile Include="Services\BaseExcelApiService.cs" />
+    <Compile Include="Services\ExcelApiConfigService.cs" />
+    <Compile Include="Services\ExcelApiService.cs" />
+    <Compile Include="Services\ExcelStaDispatcher.cs" />
+    <Compile Include="Services\Handlers\HandleCopyPasteHandler.cs" />
+    <Compile Include="Services\Handlers\HandleOpenWorkbooksAllHandler.cs" />
+    <Compile Include="Services\Handlers\HandleWriteValuesBatchHandler.cs" />
+    <Compile Include="Services\WorkbookChangeTrackerService.cs" />
+    <Compile Include="Services\Formatting\IFormatReader.cs" />
+    <Compile Include="Services\Formatting\BoldFormatReader.cs" />
+    <Compile Include="Services\Formatting\ItalicFormatReader.cs" />
+    <Compile Include="Services\Formatting\FontSizeFormatReader.cs" />
+    <Compile Include="Services\Formatting\UnderlineFormatReader.cs" />
+    <Compile Include="Services\Formatting\NumberFormatReader.cs" />
+    <Compile Include="Services\Formatting\ColorFormatReader.cs" />
+    <Compile Include="Services\Formatting\AlignmentFormatReader.cs" />
+    <Compile Include="Services\Formatting\FormatSnapshot.cs" />
+    <Compile Include="Services\Formatting\FormatSnapshotBuilder.cs" />
+    <Compile Include="Services\Formatting\FormatReaderHelpers.cs" />
+    <Compile Include="Services\Formatting\FormatManager.cs" />
+    <Compile Include="Services\Formatting\FormatWriter.cs" />
+    <Compile Include="Services\Formatting\FormatOptimizer.cs" />
+    <Compile Include="Services\Formatting\FormatRangeService.cs" />
+    <Compile Include="Services\Formatting\FormatProgressUpdate.cs" />
+    <Compile Include="Common\Commands\SingleCellSelectedCondition.cs" />
+    <Compile Include="Common\Commands\RangeSelectedCondition.cs" />
+    <Compile Include="Common\Data\ClassLoader.cs" />
+    <Compile Include="Common\Commands\CommandBase.cs" />
+    <Compile Include="Common\Commands\IExecuteCondition.cs" />
+    <Compile Include="Common\Model\AnnotatedModelBase.cs" />
+    <Compile Include="Common\Model\Annotation.cs" />
+    <Compile Include="Common\Model\CommandCollection.cs" />
+    <Compile Include="Common\Model\Component.cs" />
+    <Compile Include="Common\Data\Container.cs" />
+    <Compile Include="Common\Model\IObjectStore.cs" />
+    <Compile Include="Common\Model\ModelBase.cs" />
+    <Compile Include="Common\Collections\MultiValueDictionary.cs" />
+    <Compile Include="Common\Model\NotifiableObject.cs" />
+    <Compile Include="Common\Model\ObjectStoreMemory.cs" />
+    <Compile Include="Common\Patterns\Singleton.cs" />
+    <Compile Include="Common\Commands\AnyCellSelectedCondition.cs" />
+    <Compile Include="Common\Commands\CommandTutorial.cs" />
+    <Compile Include="Common\Commands\CommandFeedback.cs" />
+    <Compile Include="Common\Commands\CommandHelp.cs" />
+    <Compile Include="Common\Commands\CommandOpenAnnouncements.cs" />
+    <Compile Include="Common\Commands\CommandOpenExcelLogFolder.cs" />
+    <Compile Include="Common\Commands\CommandOpenDenoLogFolder.cs" />
+    <Compile Include="Common\Commands\CommandOpenBinaryFolder.cs" />
+    <Compile Include="Common\Commands\CommandCreateSlashCommandsSheet.cs" />
+    <Compile Include="Common\Commands\UtilityCommands.cs" />
+    <Compile Include="Excel\Events\SelectionChangedEventArgs.cs" />
+    <Compile Include="Excel\ExcelSelection.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Interfaces\ICommands.cs" />
+    <Compile Include="Interfaces\IComponent.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\NLogLogger.cs" />
+    <Compile Include="Logging\VoidLogger.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\PostHogService.cs" />
+    <Compile Include="Services\WorkbookOperationsService.cs" />
+    <Compile Include="TaskPane\Commands\CommandToggleTaskPane.cs" />
+    <Compile Include="TaskPane\TaskPaneManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TaskPane\WebView2TaskPaneHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Utils\Execute.cs" />
+    <Compile Include="Utils\EnvFileLoader.cs" />
+    <Compile Include="Utils\InvariantValueFormatter.cs" />
+    <Compile Include="Utils\RegistryHelper.cs" />
+    <Compile Include="Utils\RibbonXmlUtils.cs" />
+    <Compile Include="Utils\KeyboardHook.cs" />
+    <Compile Include="Utils\OleMessageFilter.cs" />
+    <Compile Include="Utils\PathResolver.cs" />
+    <Compile Include="Utils\EnvironmentHelper.cs" />
+    <Compile Include="Utils\WindowUtils.cs" />
+    <Compile Include="Utils\UserUtils.cs" />
+    <Compile Include="Utils\WorksheetUtils.cs" />
+    <EmbeddedResource Include="Ribbon\Icons\x21_logo_80.png" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".env" Condition="Exists('.env')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include=".env.example" />
+    <None Include="app.config" />
+    <None Include="X21_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Ribbon\Ribbon.cs" />
+    <Compile Include="ThisAddIn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="ThisAddIn.Designer.xml">
+      <DependentUpon>ThisAddIn.cs</DependentUpon>
+    </None>
+    <Compile Include="ThisAddIn.Designer.cs">
+      <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
+    </Compile>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ribbon\Ribbon.xml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <!-- Deployment Environment Configuration -->
+  <PropertyGroup Condition=" '$(Configuration)' != 'Debug' ">
+    <BackendExecutableName>x21-backend-$(DeployEnvironment).exe</BackendExecutableName>
+    <!-- Environment-specific add-in names for side-by-side installation (Production keeps base name) -->
+    <ProductName>$(AddInName)</ProductName>
+    <FriendlyName>$(AddInName)</FriendlyName>
+    <OfficeApplicationDescription>$(AddInName) Excel add-in</OfficeApplicationDescription>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>7C8B744A56C51D5D99F74865C1BFAA3D6EDD9DD3</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestTimestampUrl>http://time.certum.pl/</ManifestTimestampUrl>
+  </PropertyGroup>
+  <!-- Include the build rules for a C# project. -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Include additional build rules for an Office application add-in. -->
+  <Import Project="$(VSToolsPath)\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- This section defines VSTO properties that describe the host-changeable project properties. -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
+        <ProjectProperties HostName="Excel" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\16.0\Excel\InstallRoot\Path#excel.exe" DebugInfoCommandLine="/x" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
+        <Host Name="Excel" GeneratedCodeNamespace="X21" PublishedHash="69C324AB27932AA2FBF2B7EA72250886FF164DE6" IconIndex="0"> <!-- pragma: allowlist secret -->
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" PublishedHash="AFB087D411EF8BE11FBD4E1364AD95B36C63CE3B" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" /> <!-- pragma: allowlist secret -->
+        </Host>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.Web.WebView2.1.0.3296.44\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Web.WebView2.1.0.3296.44\build\Microsoft.Web.WebView2.targets'))" />
+  </Target>
+  <ItemGroup>
+    <EmbeddedResource Include="x21-samples.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSTemplate>true</IncludeInVSTemplate>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="..\..\packages\Microsoft.Web.WebView2.1.0.3296.44\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\..\packages\Microsoft.Web.WebView2.1.0.3296.44\build\Microsoft.Web.WebView2.targets')" />
+  <!-- WebUI Build Tasks -->
+  <Target Name="BuildWebUI" AfterTargets="PrepareForBuild" BeforeTargets="CopyWebAssetsToOutput" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Building web-ui for production..." Importance="high" />
+    <Exec Command="npm run build:output &quot;$(ProjectDir)..\web-ui\$(OutputPath)TaskPane\WebAssets&quot;" WorkingDirectory="$(ProjectDir)..\web-ui" />
+    <Message Text="web-ui build completed." Importance="high" />
+  </Target>
+  <Target Name="WarnWebUIDevServer" BeforeTargets="PrepareForBuild" Condition="'$(Configuration)' == 'Debug'">
+    <Message Text="REMINDER: run 'npm run dev' in the web-ui folder!" Importance="high" />
+  </Target>
+  <!-- Ensure WebAssets are copied to output directory -->
+  <Target Name="CopyWebAssetsToOutput" AfterTargets="BuildWebUI" BeforeTargets="ResolveAssemblyReferences" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Copying WebAssets to output directory..." Importance="high" />
+    <ItemGroup>
+      <WebAssetsFiles Include="$(ProjectDir)..\web-ui\$(OutputPath)TaskPane\WebAssets\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(WebAssetsFiles)" DestinationFolder="$(ProjectDir)TaskPane\WebAssets\%(RecursiveDir)" />
+    <Copy SourceFiles="@(WebAssetsFiles)" DestinationFolder="$(OutputPath)TaskPane\WebAssets\%(RecursiveDir)" />
+    <Message Text="Copied @(WebAssetsFiles-&gt;Count()) WebAssets files." Importance="high" />
+  </Target>
+  <!-- Dynamically add WebAssets to Content and ApplicationFile after they're copied -->
+  <Target Name="IncludeWebAssetsInBuild" AfterTargets="CopyWebAssetsToOutput" BeforeTargets="_CopyFilesMarkedCopyLocal;_CopyManifestFiles" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Including WebAssets in build..." Importance="high" />
+    <ItemGroup>
+      <_WebAssetFiles Include="TaskPane\WebAssets\**\*" />
+      <Content Include="@(_WebAssetFiles)">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <IncludeInDeployment>true</IncludeInDeployment>
+        <Link>TaskPane\WebAssets\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      </Content>
+      <FileWrites Include="@(_WebAssetFiles)" />
+    </ItemGroup>
+    <Message Text="Included @(_WebAssetFiles-&gt;Count()) WebAssets files in Content" Importance="high" />
+  </Target>
+  <!-- Ensure WebAssets are in ApplicationFile list for ClickOnce before manifest generation -->
+  <Target Name="AddWebAssetsToClickOnce" BeforeTargets="GenerateApplicationManifest;_DeploymentComputeClickOnceManifestInfo" AfterTargets="IncludeWebAssetsInBuild" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Adding WebAssets to ClickOnce ApplicationFile list..." Importance="high" />
+    <ItemGroup>
+      <_DeploymentManifestFiles Include="TaskPane\WebAssets\**\*" />
+      <ApplicationFile Include="@(_DeploymentManifestFiles)" />
+    </ItemGroup>
+    <Message Text="Added @(_DeploymentManifestFiles-&gt;Count()) files to ClickOnce manifest" Importance="high" />
+  </Target>
+  <!-- Deno Backend Build Tasks -->
+  <Target Name="UpdateDenoEnvFile" AfterTargets="CoreCompile" BeforeTargets="BuildDenoBackend">
+    <Message Text="Updating Deno .env file with build information..." Importance="high" />
+    <!-- Create .env file if it doesn't exist -->
+    <Copy SourceFiles="$(ProjectDir)../deno-server/.env-example" DestinationFiles="$(ProjectDir)../deno-server/.env" Condition="!Exists('$(ProjectDir)../deno-server/.env')" />
+    <!-- Get the actual VSTO-calculated version from the assembly using the script -->
+    <Exec Command="powershell -ExecutionPolicy Bypass -File $(ProjectDir)test-version.ps1 -Configuration $(Configuration)" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ActualVersion" />
+    </Exec>
+    <!-- Update LANGFUSE_RELEASE with actual VSTO version -->
+    <Exec Command="powershell -Command &quot;(Get-Content '$(ProjectDir)../deno-server/.env') -replace 'LANGFUSE_RELEASE=.*', 'LANGFUSE_RELEASE=$(ActualVersion)' | Set-Content '$(ProjectDir)../deno-server/.env'&quot;" />
+    <!-- Update LANGFUSE_TRACING_ENVIRONMENT with build configuration (lowercase) -->
+    <Exec Command="powershell -Command &quot;(Get-Content '$(ProjectDir)../deno-server/.env') -replace 'LANGFUSE_TRACING_ENVIRONMENT=.*', ('LANGFUSE_TRACING_ENVIRONMENT=' + '$(Configuration)'.ToLower()) | Set-Content '$(ProjectDir)../deno-server/.env'&quot;" />
+    <Message Text="Deno .env file updated with actual VSTO version $(ActualVersion) and configuration $(Configuration)" Importance="high" />
+  </Target>
+  <!-- Deno Backend Build Tasks -->
+  <Target Name="BuildDenoBackend" BeforeTargets="PrepareForBuild" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Building Deno backend for production (Environment: $(DeployEnvironment))..." Importance="high" />
+    <!-- Set X21_ENVIRONMENT before compilation so it's baked into the compiled executable -->
+    <Exec Command="set X21_ENVIRONMENT=$(DeployEnvironment) &amp;&amp; deno compile --target x86_64-pc-windows-msvc --output x21-backend-$(DeployEnvironment) --no-check --allow-net --allow-env --allow-read --allow-write --allow-sys --env-file=.env --include=src/data mod.ts" WorkingDirectory="$(ProjectDir)../deno-server" />
+    <Message Text="Deno backend build completed: $(BackendExecutableName)" Importance="high" />
+  </Target>
+  <Target Name="CopyDenoBackend" AfterTargets="BuildDenoBackend" BeforeTargets="ResolveReferences" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Copying Deno backend to output directory..." Importance="high" />
+    <Copy SourceFiles="$(ProjectDir)../deno-server\$(BackendExecutableName)" DestinationFolder="$(OutputPath)" />
+    <Copy SourceFiles="$(ProjectDir)../deno-server\$(BackendExecutableName)" DestinationFolder="$(ProjectDir)" />
+    <Message Text="Deno backend copied to output directory: $(BackendExecutableName)" Importance="high" />
+  </Target>
+  <!-- Dynamically include Deno backend executable for ClickOnce deployment after it's copied -->
+  <Target Name="IncludeDenoBackendInDeployment" AfterTargets="CopyDenoBackend" BeforeTargets="_CopyManifestFiles;GenerateApplicationManifest" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Including $(BackendExecutableName) in ClickOnce deployment..." Importance="high" />
+    <ItemGroup>
+      <ApplicationFile Include="$(BackendExecutableName)" />
+      <Content Include="$(BackendExecutableName)">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <IncludeInDeployment>true</IncludeInDeployment>
+      </Content>
+    </ItemGroup>
+    <Message Text="$(BackendExecutableName) included in deployment" Importance="high" />
+  </Target>
+</Project>

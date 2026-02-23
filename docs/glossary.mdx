@@ -1,0 +1,17 @@
+# Glossary
+
+Common terminology used throughout the X21 documentation.
+
+- **Add-in (VSTO)** – The .NET Framework component that integrates with Excel, hosts the task pane, and exposes local APIs.
+- **Anthropic Claude** – Large language model used for natural language understanding and tool planning.
+- **Auto-approve** – UI setting that automatically approves designated tools without manual review.
+- **ClickOnce** – Microsoft deployment technology used to install and update X21.
+- **Conversation History** – The ordered list of messages between the user and Claude, including tool results, stored per workbook.
+- **Deno Orchestrator** – TypeScript service coordinating prompts, Claude interactions, and Excel tool execution.
+- **Langfuse** – Observability platform capturing traces, spans, and scores for each request.
+- **PostHog** – Analytics service used for UI and add-in usage metrics.
+- **Tool** – A callable operation (read/write/format/structural/VBA) that Claude can request and users can approve.
+- **Tool Change** – Metadata about a tool execution, including status flags (`pending`, `applied`, `approved`) and revert payloads.
+- **WebSocket** – Persistent connection between the task pane and Deno server for streaming responses and tool approvals.
+- **WebView2** – Chromium-based renderer hosting the React UI inside Excel.
+- **Workbook State** – Data structure maintained by the orchestrator containing conversation history, tool changes, and request metadata for a workbook.

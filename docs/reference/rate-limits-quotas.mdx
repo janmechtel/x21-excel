@@ -1,0 +1,213 @@
+---
+title: "Rate Limits & Quotas"
+description: "Understanding X21's usage limits and constraints"
+---
+
+# Rate Limits & Quotas
+
+X21 has several limits to ensure optimal performance and manage costs. Understanding these helps you work within constraints.
+
+## Token Limits
+
+### Conversation Limit
+
+**200,000 tokens per conversation**
+
+Includes:
+- All your messages
+- All AI responses
+- Tool definitions (background)
+- System messages
+- Attached files (~100KB per PDF page estimate)
+
+### Per-Response Limits
+
+- **Output**: 32,000 tokens reserved
+- **Thinking**: 1,600 tokens reserved
+- **Combined**: Up to 33,600 tokens per AI response
+
+### What Are Tokens?
+
+Tokens are units of text:
+- ~4 characters = 1 token
+- "Hello" = 1 token
+- "spreadsheet" = 2 tokens
+- Full conversation history counts
+
+### Token Counter
+
+Status bar shows real-time usage:
+```
+📊 Tokens: 45,230 / 200,000
+```
+
+### When Limits Are Reached
+
+At 200,000 tokens, X21 automatically:
+1. **Compacts** conversation (summarizes old messages)
+2. **Preserves** recent context
+3. **Continues** without interruption
+
+**Best practice**: Start new conversations for unrelated tasks.
+
+## File Limits
+
+### PDF Attachments
+
+**100 pages total per request**
+
+Examples:
+- 1 file × 100 pages = OK
+- 2 files × 50 pages each = OK
+- 5 files × 30 pages each = Exceeds limit
+
+### Image Files
+
+**No explicit limit**, but:
+- Large images increase processing time
+- Multiple images count toward token usage
+- Recommended: Compress large images
+
+### File Types
+
+Supported:
+- PDFs (up to 100 pages total)
+- PNG, JPG, JPEG, GIF, WEBM
+
+Not supported:
+- Excel files (use file operations instead)
+- Word documents
+- Other formats
+
+## Query Limits
+
+### Recent Chats
+
+**Max 50 conversations** per history query
+
+Configurable range: 1-50
+
+### Search Results
+
+**Max 100 results** per search query
+
+Configurable range: 1-100
+
+### Messages Per Conversation
+
+No hard limit, but:
+- Very long conversations may compact
+- Performance may degrade beyond 200k tokens
+
+## Rate Limiting
+
+### Anthropic API Limits
+
+X21 uses Claude API, which has rate limits:
+
+**If rate limited**:
+- Error message appears
+- Wait time indicated (typically 30-60 seconds)
+- Retry automatically or manually
+
+**Common causes**:
+- Multiple rapid requests
+- Large file processing
+- Peak usage times
+
+### Recovery
+
+```
+⚠️ Rate limit reached. Please wait 30 seconds.
+```
+
+**Actions**:
+1. Wait the indicated time
+2. Retry your request
+3. Contact support if persistent
+
+## Best Practices
+
+### Managing Tokens
+
+**Start fresh**:
+- New conversation for new tasks
+- Don't mix unrelated work
+- Clear separation reduces token usage
+
+**Monitor usage**:
+- Watch the token counter
+- Compact before hitting 200k
+- Use concise prompts when possible
+
+### File Attachments
+
+**Optimize PDFs**:
+- Extract relevant pages only
+- Compress before attaching
+- Split large documents
+
+**Image efficiency**:
+- Resize to reasonable dimensions
+- Compress without losing quality
+- Screenshot only necessary portions
+
+### Avoiding Rate Limits
+
+**Pace requests**:
+- Don't rapid-fire multiple requests
+- Let responses complete
+- Batch operations when possible
+
+**Off-peak usage**:
+- Fewer rate limits during off-peak hours
+- Plan large operations accordingly
+
+## Error Messages
+
+### Token Limit Errors
+
+```
+⚠️ Conversation approaching token limit
+```
+**Action**: Start new conversation soon
+
+```
+⚠️ Request too large. Try removing attachments or starting a new conversation.
+```
+**Action**: Reduce file attachments or start fresh
+
+### Rate Limit Errors
+
+```
+⚠️ Rate limit reached. Please wait 30 seconds.
+```
+**Action**: Wait and retry
+
+```
+⚠️ Service overloaded. Please try again in a moment.
+```
+**Action**: Brief wait, then retry
+
+### File Limit Errors
+
+```
+⚠️ PDF attachments exceed 100 pages total
+```
+**Action**: Remove pages or split documents
+
+## Quotas by User Type
+
+All X21 users have the same limits:
+- 200,000 tokens per conversation
+- 100 PDF pages per request
+- Shared Anthropic API rate limits
+
+Enterprise deployments may have custom limits - contact your administrator.
+
+## Related Topics
+
+- [Understanding AI Responses](../getting-started/understanding-ai-responses) - Token details
+- [File Attachments](../user-guide/file-attachments) - File handling
+- [Performance Optimization](../best-practices/performance-optimization) - Efficiency tips
+- [Troubleshooting: Error Types](../troubleshooting/error-types) - Error handling

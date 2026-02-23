@@ -1,0 +1,40 @@
+# Data Analysis
+
+Analysts use X21 to explore datasets, generate summaries, and validate results without writing manual formulas. Below are typical workflows that combine Claude’s reasoning with Excel tools.
+
+## Sales Performance Review
+
+1. **Set Context** – “We’re in the `Sales_Q4` sheet. Analyse `A1:F500`.”
+2. **Read Data** – Claude calls `read_values` to inspect the table, extracting metrics like revenue, units sold, and region.
+3. **Summarise** – Claude streams a narrative with KPIs, highlighting trends or anomalies (e.g., “Region West fell 8% vs Q3”).
+4. **Create Summary Sheet** – Approved tools write an aggregated table to a new worksheet using `add_sheets` and `write_values`.
+5. **Highlight Findings** – `write_format` emphasises top/bottom performers; optional chart created for exec-ready visuals.
+
+## Variance Analysis
+
+- Compare actuals vs budget by prompting: “Calculate variance and percentage variance for the selected table.”
+- Workflow:
+  - `write_values` inserts variance formulas (e.g., `=B2-C2`).
+  - `drag_formula` propagates across rows.
+  - `write_format` applies conditional colour scales to highlight outliers.
+  - Claude summarises key deviations and suggests next steps.
+
+## Cohort Analysis
+
+- Attach a PDF with cohort definitions and ask Claude to reconcile it with the Excel dataset.
+- The assistant uses `read_values`, cross-references the PDF, and constructs a pivot-style summary table.
+- Results include commentary on retention patterns, plus charts if requested.
+
+## Quality Checks
+
+- Request: “Identify rows with missing critical fields and list them.”
+- Claude runs `read_values`, filters nulls, and writes a remediation table on a staging sheet.
+- Optionally, it can generate formulas or a macro to flag missing data automatically for future updates.
+
+## Tips for Analysts
+
+- Provide time periods, dimensions, and metrics explicitly so Claude targets the right columns.
+- Approve read operations quickly to keep the conversation flowing; scrutinise write operations before committing.
+- Use attachments for definitions, MBR decks, or policy docs to ensure recommendations match business rules.
+
+X21 keeps analysts focused on insight rather than mechanics, letting them iterate faster while preserving transparency.

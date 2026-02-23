@@ -1,0 +1,316 @@
+---
+title: "Connection Status"
+description: "Understanding and troubleshooting X21 connection issues"
+---
+
+# Connection Status
+
+X21 requires connections between multiple components. This guide helps troubleshoot connection problems.
+
+## Connection Architecture
+
+X21 uses this connection flow:
+
+```
+Excel Task Pane (React UI)
+    ↕ WebSocket (port 8000)
+Deno Server
+    ↕ HTTP (port 8080)
+VSTO Add-in
+    ↕ COM
+Excel Application
+```
+
+## Connection Indicators
+
+### Status Bar
+
+**In development mode**, status bar shows:
+
+**Connected** (green dot):
+```
+🟢 ws://localhost:8000
+```
+All systems operational
+
+**Disconnected** (red dot):
+```
+🔴 ws://localhost:8000
+```
+WebSocket connection lost
+
+### Error Messages
+
+**Cannot Connect**:
+```
+⚠️ Cannot connect to Deno server. Check that the backend is running.
+```
+
+**Connection Lost**:
+```
+⚠️ Connection lost. Click Reconnect to restore.
+```
+
+## Checking Connections
+
+### 1. Check Deno Server
+
+**Windows** (PowerShell):
+```powershell
+netstat -ano | findstr ":8000"
+```
+
+**Expected output**:
+```
+TCP    0.0.0.0:8000    0.0.0.0:0    LISTENING    <PID>
+```
+
+**If not running**:
+1. Start Deno server manually
+2. Check installation
+3. Review server logs
+
+### 2. Check VSTO Add-in
+
+**Windows** (PowerShell):
+```powershell
+netstat -ano | findstr ":8080"
+```
+
+**Expected output**:
+```
+TCP    127.0.0.1:8080    0.0.0.0:0    LISTENING    <PID>
+```
+
+**If not running**:
+1. Check Excel add-ins list
+2. Enable X21 add-in
+3. Restart Excel
+
+### 3. Check Task Pane
+
+**In Excel**:
+1. Look for X21 task pane
+2. Check for load errors
+3. Verify WebView2 is installed
+
+## Common Connection Issues
+
+### Cannot Connect to Deno Server
+
+**Symptoms**:
+- Red connection indicator
+- Error on sending messages
+- Task pane loads but unresponsive
+
+**Causes & Solutions**:
+
+**1. Deno not running**
+```
+Solution: Start Deno server
+- Check startup scripts
+- Review logs for startup errors
+- Verify Deno installation
+```
+
+**2. Port 8000 in use**
+```
+Solution: Find conflicting process
+Windows: netstat -ano | findstr ":8000"
+Kill process or change X21 port
+```
+
+**3. Firewall blocking**
+```
+Solution: Allow port 8000
+- Windows Firewall settings
+- Add inbound rule for port 8000
+- Or disable firewall temporarily to test
+```
+
+**4. Wrong server address**
+```
+Solution: Verify configuration
+- Check environment variables
+- Ensure localhost:8000
+- No proxy interfering
+```
+
+### VSTO Connection Issues
+
+**Symptoms**:
+- Tool operations fail
+- Can't read Excel data
+- Workbook metadata missing
+
+**Causes & Solutions**:
+
+**1. VSTO not loaded**
+```
+Solution:
+1. File → Options → Add-ins
+2. Manage: COM Add-ins → Go
+3. Check X21 is enabled
+4. Restart Excel
+```
+
+**2. Port 8080 in use**
+```
+Solution:
+Windows: netstat -ano | findstr ":8080"
+Kill conflicting process
+Restart Excel
+```
+
+**3. .NET Framework issue**
+```
+Solution:
+- Verify .NET Framework 4.8 installed
+- Repair .NET installation
+- Check Windows Updates
+```
+
+### WebSocket Disconnections
+
+**Symptoms**:
+- Connection drops during use
+- Frequent reconnection prompts
+- Streaming stops mid-response
+
+**Causes & Solutions**:
+
+**1. Network instability**
+```
+Solution:
+- Check network connection
+- Use wired instead of WiFi
+- Disable VPN temporarily
+- Test with mobile hotspot
+```
+
+**2. Server restart**
+```
+Solution:
+- Normal if server restarted
+- Click Reconnect
+- Wait for server to fully start
+```
+
+**3. Timeout**
+```
+Solution:
+- Increase timeout settings
+- Reduce request complexity
+- Check for network issues
+```
+
+## Reconnection
+
+### Automatic Reconnection
+
+X21 attempts automatic reconnection:
+1. Connection lost detected
+2. Wait 2 seconds
+3. Attempt reconnect
+4. Retry up to 3 times
+5. Show manual reconnect button
+
+### Manual Reconnection
+
+If automatic fails:
+1. Click **Reconnect** button
+2. Wait for connection
+3. If fails, restart Excel
+4. Check server status
+
+### After Reconnection
+
+- Previous conversation preserved
+- Pending operations may need retry
+- Token usage maintained
+
+## Troubleshooting Steps
+
+### Basic Troubleshooting
+
+1. **Check status indicators**
+2. **Click Reconnect** if available
+3. **Restart Excel** (clears state)
+4. **Restart Deno server**
+5. **Check ports** (8000, 8080)
+6. **Review firewall** settings
+
+### Advanced Troubleshooting
+
+1. **Check process list**:
+   ```powershell
+   Get-Process | Where-Object {$_.ProcessName -like "*excel*" -or $_.ProcessName -like "*deno*"}
+   ```
+
+2. **Review logs**:
+   - Deno server logs
+   - Excel VSTO logs
+   - Browser console (F12 in task pane)
+
+3. **Test ports**:
+   ```powershell
+   Test-NetConnection -ComputerName localhost -Port 8000
+   Test-NetConnection -ComputerName localhost -Port 8080
+   ```
+
+4. **Network diagnostics**:
+   - Ping localhost
+   - Check hosts file
+   - Disable IPv6 if issues
+
+### When All Else Fails
+
+1. **Complete restart**:
+   - Close Excel
+   - Stop Deno server
+   - Wait 30 seconds
+   - Start Deno server
+   - Start Excel
+
+2. **Reinstall**:
+   - Uninstall X21
+   - Clear data folders
+   - Reinstall fresh
+   - Verify all prerequisites
+
+3. **Contact support**:
+   - Collect logs
+   - Document error messages
+   - List troubleshooting steps tried
+   - Email [support](mailto:jan@kontext21.com)
+
+## Prevention
+
+### Stable Connections
+
+**Best practices**:
+- Keep Excel and Deno server running
+- Stable network connection
+- Don't hibernate/sleep during use
+- Adequate system resources
+
+### Configuration
+
+**Firewall rules**:
+```
+Allow inbound:
+- Port 8000 (TCP) for Deno
+- Port 8080 (TCP) for VSTO
+```
+
+**Startup**:
+- Ensure Deno starts before Excel
+- Check startup scripts run correctly
+- Verify environment variables set
+
+## Related Topics
+
+- [Installation Methods](../deployment/installation-methods) - Initial setup
+- [Process Lifecycle](../deployment/process-lifecycle) - Component management
+- [Error Types](./error-types) - Connection error details
+- [Common Issues](./common-issues) - General problems

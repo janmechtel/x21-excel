@@ -1,0 +1,34 @@
+# File Attachments
+
+X21 lets you enrich prompts with supporting documents so Claude can reason about PDFs, screenshots, and reference material alongside the active workbook. Attachments travel with each request and are stored securely for auditing.
+
+## Supported Formats & Limits
+
+- **PDF** – Up to 100 estimated pages per document (based on ~100 KB per page). Ideal for requirements, invoices, or specifications.
+- **Images** – PNG and JPEG files for charts, whiteboard captures, or annotated screenshots.
+- Total upload size per request defaults to 20 MB. Larger files should be trimmed before attaching.
+
+> Other formats are ignored at upload time to prevent unexpected parsing issues.
+
+## How Attachments Flow Through the System
+
+1. The UI encodes each file as base64, capturing `name`, `type`, `size`, and the encoded content.
+2. The payload is included in `stream:start` under `documentsBase64`.
+3. The Deno router calls `parseDocumentFromRequest`, converting each file into an Anthropic message block (`type: "document"` for PDFs, `"image"` for images).
+4. Attachment metadata (file counts, total size, estimated PDF pages) is added to the Langfuse trace for future reference.
+5. Claude receives both the workbook context and the attached documents, enabling multi-modal reasoning.
+
+## Working with Attachments in the UI
+
+- Drag-and-drop files onto the composer or click **Attach** to browse.
+- Remove attachments before sending by clicking the trash icon next to each file.
+- Uploaded files persist only for the current request; start a new prompt to attach different documents.
+- When the backend acknowledges attachments, the conversation transcript includes a note so you can track what was sent.
+
+## Security & Privacy Considerations
+
+- Attachments are transmitted over `ws://localhost` and never leave the machine unless you enable remote telemetry that records them explicitly (disabled by default).
+- Files are not stored on disk by X21. They live in memory for the duration of the request and are discarded afterwards.
+- If your organisation requires attachment logging, extend the Deno service to persist metadata (not the contents) to your preferred audit store.
+
+Attachments are a powerful way to give Claude richer context, especially when Excel data alone does not capture the full problem statement.

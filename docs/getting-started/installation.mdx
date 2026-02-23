@@ -1,0 +1,27 @@
+# Installation
+
+Follow these steps to install the X21 Excel add-in on a Windows workstation. The add-in ships as a ClickOnce application signed with your team’s certificate and bundles the Deno backend, React task pane, and VSTO components.
+
+## Prerequisites
+
+Usually all those are installed by default on modern Windows systems:
+
+- Windows 10 (build 19045+) or Windows 11 with **Excel 2016 or later** (desktop edition).
+- **.NET Framework 4.8** – required by the VSTO runtime.
+- WebView2 Runtime (usually installed with Microsoft Edge). If missing, download from Microsoft.
+- Required ports available on localhost: `8000+` for the Deno API, `8085+` for WebSockets, and `8080+` for the Excel API bridge. The add-in automatically finds a free port close to these defaults and writes it to `%LOCALAPPDATA%\X21\deno-*`.
+
+## Choosing an Installation Channel
+
+X21 publishes multiple ClickOnce channels through the `Publish.ps1` script:
+
+- **Staging** – Pre-production validation https://dl.kontext21.com/staging/x21-staging-setup.exe
+- **Production** – Main customer channel served from https://dl.kontext21.com/x21-setup.exe
+- **ProductionLocal** – For air-gapped deployment - Extract this https://dl.kontext21.com/local/x21-setup-v1.6.0.0.zip to`C:\`for which will extract to `C:\x21` later version use`x21-setup-vX.Y.Z.W.zip`  .
+
+## Installing via ClickOnce
+
+1. Navigate to the ClickOnce URL from above
+2. Click **Install**. The bootstrapper installs the VSTO add-in, registers necessary registry keys, and places the backend binaries under `%LOCALAPPDATA%\X21`.
+3. **Launch Excel**. If it's already running close all Windows also via task manager or restarting your PC.
+4. Look for the **X21** ribbon tab. Open the task pane using the **AI Chat** button or Ctrl+Shift+A

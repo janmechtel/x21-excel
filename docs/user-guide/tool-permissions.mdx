@@ -1,0 +1,42 @@
+# Tool Permission System
+
+X21 puts humans in control of every workbook change. When Claude proposes using a tool, the orchestrator pauses execution until a decision is made. This section explains how the permission flow works and how to use it effectively.
+
+## Lifecycle of a Tool Request
+
+1. Claude emits a `tool_use` block (e.g., `write_values`) while generating a response.
+2. The Deno backend registers the request in `stateManager.addInitialToolChange`, marks it as **pending**, and sends `tool:permission` to the UI.
+3. The UI creates a card in the Pending Actions panel and decides whether to auto-approve based on:
+   - Manual toggles (`autoApproveEnabled`, `approveAllEnabled`).
+   - `toolsNotRequiringApproval` (safe read-only tools such as `read_values`).
+4. The user can:
+   - **View** – Executes the tool via `tool:view`, applies changes temporarily, and captures revert data.
+   - **Approve** – Runs `toolExecutionFlow`, persists results, marks the tool as approved, and continues the Claude stream.
+   - **Reject** – Cancels execution, records the user message, and updates conversation history so Claude adapts.
+   - **Revert** / **Apply** – After approval, use these options to undo or redo part of the change set (`revertToolChangesForWorkbookFromToolIdOnwards` / `applyFromToolIdOnwards`).
+
+## Understanding Tool State
+
+Each tool tracks several flags stored in `ToolChangeInterface`:
+
+- `pending` – Awaiting decision.
+- `applied` – Tool executed against Excel (either via View or Approve).
+- `approved` – User confirmed the change.
+- `inputDataRevert` – Snapshot of the workbook state used to revert if needed.
+
+Status badges in the UI mirror these flags. For example, a tool can be **Applied** but still **Pending** if it was viewed but not yet approved.
+
+## Batch Approvals
+
+- When multiple tools require approval, the UI can send a single `tool:permission:response` with `toolResponses` for each item.
+- The backend processes approvals sequentially, logging successes and failures. Any tool that throws `ToolExecutionError` is marked as failed, and Claude is informed so it can retry or apologise.
+- Mixed decisions are allowed: some tools can be approved while others are rejected, and the LLM continues with updated context.
+
+## Best Practices
+
+- **Preview before approving** for destructive actions like `remove_rows` or `write_format`.
+- **Reject with context** – Provide a short message explaining why the tool was denied so Claude can adjust its strategy.
+- **Leverage auto-approve** for read operations during exploratory analysis to reduce latency.
+- **Monitor batch operations** – When approving many tools at once, watch the conversation for any follow-up suggestions in case a subset failed.
+
+The permission system ensures X21 stays trustworthy in production environments: every structural change is auditable, reversible, and linked to the user who approved it.

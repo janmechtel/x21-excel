@@ -1,0 +1,73 @@
+[
+  {
+    "defaultInput": "",
+    "description": "Explain how to build or troubleshoot a formula for the selected data.",
+    "icon": "Calculator",
+    "inputPlaceholder": "Describe the formula goal and reference cells (e.g., \"Need SUMIFS for column B when column C = Approved\").",
+    "name": "formula_help",
+    "promptFile": "formula_help.md",
+    "requiresInput": true,
+    "title": "Formula Help"
+  },
+  {
+    "description": "Format everything and make it look nice an consistent.",
+    "icon": "Palette",
+    "name": "format",
+    "promptFile": "format.md",
+    "requiresInput": false,
+    "title": "Format"
+  },
+  {
+    "description": "Spreadsheet audit to find potential issues and improvements.",
+    "icon": "ClipboardCheck",
+    "inputPlaceholder": "Add anything specific you want the audit to focus on (e.g., formulas, data quality, layout).",
+    "name": "audit",
+    "promptFile": "audit.md",
+    "requiresInput": true,
+    "title": "Audit"
+  },
+  {
+    "description": "Recereate this attachment, use formulas where possible",
+    "icon": "FileImage",
+    "inputPlaceholder": "Add anything specifc like page numbers or data to extract also if you want colors/formatting etc.",
+    "name": "pdf",
+    "promptFile": "from_pdf.md",
+    "requiresInput": true,
+    "title": "From PDF/Image"
+  },
+  {
+    "description": "Map accounts or categories based on descriptions.",
+    "icon": "Tags",
+    "inputPlaceholder": "Add the source of descriptions and target mapping details (e.g., \"Column G has descriptions, map to categories on Sheet X\").",
+    "name": "classify",
+    "promptFile": "classify.md",
+    "requiresInput": true,
+    "title": "AI Classifcation & Mapping"
+  },
+  {
+    "description": "Inspect the selected range for data quality issues and propose fixes.",
+    "icon": "Sparkles",
+    "name": "clean_up_data",
+    "prompt": "Inspect the current Excel selection for potential data quality issues (duplicates, inconsistent formats, missing values). Propose a clean, step-by-step plan to fix the issues.",
+    "requiresInput": false,
+    "title": "Clean Up Data"
+  },
+  {
+    "description": "Recommend the best chart(s) to visualize the selected data.",
+    "icon": "BarChart3",
+    "name": "generate_chart_plan",
+    "prompt": "Analyze the current Excel selection and suggest the most effective charts to visualize it. Provide the reasoning, the specific chart types, and any Excel steps the user should take.",
+    "requiresInput": false,
+    "title": "Generate Chart Plan"
+  },
+  {
+    "defaultInput": "Column G = descriptions (Buchungstext), Column Q = classification labels",
+    "description": "Fill blank Q labels by learning from column G descriptions with >=90% confidence per unique text.",
+    "icon": "Wand2",
+    "inputPlaceholder": "Confirm the text/label columns (e.g., \"Column G holds descriptions, Column Q holds labels\") and add any filtering details.",
+    "name": "auto_fill",
+    "promptFile": "auto_fill.md",
+    "requiresInput": true,
+    "title": "Auto Fill Column"
+  }
+]

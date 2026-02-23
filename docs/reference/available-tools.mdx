@@ -1,0 +1,290 @@
+---
+title: "Available Tools"
+description: "Complete reference of all Excel operations available to the AI"
+---
+
+# Available Tools Reference
+
+X21 provides 14 specialized tools for Excel operations. This reference documents each tool's capabilities, parameters, and usage.
+
+## Data Operations
+
+### read_values
+
+**Purpose**: Read cell values and formulas from ranges
+
+**Auto-approved**: ✓ Yes
+
+**Parameters**:
+- `range`: Excel range (e.g., "A1:D10")
+- `worksheet`: Sheet name (optional if current sheet)
+
+**Returns**: 2D array of values and formulas
+
+**Example**: "Read the data in A1:D10"
+
+---
+
+### write_values
+
+**Purpose**: Write values or formulas to cells
+
+**Auto-approved**: ✗ Requires approval
+
+**Parameters**:
+- `range`: Target Excel range
+- `values`: 2D array of values/formulas
+- `worksheet`: Sheet name (optional)
+
+**Returns**: Before/after snapshots
+
+**Example**: "Set A1 to 100"
+
+---
+
+### drag_formula
+
+**Purpose**: AutoFill formulas or patterns using Excel's drag behavior
+
+**Auto-approved**: ✗ Requires approval
+
+**Parameters**:
+- `source_range`: Starting cells
+- `destination_range`: Where to fill
+- `fill_type`: default, series, formats, values
+
+**Returns**: Filled range details
+
+**Example**: "Drag A1 formula down to A100"
+
+## Formatting Operations
+
+### read_format
+
+**Purpose**: Read formatting properties of cells
+
+**Auto-approved**: ✓ Yes
+
+**Parameters**:
+- `range`: Excel range to read
+- `worksheet`: Sheet name (optional)
+
+**Returns**: Font, colors, alignment, number format
+
+**Example**: "What formatting is on A1?"
+
+---
+
+### write_format
+
+**Purpose**: Apply formatting to ranges
+
+**Auto-approved**: ✗ Requires approval
+
+**Parameters**:
+- `range`: Target range
+- `format`: Object with properties:
+  - `bold`, `italic`, `underline`: boolean
+  - `font_color`: hex color (e.g., "#FF0000")
+  - `background_color`: hex color
+  - `font_size`: number
+  - `font_name`: string
+  - `alignment`: left, center, right, justify
+  - `number_format`: format string
+
+**Returns**: Applied formatting confirmation
+
+**Example**: "Make A1:A10 bold with gray background"
+
+## Structure Operations
+
+### add_sheets
+
+**Purpose**: Create new worksheets
+
+**Auto-approved**: ✗ Requires approval
+
+**Parameters**:
+- `sheet_names`: Array of names
+- `position`: Before/after which sheet (optional)
+
+**Returns**: Created sheet names
+
+**Example**: "Add a sheet named 'Summary'"
+
+---
+
+### remove_sheets
+
+**Purpose**: Delete worksheets
+
+**Auto-approved**: ✗ Requires approval
+
+**Warning**: ⚠️ Cannot be undone
+
+**Parameters**:
+- `sheet_names`: Array of sheets to delete
+
+**Returns**: Confirmation of deletion
+
+**Example**: "Delete the 'Temp' sheet"
+
+---
+
+### add_rows
+
+**Purpose**: Insert rows at specific positions
+
+**Auto-approved**: ✗ Requires approval
+
+**Parameters**:
+- `row_spec`: Row specification (e.g., "1:1" or "5:7")
+- `worksheet`: Sheet name (optional)
+
+**Returns**: Inserted row details
+
+**Example**: "Insert 3 rows above row 5"
+
+---
+
+### remove_rows
+
+**Purpose**: Delete rows
+
+**Auto-approved**: ✗ Requires approval
+
+**Warning**: ⚠️ Data loss - cannot be undone
+
+**Parameters**:
+- `row_spec`: Rows to delete (e.g., "5:10")
+- `worksheet`: Sheet name (optional)
+
+**Returns**: Confirmation of deletion
+
+**Example**: "Delete rows 5 through 10"
+
+---
+
+### add_columns
+
+**Purpose**: Insert columns at specific positions
+
+**Auto-approved**: ✗ Requires approval
+
+**Parameters**:
+- `column_spec`: Column specification (e.g., "A:A" or "B:D")
+- `worksheet`: Sheet name (optional)
+
+**Returns**: Inserted column details
+
+**Example**: "Insert 2 columns before column B"
+
+---
+
+### remove_columns
+
+**Purpose**: Delete columns
+
+**Auto-approved**: ✗ Requires approval
+
+**Warning**: ⚠️ Data loss - cannot be undone
+
+**Parameters**:
+- `column_spec`: Columns to delete (e.g., "C:E")
+- `worksheet`: Sheet name (optional)
+
+**Returns**: Confirmation of deletion
+
+**Example**: "Delete columns C through E"
+
+## VBA Operations
+
+### vba_read
+
+**Purpose**: Read existing VBA macro code
+
+**Auto-approved**: ✓ Yes
+
+**Parameters**:
+- `module_name`: VBA module name (optional - reads all if omitted)
+
+**Returns**: VBA code text
+
+**Example**: "Show me the VBA in this workbook"
+
+---
+
+### vba_create
+
+**Purpose**: Create new VBA macros
+
+**Auto-approved**: ✗ Requires approval
+
+**Status**: 🧪 Experimental
+
+**Warning**: Review generated code carefully
+
+**Parameters**:
+- `function_name`: Name of the macro
+- `code`: VBA code to create
+
+**Returns**: Created function confirmation
+
+**Example**: "Create a macro to highlight duplicates"
+
+---
+
+### vba_update
+
+**Purpose**: Modify existing VBA macros
+
+**Auto-approved**: ✗ Requires approval
+
+**Status**: 🧪 Experimental
+
+**Warning**: Review changes carefully
+
+**Parameters**:
+- `function_name`: Macro to update
+- `code`: New VBA code
+
+**Returns**: Update confirmation
+
+**Example**: "Update the Calculate macro to include tax"
+
+## Tool Categories
+
+### By Safety Level
+
+**Auto-Approved (Read-Only)**:
+- read_values
+- read_format
+- vba_read
+
+**Manual Approval (Write Operations)**:
+- write_values
+- write_format
+- drag_formula
+- add_sheets
+- add_rows
+- add_columns
+- vba_create
+- vba_update
+
+**Destructive (Cannot Undo)**:
+- remove_sheets
+- remove_rows
+- remove_columns
+
+### By Operation Type
+
+**Data**: read_values, write_values, drag_formula
+**Format**: read_format, write_format
+**Structure**: add_sheets, remove_sheets, add_rows, remove_rows, add_columns, remove_columns
+**VBA**: vba_read, vba_create, vba_update
+
+## Related Topics
+
+- [Tool Management](../user-guide/tool-management) - Enable/disable tools
+- [Tool Permissions](../user-guide/tool-permissions) - Approval workflow
+- [Tool Preview & Undo](../user-guide/tool-preview-undo) - View and revert changes

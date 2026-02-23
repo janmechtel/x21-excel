@@ -1,0 +1,277 @@
+---
+title: "Range & Sheet References"
+description: "Reference cells, ranges, and sheets in your conversations"
+---
+
+# Range & Sheet References
+
+X21 makes it easy to reference specific cells, ranges, and sheets in your conversations through interactive mentions and automatic detection.
+
+## Sheet Mentions
+
+### Using @ to Reference Sheets
+
+Type `@` followed by a sheet name to reference it:
+
+```
+Compare the totals in @Sales with @Forecast
+```
+
+### Sheet Mention Features
+
+**Autocomplete Palette**:
+1. Type `@`
+2. Palette shows all sheets
+3. Type to search/filter
+4. Arrow keys to navigate
+5. Enter to select
+
+**Interactive Pills**:
+- Sheet names appear as colored pills
+- Click a pill to navigate to that sheet
+- Hover for full sheet name
+
+**Search and Filter**:
+```
+@s → shows Sales, Summary, Sheet1
+@for → shows Forecast
+```
+
+### When to Use Sheet Mentions
+
+**Comparing data**:
+```
+Find differences between @Actual and @Budget
+```
+
+**Multi-sheet operations**:
+```
+Copy formatting from @Template to @Report
+```
+
+**Navigation context**:
+```
+The formula in @Calculations uses data from @RawData
+```
+
+## Range References
+
+### Current Selection Badge
+
+The input area shows your currently selected range:
+
+```
+📍 Sheet1!A1:D10
+```
+
+### Inserting Ranges
+
+**Button Method**:
+1. Select cells in Excel
+2. Click the "Insert Range" button in input area
+3. Range appears as a pill
+
+**Manual Entry**:
+Type range addresses directly:
+```
+Calculate the average of A1:A100
+```
+
+### Interactive Range Pills
+
+Ranges appear as clickable elements:
+
+```
+Update the values in [Sheet1!A1:D10]
+```
+
+**Click a range pill to**:
+- Navigate to those cells
+- Switch sheets if needed
+- Highlight the range
+
+### Range Formats Supported
+
+**Simple ranges**:
+```
+A1:D10
+B5:B100
+C1
+```
+
+**Sheet-qualified**:
+```
+Sheet1!A1:D10
+'Sales Data'!B5:B100
+```
+
+**Named ranges**:
+```
+TotalSales
+QuarterlyRevenue
+```
+
+## Using References Effectively
+
+### Selection Context
+
+The AI automatically knows your selection:
+
+```
+You: "Summarize this data"
+AI: [reads your selected A1:D10]
+AI: "The selection contains 10 rows..."
+```
+
+### Explicit References
+
+Be specific when needed:
+
+```
+"Compare A1:A10 with B1:B10"
+"Copy formula from C1 to C2:C100"
+```
+
+### Cross-Sheet References
+
+Reference multiple sheets:
+
+```
+"Sum the totals from @Q1, @Q2, @Q3, and @Q4"
+```
+
+## Best Practices
+
+### Clear References
+
+**Be specific**:
+```
+✓ "Update Sheet1!A1:A10"
+✗ "Update those cells"
+```
+
+**Use sheet mentions**:
+```
+✓ "Copy @Template formatting to @Report"
+✗ "Copy from the template to the other sheet"
+```
+
+### Selection Strategy
+
+**Small operations**:
+Select the range first, then request:
+```
+1. Select A1:A10
+2. "Make these bold"
+```
+
+**Large operations**:
+Specify range in prompt:
+```
+"Apply formatting to A1:Z1000"
+```
+
+### Sheet Name Clarity
+
+For sheets with spaces or special characters:
+
+```
+@'Sales Data'
+@'Q1-2024'
+@'Report (Final)'
+```
+
+## Advanced Features
+
+### Multiple Ranges
+
+Reference several ranges in one prompt:
+
+```
+"Compare values in A1:A10, B1:B10, and C1:C10"
+```
+
+### Dynamic Ranges
+
+Reference relative to selection:
+
+```
+"Extend the formula to cover the entire used range"
+"Apply to all rows with data"
+```
+
+### Range Calculations
+
+Request operations across ranges:
+
+```
+"Calculate the difference between A1:A10 and B1:B10"
+"Find the maximum value across C1:C100 and D1:D100"
+```
+
+## Common Patterns
+
+### Pattern 1: Select and Act
+
+```
+1. User selects B5:B15
+2. User: "Format as currency"
+3. AI: "I'll format Sheet1!B5:B15 as currency"
+```
+
+### Pattern 2: Explicit Range
+
+```
+User: "Make A1:Z1 bold and centered"
+AI: [applies to specified range]
+```
+
+### Pattern 3: Cross-Sheet
+
+```
+User: "Copy structure from @Template to @NewReport"
+AI: [references both sheets correctly]
+```
+
+## Troubleshooting
+
+### Sheet Not Found
+
+**Issue**: `@Sales` doesn't autocomplete
+
+**Solutions**:
+- Check sheet name spelling
+- Verify sheet exists
+- Try clicking sheet tabs to refresh
+
+### Range Not Recognized
+
+**Issue**: Range reference not working
+
+**Solutions**:
+- Use proper Excel notation (A1:B10)
+- Include sheet name if ambiguous
+- Check for typos in range addresses
+
+### Navigation Not Working
+
+**Issue**: Clicking pills doesn't navigate
+
+**Solutions**:
+- Ensure workbook is active
+- Check Excel isn't in edit mode
+- Refresh connection
+
+## Keyboard Shortcuts
+
+- **@ key**: Open sheet mention palette
+- **Arrow keys**: Navigate mentions/ranges
+- **Enter**: Select mention/range
+- **Escape**: Close palette
+- **Click pill**: Navigate to reference
+
+## Related Topics
+
+- [Interface Overview](./interface) - Understanding the input area
+- [Context Awareness](../../ai-capabilities/context-awareness) - How AI understands your workbook
+- [Keyboard Shortcuts](./keyboard-shortcuts) - All keyboard commands

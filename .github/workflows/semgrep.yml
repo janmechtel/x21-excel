@@ -1,0 +1,37 @@
+name: Semgrep Scan
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: |
+            p/ci
+            p/r2c-security-audit
+            p/owasp-top-ten
+            p/typescript
+            p/javascript
+            p/react
+            p/csharp
+            p/python
+            p/github-actions

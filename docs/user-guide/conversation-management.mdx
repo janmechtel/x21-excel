@@ -1,0 +1,37 @@
+# Conversation Management
+
+X21 maintains independent conversations per workbook so analysts can work in parallel without cross-talk. The Deno `stateManager` is responsible for storing history, tool changes, and metadata across the entire lifecycle.
+
+## Workbook-Scoped State
+
+- When a WebSocket connection starts, `stateManager.getOrCreateState(workbookName)` initialises a new entry containing:
+  - `sessionId` – A UUID tied to the workbook, persisted for the Excel session.
+  - `conversationHistory` – Array of `Anthropic.MessageParam` objects representing user and assistant turns.
+  - `toolChangeHistory` – Map of tool IDs to `ToolChangeInterface` structs capturing pending/approved/applied status.
+  - `requestMetada` and `abortController` maps keyed by request ID.
+- Multiple Excel windows can connect simultaneously; each workbook name maps to its own state object.
+
+## Request Flow
+
+1. `stream:start` sets `latestRequestId`, saves the active tools, worksheets, attachment info, and creates an `AbortController`.
+2. The incoming prompt is appended to conversation history.
+3. As Claude responds, the orchestration layer updates history with streamed content. Tool results are inserted directly next to the originating user message.
+4. When the stream ends or is cancelled, `tracing.endTrace` finalises the Langfuse trace and the state is ready for the next prompt.
+
+## Compacting & Token Control
+
+- If `isHistoryExceedingTokenLimit` reports that the prompt grows too large, `compactChatHistory` summarises prior turns into a single narrative, preserving the most recent user prompt verbatim.
+- Summaries include workbook metadata (active sheet, tools enabled) to avoid losing context.
+- Token counts before/after compacting are logged to Langfuse for observability.
+
+## Restarting & Cleaning Up
+
+- Selecting **Restart Conversation** in the UI sends `chat:restart`, which aborts the current request, clears conversation history, and deletes tool change data for that workbook.
+- When Excel closes or the add-in unloads, the VSTO layer disposes of the task pane and the backend eventually removes the state entry as sockets close.
+
+## Attachments & Metadata Persistence
+
+- Attached documents are converted into Anthropic message blocks and inserted into conversation history so Claude can reference them in follow-up turns.
+- Request metadata (active worksheet, workbook name, tool selections) is stored alongside the prompt and used during compacting and auditing.
+
+By scoping state to workbooks and carefully managing history, X21 keeps conversations responsive while providing guardrails for multi-step workflows.

@@ -1,0 +1,40 @@
+# Formula Management
+
+Claude excels at generating complex formulas, and X21 provides tools to apply them safely across ranges. The key is the `drag_formula` tool, supported by best practices around absolute/relative references and validation.
+
+## `drag_formula` Tool
+
+- **Purpose** – Replicates Excel’s fill handle behaviour programmatically.
+- **Inputs**
+  - `workbookName`, `worksheet`
+  - `sourceRange` – The range containing the seed formula(s) (e.g., `C2:C2`).
+  - `destinationRange` – The target range to fill (e.g., `C3:C100`).
+  - `direction` – `down`, `up`, `left`, or `right`.
+  - `fillType` – Matches Excel’s auto fill options (`fillValues`, `fillSeries`, `fillFormats`, etc.).
+- The Excel API uses `HandleDragFormula` to perform the autofill and returns the resulting formulas and values.
+
+## Generating Formulas with Claude
+
+- Prompt Claude with the required logic and ask it to return both the formula and the range to apply it to.
+- Claude often proposes relative references; ensure the seed cell uses proper `$` anchors where constants are needed.
+- The assistant can combine `write_values` to drop the first formula and `drag_formula` to propagate it.
+
+## Validation Strategies
+
+- After applying formulas, use `read_values` or `read_format` to inspect the affected range and confirm expected outcomes (e.g., numeric formats, error checks).
+- Encourage Claude to include sample outputs in its explanation so you can spot mismatches quickly.
+- For sensitive workbooks, preview the drag operation with **View** before approving permanently.
+
+## Common Patterns
+
+- **Running Totals** – Seed formula `=SUM($B$2:B2)` in the first data row, then drag down.
+- **Conditional Flags** – Seed `=IF($A2="Closed",1,0)` and drag across to mark statuses.
+- **Dynamic Named Ranges** – Combine `drag_formula` with follow-up instructions to create named ranges covering the filled region.
+
+## Troubleshooting
+
+- If autofill fails, check that `sourceRange` and `destinationRange` align. The Excel API raises a descriptive error if shapes differ.
+- Locked or protected cells block fill operations; unlock the range before retrying.
+- When the workbook already contains data in the destination, Excel may prompt about overwriting. The API responds with the final values so you can review any overwritten data via the revert payload.
+
+Formula management tools pair Claude’s reasoning with deterministic Excel automation, helping you roll out new calculations confidently.

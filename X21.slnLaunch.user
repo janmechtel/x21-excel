@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "X21\\vsto-addin\\X21.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "X21\\e2e-excel-tests\\e2e-excel-tests.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

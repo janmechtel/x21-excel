@@ -1,0 +1,41 @@
+# Error Recovery
+
+Even with approvals, mistakes can happen. X21 provides several mechanisms to recover quickly without losing context.
+
+## Cancel an In-Flight Request
+
+- Press **Esc** or click **Cancel Response** to send `stream:cancel`.
+- The backend aborts the Claude request via `AbortController`, logs a cancellation span in Langfuse, and notifies the UI with `stream:cancelled`.
+- Continue the conversation with a corrected prompt or restart if needed.
+
+## Revert Applied Tools
+
+- For each approved tool, select **Revert**. The backend executes `revertToolChangesForWorkbookFromToolIdOnwards`, restoring the workbook using stored `inputDataRevert` payloads.
+- Conversation history records the revert action so Claude acknowledges that the previous results are no longer valid.
+- You can reapply the same tool later using **Apply** if you change your mind.
+
+## Handle Tool Failures
+
+- When a tool throws `ToolExecutionError`, the UI shows the error message and stack trace (if available).
+- Suggested workflow:
+  1. Review the error details (range mismatch, protected sheet, etc.).
+  2. Adjust the prompt or workbook state.
+  3. Ask Claude to retry or propose an alternative.
+- The backend also updates the conversation with the failure context to inform future reasoning.
+
+## Restart a Conversation
+
+- Click **Restart Chat** to clear state. This sends `chat:restart`, aborts any active request, and wipes conversation + tool history for the current workbook.
+- Use this after a major workbook change or when the conversation drifts off-topic.
+
+## Recover from Backend Crashes
+
+- If the Deno server crashes, close Excel to terminate the hosting process, then reopen Excel. Ports and state are reinitialised automatically.
+- Check `%LOCALAPPDATA%\X21\X21-deno\Logs` for crash details and share them with the engineering team.
+
+## Restore from Version Control
+
+- If a workbook becomes corrupted, revert to the last known-good version from your source control or backup solution.
+- For ClickOnce deployments, re-run the installer (`setup.exe`) to repair the add-in.
+
+Error recovery is most effective when paired with clear audit trails. Keep Langfuse traces and logs handy whenever you escalate issues to developers.

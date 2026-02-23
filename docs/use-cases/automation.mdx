@@ -1,0 +1,34 @@
+# Automation
+
+X21 automates repetitive Excel workflows while keeping humans in the loop. Use it to reduce manual effort across nightly refreshes, recurring reports, or complex transformations.
+
+## Scheduled Reporting
+
+- Prompt: “Refresh the monthly KPI report using the latest data in `DataFeed`.”
+- Claude reads the data, updates summary tables, recalculates metrics with `drag_formula`, and refreshes visuals.
+- Approve the batch once, then reuse the same prompt each month—Claude remembers the structure and only needs minor adjustments.
+
+## Data Imports & Cleanup
+
+- Automate the import of CSV dumps or ERP extracts. Example workflow:
+  1. `add_sheets` creates a staging area.
+  2. `write_values` pastes or restructures imported data.
+  3. `remove_rows` strips empty or duplicate rows.
+  4. `write_format` ensures consistent number/date formats.
+- Finish by saving the workbook or exporting to CSV manually.
+
+## Macro Generation
+
+- Ask Claude to create helper macros: “Generate a macro that clears the `Staging` sheet and copies the latest data from `DataFeed`.”
+- Approve the `vba_create` tool, inspect the code, and run it on-demand. Combine with Claude-generated instructions for non-technical teammates.
+
+## Tooling Pipelines
+
+- Turn multi-step manual processes into a single conversational flow (e.g., “Append this week’s sales data, recalculate rolling averages, and email me the summary.”). While emails still require manual action, Claude prepares the workbook for final steps.
+
+## Governance Automation
+
+- Build checklists with Claude: “Produce a QA log of all changes made today.” It can read the workbook history, summarise approved tool calls, and write an audit sheet.
+- Use PostHog + Langfuse traces to monitor automation runs and ensure they align with policies.
+
+Automation with X21 is iterative—start with one prompt, refine it, and re-run as your process evolves.

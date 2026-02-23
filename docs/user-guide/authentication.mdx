@@ -1,0 +1,37 @@
+# Authentication
+
+The X21 task pane uses Supabase to authenticate users before they can send prompts or approve tool calls. This section explains the login flow, session persistence, and how credentials propagate across components.
+
+## Sign-In Flow
+
+1. The React UI renders the Supabase Auth client with PKCE enabled (`supabaseClient.ts`).
+2. Users sign in with email + magic link or SSO providers configured in your Supabase project.
+3. Supabase issues an access token that is persisted in local storage (`sb-*-auth-token`). The token is refreshed automatically thanks to `autoRefreshToken: true`.
+4. When the WebSocket connection opens, the UI sends a `user:email_response` message. The Deno backend stores the email in `UserService` and attaches it to Langfuse traces.
+
+No backend secrets are embedded in the task pane—only the public anon key. Server-side validation (e.g., rate limiting, quota enforcement) happens in the Deno orchestrator based on the resolved email address.
+
+## Handling Session Expiry
+
+- When Supabase refresh fails, the Auth context emits a `signedOut` event. The UI shows a toast and disables the chat input until the user signs back in.
+- The Deno backend will reject inbound WebSocket messages without a known email, prompting the UI to request login again.
+- You can manually sign out via the profile menu, which clears local storage and notifies the backend that the user email is null.
+
+## Linking Authentication to Telemetry
+
+- **Langfuse**: Each request includes `userEmail` and a workbook-specific session ID (`<workbook>-<uuid>`). This creates searchable traces per user.
+- **PostHog**: The VSTO layer calls `PostHogService.Identify` with the same email, ensuring UI analytics and backend traces stay aligned.
+
+## Enterprise Considerations
+
+- Configure Supabase policies to restrict who can access production environments. The Deno service respects environment variables such as `DENO_ENV` to change behaviour per channel.
+- If single sign-on is mandated, enable the provider in Supabase and hide the email magic link option in the UI component.
+- For air-gapped deployments, you can disable authentication entirely by forking the UI; however, this removes auditability for tool approvals and should only be used for demos.
+
+## Troubleshooting Login Issues
+
+- **No magic link arrives**: confirm the Supabase email provider is configured and not blocked by spam filters.
+- **Stuck on loading screen**: inspect the developer console. Failures like `DenoServerConnectionError` indicate the backend never received the `user:email_response`.
+- **Frequent sign-outs**: check that system clocks are accurate; Supabase requires synchronized time to validate tokens.
+
+Once authenticated, proceed to the [Quick Start Guide](./quick-start) to run your first workflow.

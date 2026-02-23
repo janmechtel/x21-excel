@@ -1,0 +1,43 @@
+# Effective Prompting
+
+Clear prompts help Claude produce precise Excel operations with fewer iterations. Use the following techniques to guide the model.
+
+## Provide Context Up Front
+
+- Reference the **worksheet** and **range** you want to work with. Example: “On `Sales Q4`, summarise `B2:E200`.”
+- Mention any **attachments** and what to do with them: “Use the attached contract PDF to validate totals.”
+- If the workbook has multiple tables, describe the relevant columns.
+
+## Be Explicit About Outputs
+
+- Specify the desired result: “Create a new sheet named `Summary` with columns Region, Total Revenue, Growth%.”
+- Indicate whether you expect a **formula**, **value write**, or **format change**.
+- For charts, state the chart type and data orientation.
+
+## Encourage Tool Planning
+
+- Ask Claude to outline its plan: “List the steps you’ll take and the tools you’ll call before executing.”
+- This yields a preview of planned operations so you can approve or adjust before tools run.
+
+## Use Follow-up Prompts
+
+- After a tool executes, request verification: “Confirm the totals in C2:C10 match the PDF.”
+- If results are off, explain what should change. Claude adapts quickly when given corrective feedback.
+
+## Sample Prompt
+
+```
+You’re working in the `Pipeline` sheet. Clean up the table in A1:F500 by:
+1. Removing rows where Status = "Closed Lost".
+2. Filling blank Probability cells with the average of the column.
+3. Highlighting deals above $250k in green.
+Show the steps you’ll take and ask for approval before writing.
+```
+
+## Common Pitfalls to Avoid
+
+- **Ambiguous references** – Avoid “this column” or “these rows” without selecting them; Claude relies on precise addresses.
+- **Oversized requests** – Break large transformations into chunks to stay within token limits and maintain readability.
+- **Skipping approvals** – Do not auto-approve unfamiliar tools until you trust them in your environment.
+
+Effective prompting is the fastest way to get high-quality results while minimising rework.

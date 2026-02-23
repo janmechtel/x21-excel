@@ -1,0 +1,36 @@
+# Process Lifecycle
+
+Understanding how X21 starts, runs, and shuts down helps diagnose edge cases and coordinate with IT policies.
+
+## Startup Sequence
+
+1. **Excel Launches** – The VSTO add-in loads (`ThisAddIn.cs`) and initialises services.
+2. **Backend Discovery** – `BackendConfigService` reads existing port files to determine URLs for the Deno HTTP and WebSocket servers.
+3. **Excel API Startup** – `ExcelApiService` finds an open port (default 8080), writes `excel-api-port-<env>.txt`, and starts an `HttpListener` hosting `/api/actions/execute`.
+4. **Backend Process** – The add-in starts `x21-backend.exe` (bundled Deno runtime). The backend finds open ports near 8000/8085, writes `deno-server-port-*` and `deno-websocket-port-*`, and begins listening.
+5. **Task Pane Ready** – The WebView2 UI loads, requests the WebSocket URL, and opens a connection. Authentication kicks in once the user signs in.
+
+## Runtime Behaviour
+
+- **WebSocket Communication** – UI and backend exchange messages for prompts, tool permissions, and status updates.
+- **HTTP Calls to Excel** – Tool execution flows send POST requests to `/api/actions/execute`, which synchronously run Excel interop commands.
+- **Telemetry** – Langfuse spans, PostHog events, and log entries stream continuously. Logs rotate daily.
+- **Port Refresh** – If a port conflict occurs, services fall back to the next available port and update the port files.
+
+## Shutdown Sequence
+
+- Closing Excel triggers `ThisAddIn_Shutdown`, which stops the Excel API listener and disposes of the task pane.
+- The backend process detects that the parent process exited and shuts down automatically (Deno `serve` loop ends).
+- Port files remain on disk for the next launch; stale files are overwritten the next time ports are resolved.
+
+## Crash Recovery
+
+- If Excel or the backend crashes unexpectedly, reopening Excel restarts both services. Check logs to understand why the crash occurred (e.g., unhandled tool error, port exhaustion).
+- In worst-case scenarios, manually kill lingering `x21-backend.exe` processes from Task Manager before relaunching.
+
+## Multi-Workbook Handling
+
+- Each workbook opened in Excel shares the same backend process but maintains separate state keyed by workbook name.
+- When a workbook closes, the backend clears its state after the WebSocket disconnects.
+
+Keeping the lifecycle in mind helps when scripting deployments, building monitoring hooks, or debugging resource leaks.

@@ -1,0 +1,31 @@
+datasetName: "x21-demo"
+cases:
+  - id: "extract_info"
+    name: "extract_info"
+    inputWorkbook: "../data/x21-demo/extract_info/1_extract_info_init.xlsx"
+    goldenFile: "../data/x21-demo/extract_info/1_extract_info_golden.xlsx"
+    answerPosition: "A1:H39"
+    prompt: "Give me a column with just the emails no < > signs"
+
+  - id: "fill_inputs"
+    name: "fill_inputs"
+    inputWorkbook: "../data/x21-demo/fill_inputs/1_fill_inputs_init.xlsx"
+    goldenFile: "../data/x21-demo/fill_inputs/1_fill_inputs_golden.xlsx"
+    answerPosition: "G28:G51"
+    prompt: "Fill the FY 24 column G28:G46 with the actuals from Sheet \"Source Actuals\" by linking with formulas"
+
+  - id: "amortization"
+    name: "amortization"
+    inputWorkbook: "../data/x21-demo/amortization/1_amortization_init.xlsx"
+    goldenFile: "../data/x21-demo/amortization/1_amortization_golden.xlsx"
+    answerPosition: "A1:F11"
+    prompt: "Give me a simple amortization for 5 years, 100k $ starting investment and 5% interest."
+
+  - id: "pdf_extraction"
+    name: "pdf_extraction"
+    inputWorkbook: "../data/x21-demo/pdf_extraction/1_pdf_extraction_init.xlsx"
+    goldenFile: "../data/x21-demo/pdf_extraction/1_pdf_extraction_golden.xlsx"
+    answerPosition: "D6:G35"
+    attachments:
+      - "../data/x21-demo/pdf_extraction/income_statement.pdf"
+    prompt: "Recreate this income statement, use formulas where possible."

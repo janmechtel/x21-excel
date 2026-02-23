@@ -1,0 +1,249 @@
+---
+title: "Data Storage Locations"
+description: "Where X21 stores conversation history, logs, and configuration"
+---
+
+# Data Storage Locations
+
+X21 stores data locally on your computer. This guide helps IT administrators locate files for backup, troubleshooting, or migration.
+
+## Conversation Database
+
+### SQLite Database Location
+
+**Windows**:
+```
+%LOCALAPPDATA%\X21\conversations.sqlite3
+```
+Typical path: `C:\Users\USERNAME\AppData\Local\X21\conversations.sqlite3`
+
+**macOS**:
+```
+~/Library/Application Support/X21/conversations.sqlite3
+```
+
+**Linux**:
+```
+~/.local/share/X21/conversations.sqlite3
+```
+
+### Database Contents
+
+The SQLite database stores:
+- All conversation messages
+- Per-workbook conversation history
+- Message metadata
+- Search indexes
+
+### Database Configuration
+
+**Custom location** (optional):
+Set environment variable:
+```
+X21_DB_PATH=C:\CustomPath\conversations.sqlite3
+```
+
+**WAL mode**:
+- Write-Ahead Logging enabled for concurrency
+- Creates additional `.sqlite3-wal` and `.sqlite3-shm` files
+- Automatically managed
+
+## Log Files
+
+### Log Storage Location
+
+**Windows**:
+```
+%LOCALAPPDATA%\X21\X21-deno\Logs\
+```
+Typical path: `C:\Users\USERNAME\AppData\Local\X21\X21-deno\Logs\`
+
+**macOS/Linux**:
+```
+~/.local/share/X21/logs/
+```
+
+### Log Files
+
+**Daily rotation**:
+- Current: `deno-{hostname}.log`
+- Archived: `deno-{hostname}_YYYY-MM-DD.log`
+
+**Contents**:
+- Server startup/shutdown
+- Request processing
+- Tool execution
+- Error messages
+- WebSocket connections
+
+### Log Levels
+
+Configurable via environment:
+- DEBUG (development default)
+- INFO
+- WARN
+- ERROR
+- CRITICAL
+
+## Configuration Files
+
+### Environment Variables
+
+X21 configuration via environment variables (not files):
+- `ANTHROPIC_API_KEY` - Claude API key
+- `SERVER_PORT` - Deno server port (default: 8000)
+- `X21_DB_PATH` - Custom database location
+- `LOG_LEVEL` - Logging verbosity
+
+### No Configuration Files
+
+X21 doesn't use configuration files - all settings via:
+1. Environment variables
+2. Runtime parameters
+3. Workbook-embedded custom commands
+
+## Backup Recommendations
+
+### What to Backup
+
+**Essential**:
+- Conversation database (`conversations.sqlite3`)
+- API key (stored in environment/deployment)
+
+**Optional**:
+- Log files (for troubleshooting history)
+- Custom slash command definitions (if any)
+
+### Backup Frequency
+
+**Conversation database**:
+- Daily for active users
+- Weekly for light users
+- Before major updates
+
+**Logs**:
+- Rotate automatically (daily)
+- Keep 30-90 days for support
+
+### Backup Commands
+
+**Windows** (PowerShell):
+```powershell
+Copy-Item "$env:LOCALAPPDATA\X21\conversations.sqlite3" -Destination "\\backup\path\"
+```
+
+**macOS/Linux**:
+```bash
+cp ~/Library/Application\ Support/X21/conversations.sqlite3 /backup/path/
+```
+
+## Migration
+
+### Moving to New Computer
+
+1. **Export database**:
+   - Copy `conversations.sqlite3` from old computer
+
+2. **Install X21** on new computer
+
+3. **Import database**:
+   - Place `conversations.sqlite3` in appropriate location
+   - Or set `X21_DB_PATH` environment variable
+
+4. **Verify**:
+   - Open X21, check conversation history
+
+### Shared/Network Storage
+
+**Not recommended**:
+- SQLite doesn't support network file systems well
+- Concurrent access issues possible
+- Use local storage only
+
+## Disk Space
+
+### Typical Usage
+
+**Conversation database**:
+- Light user: less 10 MB
+- Medium user: 10-50 MB
+- Heavy user: 50-200 MB
+
+**Log files**:
+- Per day: 1-10 MB
+- With rotation: 30-300 MB total
+
+**Total estimate**: 100-500 MB for most users
+
+
+### Safe to Delete
+
+**Old logs**:
+- Logs older than 30-90 days
+- No impact on functionality
+
+**WAL files**:
+- `.sqlite3-wal` and `.sqlite3-shm` only when database not in use
+- Automatically recreated
+
+### Not Safe to Delete
+
+**Active database**:
+- `conversations.sqlite3` - loses all history
+- Backup first if cleanup needed
+
+**Current logs**:
+- Today's log file may be actively written
+
+## Privacy & Security
+
+### Local Storage Only
+
+- All data stays on local computer
+- No cloud sync (unless manually configured)
+- GDPR/privacy compliant by default
+
+### Sensitive Data
+
+Database may contain:
+- Conversation content
+- User email addresses
+- Workbook names and sheet names
+- Tool operation details
+
+**Security recommendations**:
+- Encrypt backup drives
+- Restrict file permissions
+- Include in enterprise backup policies
+
+## Troubleshooting
+
+### Can't Find Database
+
+1. Check environment variable `X21_DB_PATH`
+2. Verify path expansion (e.g., `%LOCALAPPDATA%`)
+3. Look for alternate user profiles
+4. Check permissions on parent directory
+
+### Database Locked
+
+**Cause**: Multiple X21 instances or WAL mode issue
+
+**Solution**:
+1. Close all Excel/X21 instances
+2. Wait 30 seconds
+3. Restart X21
+
+### Log Files Missing
+
+**Cause**: Permissions or path issue
+
+**Solution**:
+1. Check directory exists
+2. Verify write permissions
+3. Check `LOG_LEVEL` environment variable
+
+## Related Topics
+
+- [Installation Methods](./installation-methods) - Initial setup
+- [Troubleshooting: Log Files](../troubleshooting/log-files) - Reading logs

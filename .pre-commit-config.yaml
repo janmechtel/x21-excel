@@ -1,0 +1,169 @@
+repos:
+  # ============================================================================
+  # TypeScript/Deno Hooks
+  # ============================================================================
+  - repo: local
+    hooks:
+      - id: deno-check
+        name: Deno formatting and linting
+        entry: pwsh -File scripts/pre-commit-hooks/deno-check.ps1
+        language: system
+        files: ^X21/deno-server/
+        pass_filenames: false
+
+  # ============================================================================
+  # TypeScript/React Hooks
+  # ============================================================================
+  - repo: local
+    hooks:
+      - id: deno-check
+        name: Deno formatting and linting
+        entry: pwsh -File scripts/pre-commit-hooks/deno-check.ps1
+        language: system
+        files: ^X21/deno-server/
+        pass_filenames: false
+        stages: [pre-push]
+      - id: web-ui-build
+        name: Web UI build
+        entry: pwsh -File scripts/pre-commit-hooks/web-ui-build.ps1
+        language: system
+        files: ^X21/web-ui/
+        pass_filenames: false
+        stages: [pre-push]
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0
+    hooks:
+      - id: prettier
+        args: ['--cache']
+        files: ^X21/web-ui/.*\.(js|jsx|ts|tsx|css|scss|less|html)$
+        exclude: \.json$  # JSON files handled by pretty-format-json
+
+  # ============================================================================
+  # C#/.NET Hooks
+  # ============================================================================
+  - repo: local
+    hooks:
+      - id: vsto-addin-build
+        name: VSTO Add-in build (includes StyleCop analysis)
+        entry: pwsh -File scripts/pre-commit-hooks/vsto-addin-build.ps1
+        language: system
+        files: ^X21/vsto-addin/
+        pass_filenames: false
+        stages: [pre-push]
+      - id: dotnet-format
+        name: .NET format
+        entry: pwsh -c "cd X21/vsto-addin && dotnet format"
+        language: system
+        files: ^X21/vsto-addin/
+        pass_filenames: false
+
+  # ============================================================================
+  # Python Hooks
+  # ============================================================================
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.3.1
+    hooks:
+      - id: autoflake
+        args:
+          - --in-place
+          - --remove-all-unused-imports
+          - --remove-unused-variables
+          - --remove-duplicate-keys
+        files: ^X21/(evaluation|prompt-analysis)/.*\.py$
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.8
+    hooks:
+      - id: ruff-format
+        args:
+          - --line-length=88
+        files: ^X21/(evaluation|prompt-analysis)/.*\.py$
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-docstrings]
+        args:
+          - --ignore=D200,D210,D401,D205,D400,W503,D209,D204,D202,W504
+          - --max-line-length=88
+        files: ^X21/(evaluation|prompt-analysis)/
+  - repo: https://github.com/PyCQA/isort
+    rev: 7.0.0
+    hooks:
+      - id: isort
+        files: ^X21/(evaluation|prompt-analysis)/
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: debug-statements
+        files: ^X21/(evaluation|prompt-analysis)/
+  - repo: https://github.com/sirosen/texthooks
+    rev: 0.7.1
+    hooks:
+      - id: fix-smartquotes
+        files: ^X21/(evaluation|prompt-analysis)/
+
+  # ============================================================================
+  # General Hooks (all files)
+  # ============================================================================
+
+  # Security checks
+  - repo: local
+    hooks:
+      - id: semgrep
+        name: semgrep
+        entry: pwsh -File scripts/pre-commit-hooks/semgrep-docker.ps1
+        language: system
+        pass_filenames: true
+        stages: [pre-push]
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: '^(node_modules/|scripts/config/environments\.json|X21/vsto-addin/X21\.csproj)$'
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # File format validation
+      - id: check-yaml
+        args: ["--unsafe"]
+      - id: check-json
+        exclude: tsconfig\.json$ # tsconfig.json files are JSONC (allow comments)
+      - id: check-xml
+      - id: check-toml
+      # File content checks
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=1000"] # Prevent files > 1MB
+      - id: check-case-conflict
+      - id: check-symlinks
+      # Security check
+      - id: detect-private-key
+      # Line ending and encoding
+      - id: fix-byte-order-marker
+      # Formatting
+      - id: pretty-format-json
+        args: ['--autofix', '--no-ensure-ascii']
+        exclude: tsconfig\.json$  # tsconfig.json files are JSONC (allow comments)
+  # Spell checking and markdown linting
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        args: ["--ignore-words-list=deno,langfuse,posthog,tsx,tsconfig,addin,ist,als"]
+        exclude: package-lock\.json$
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.42.0
+    hooks:
+      - id: markdownlint
+        args: ["--fix"]
+        files: \.md$
+  # Commit Message Hooks
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.29.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]

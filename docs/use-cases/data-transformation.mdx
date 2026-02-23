@@ -1,0 +1,43 @@
+# Data Transformation
+
+X21 excels at reshaping messy data into clean, analysis-ready tables. Here are common transformation scenarios and the tools involved.
+
+## Cleaning Imported CSVs
+
+1. Prompt: “Clean the imported CSV in `RawData` sheet. Remove blank rows, trim whitespace, and convert dates in column C to ISO format.”
+2. Operations:
+   - `read_values` to inspect the dataset.
+   - `remove_rows` to drop blank lines.
+   - `write_values` to insert corrected values or formulas for trimming.
+   - `write_format` to apply consistent date formatting (`yyyy-mm-dd`).
+3. Outcome: Claude summarises what was cleaned and highlights any anomalies that require manual attention.
+
+## Normalising Columns
+
+- Task: “Split the `Full Name` column into `First Name` and `Last Name`, and move `Email` next to `Last Name`.”
+- Workflow:
+  - `add_columns` creates new columns for first/last names.
+  - `write_values` inserts formulas (e.g., `=TEXTBEFORE(A2," ")`) and `drag_formula` fills them down.
+  - `remove_columns` deletes the original combined column once verified.
+  - `write_format` ensures consistent casing or trim operations.
+
+## Pivoting Data
+
+- Claude can recompute pivot-like summaries by reading the source table and writing an aggregated output to a new sheet.
+- Example prompt: “Summarise total spend by Department and Month. Include grand totals.”
+- Tools: `add_sheets`, `write_values`, optional chart creation for the pivot result.
+
+## Merging Reference Data
+
+- Attach a lookup table or reference PDF and instruct Claude to align it with the workbook data.
+- Claude reads both sources, matches keys, and writes enriched rows using `write_values`. It may generate helper formulas (`VLOOKUP`/`XLOOKUP`) when necessary.
+
+## Preparing Data for Export
+
+- Request: “Convert this table to a CSV-friendly format with headers on row 1, no formulas, and consistent numeric precision.”
+- Steps:
+  - `write_values` to copy values-only versions of formula results.
+  - `write_format` to set number formats and alignments.
+  - The assistant confirms the output is ready for export (you can then use Excel’s Save As or a macro for final export).
+
+By combining tool-powered transformations with Claude’s reasoning, tedious data prep tasks become conversational and fast.

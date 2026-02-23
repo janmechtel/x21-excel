@@ -1,0 +1,134 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "colors": {
+    "dark": "#15803D",
+    "light": "#07C983",
+    "primary": "#16A34A"
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "favicon": "/favicon.svg",
+  "footer": {
+    "socials": {
+      "linkedin": "https://linkedin.com/company/kontext21"
+    }
+  },
+  "logo": {
+    "dark": "/logo/X21_Wordmark_Inverted_RGB_240px.png",
+    "light": "/logo/X21_Wordmark_FullColor_RGB_240px.png"
+  },
+  "name": "x21",
+  "navbar": {
+    "links": [
+      {
+        "href": "mailto:jan@kontext21.com",
+        "label": "Support"
+      }
+    ],
+    "primary": {
+      "href": "https://docs.kontext21.com",
+      "label": "Dashboard",
+      "type": "button"
+    }
+  },
+  "navigation": {
+    "global": {
+      "anchors": []
+    },
+    "tabs": [
+      {
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "getting-started/installation",
+              "getting-started/quick-start",
+              "tutorial",
+              "getting-started/understanding-ai-responses"
+            ]
+          },
+          {
+            "group": "User Guide",
+            "pages": [
+              "user-guide/interface",
+              "user-guide/azure-openai-endpoint",
+              "user-guide/tool-preview-undo",
+              "user-guide/file-attachments",
+              "user-guide/slash-commands",
+              "user-guide/authentication",
+              "user-guide/tool-management",
+              "user-guide/tool-permissions",
+              "user-guide/range-sheet-references",
+              "user-guide/keyboard-shortcuts",
+              "user-guide/conversation-history",
+              "user-guide/conversation-management",
+              "user-guide/message-feedback",
+              "user-guide/appearance-customization"
+            ]
+          },
+          {
+            "group": "Best Practices",
+            "pages": [
+              "best-practices/effective-prompting",
+              "best-practices/tool-approval-workflow"
+            ]
+          },
+          {
+            "group": "Use Cases & Excel Operations",
+            "pages": [
+              "use-cases/data-analysis",
+              "use-cases/data-transformation",
+              "use-cases/visualization",
+              "use-cases/automation",
+              "use-cases/data-operations",
+              "use-cases/structure-operations",
+              "use-cases/formula-management",
+              "use-cases/formatting",
+              "use-cases/vba-macros",
+              "use-cases/document-processing"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/available-tools",
+              "reference/slash-commands-reference",
+              "reference/keyboard-shortcuts",
+              "reference/rate-limits-quotas"
+            ]
+          },
+          {
+            "group": "Deployment (IT Admin)",
+            "pages": [
+              "deployment/installation-methods",
+              "deployment/process-lifecycle",
+              "deployment/data-storage-locations"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/common-issues",
+              "troubleshooting/error-types",
+              "troubleshooting/performance-issues",
+              "troubleshooting/connection-status",
+              "troubleshooting/log-files"
+            ]
+          }
+        ],
+        "tab": "Documentation"
+      }
+    ]
+  },
+  "theme": "willow"
+}

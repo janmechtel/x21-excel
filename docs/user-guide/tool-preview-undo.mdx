@@ -1,0 +1,290 @@
+---
+title: "Tool Preview & Undo"
+description: "View changes before applying them and undo operations"
+---
+
+# Tool Preview & Undo
+
+X21's preview and undo system lets you safely review and control Excel operations before they're permanently applied.
+
+## Tool Lifecycle
+
+When the AI proposes an operation, it goes through these states:
+
+```
+Pending → Viewing → Approved → Applied
+                        ↓
+                    Reverted
+```
+
+## Tool States
+
+### Pending
+- **What it means**: AI has proposed the operation
+- **What you see**: Gray badge, "Pending Approval"
+- **Available actions**: View, Approve, Reject
+
+### Viewing
+- **What it means**: Changes applied temporarily for preview
+- **What you see**: Blue badge, changes visible in Excel
+- **Available actions**: Apply (confirm), Revert (undo preview)
+
+### Approved
+- **What it means**: You've approved, ready to execute
+- **What you see**: Green badge, "Approved"
+- **Available actions**: Apply, Revert
+
+### Applied
+- **What it means**: Changes committed to workbook
+- **What you see**: Green checkmark, "Completed"
+- **Available actions**: Revert (undo the operation)
+
+### Reverted
+- **What it means**: Changes undone, back to original state
+- **What you see**: Yellow badge, "Reverted"
+- **Available actions**: Apply (re-apply the changes)
+
+### Errored
+- **What it means**: Operation failed
+- **What you see**: Red badge, error message
+- **Available actions**: View error details, dismiss
+
+## Preview (View) Feature
+
+### How to Preview
+
+1. Find the pending tool card
+2. Click **View** button
+3. Changes apply temporarily to Excel
+4. Review the results
+5. Click **Apply** to keep or **Revert** to undo
+
+### What Gets Previewed
+
+**write_values:**
+```
+Before: A1 = 100
+Preview: A1 = 150 (highlighted)
+```
+
+**write_format:**
+```
+Before: Plain text
+Preview: Bold with gray background
+```
+
+**Structural changes:**
+```
+Before: 10 rows
+Preview: 13 rows (3 inserted, highlighted)
+```
+
+### Preview Safety
+
+- Preview changes are temporary
+- Closing Excel reverts preview
+- Other users don't see preview
+- Undo stack remains intact
+
+## Apply vs Revert
+
+### Apply
+
+**Commits** the changes permanently:
+```
+[View] → [Apply]
+Changes become part of workbook history
+Undo (Ctrl+Z) now available in Excel
+```
+
+### Revert
+
+**Undoes** the operation:
+```
+[View] → [Revert]
+Returns to state before tool execution
+Removes from Excel undo stack
+```
+
+## Undo Operations
+
+### After Application
+
+Even after applying, you can still revert:
+
+1. Find the tool card (now shows "Completed")
+2. Click **Revert** button
+3. Changes are undone
+4. Original state restored
+
+### Revert vs Excel Undo
+
+**X21 Revert:**
+- Undoes specific tool operation
+- Preserves other changes
+- Works across sessions
+- Tracked by X21
+
+**Excel Undo (Ctrl+Z):**
+- Undoes last action in Excel
+- Sequential only
+- Cleared on workbook close
+- Built into Excel
+
+**Recommendation**: Use X21 Revert for tool operations, Excel Undo for manual edits.
+
+## Batch Operations
+
+### Multiple Tools
+
+When the AI proposes multiple operations:
+
+```
+Tool 1: write_values (Pending)
+Tool 2: write_format (Pending)
+Tool 3: add_rows (Pending)
+```
+
+### Preview All
+
+Click **View** on each tool separately to preview:
+- Tools execute in order
+- Each preview builds on the previous
+- Review cumulative effect
+
+### Approve All
+
+Click **Approve All** to:
+- Approve all pending tools
+- Execute in sequence
+- Apply all changes
+
+## Advanced Features
+
+### Reapply After Revert
+
+You can revert and reapply multiple times:
+
+```
+Apply → Revert → Apply → Revert → Apply
+```
+
+Useful for:
+- A/B testing different approaches
+- Showing before/after to colleagues
+- Experimenting with changes
+
+### Selective Undo
+
+Revert specific operations while keeping others:
+
+```
+✓ Operation 1: Keep (Applied)
+↩ Operation 2: Undo (Reverted)
+✓ Operation 3: Keep (Applied)
+```
+
+## Best Practices
+
+### Always Preview First
+
+For important data:
+1. **View** before approving
+2. Verify results in Excel
+3. Check formulas, values, formatting
+4. Only then **Apply**
+
+### Test with Copies
+
+For risky operations:
+1. Copy worksheet first
+2. Test on copy
+3. Review results
+4. Apply to original if correct
+
+### Use Revert Liberally
+
+Don't hesitate to revert:
+- Revert is instant and safe
+- Better to undo than keep mistakes
+- You can always reapply
+
+### Document Complex Changes
+
+For multi-step operations:
+1. Preview each step
+2. Take screenshots if needed
+3. Document what changed
+4. Easier to troubleshoot later
+
+## Common Scenarios
+
+### Scenario 1: Wrong Formula
+
+```
+1. AI proposes: =SUM(A1:A10)
+2. You View: Results look wrong
+3. You Revert: Back to original
+4. You clarify: "Actually sum A1:A100"
+5. AI proposes corrected formula
+6. You View then Apply
+```
+
+### Scenario 2: Format Experiment
+
+```
+1. View different color schemes
+2. Revert after each preview
+3. Compare options
+4. Apply preferred format
+```
+
+### Scenario 3: Structural Change
+
+```
+1. AI proposes: Insert 5 rows
+2. You View: Position looks wrong
+3. You Revert: Undo insertion
+4. You clarify: "Insert before row 3, not row 5"
+5. View then Apply when correct
+```
+
+## Limitations
+
+### What Can't Be Reverted
+
+Some operations are permanent:
+- **remove_sheets**: Deleted sheets cannot be restored
+- **remove_rows/remove_columns**: Data permanently deleted
+- **VBA operations**: Code changes committed immediately
+
+**For these**: X21 warns you and requires explicit approval.
+
+### Revert Time Limits
+
+- Reverts work within the current session
+- After closing Excel, revert history may be lost
+- Important changes should be documented
+
+## Troubleshooting
+
+### Revert Button Disabled
+
+**Cause**: Operation not yet applied or already reverted
+**Solution**: Check tool state badge
+
+### Changes Not Reverting
+
+**Cause**: Excel has other unsaved changes
+**Solution**: Save workbook first, then revert
+
+### Preview Not Visible
+
+**Cause**: Changes in different sheet or scroll position
+**Solution**: Navigate to target range (click range reference in tool card)
+
+## Related Topics
+
+- [Tool Management](./tool-management) - Control available tools
+- [Tool Permissions](./tool-permissions) - Approval workflow
+- [Best Practices: Tool Approval Workflow](../best-practices/tool-approval-workflow) - Approval strategies

@@ -1,0 +1,221 @@
+---
+title: "Tool Management"
+description: "Control which Excel operations the AI can perform"
+---
+
+# Tool Management
+
+X21 provides 14 specialized tools that let the AI interact with Excel. The Tool Management panel gives you control over which operations are available for each conversation.
+
+## Opening the Tools Panel
+
+Press **Ctrl+Shift+T** (or **Cmd+Shift+T** on Mac) to toggle the tools panel.
+
+The panel shows all available tools with toggles to enable/disable them.
+
+## Available Tools
+
+### Data Operations
+
+**read_values**
+- Read cell values and formulas from ranges
+- Auto-approved (no permission needed)
+- Example: "Show me the data in A1:D10"
+
+**write_values**
+- Write values or formulas to cells
+- Requires approval
+- Example: "Set B1 to the sum of A1:A10"
+
+**drag_formula**
+- AutoFill formulas or patterns
+- Requires approval
+- Supports: default, series, formats, values
+- Example: "Drag the formula in A1 down to A100"
+
+### Formatting Operations
+
+**read_format**
+- Read formatting properties (colors, fonts, alignment)
+- Auto-approved
+- Example: "What formatting is applied to A1?"
+
+**write_format**
+- Apply formatting to ranges
+- Requires approval
+- Supports: bold, italic, colors, fonts, alignment, number formats
+- Example: "Make the header row bold with gray background"
+
+### Structure Operations
+
+**add_sheets**
+- Create new worksheets
+- Requires approval
+- Example: "Add a sheet named 'Summary'"
+
+**remove_sheets**
+- Delete worksheets
+- Requires approval
+- **Warning**: Cannot be undone
+- Example: "Delete the 'Temp' sheet"
+
+**add_rows / add_columns**
+- Insert rows or columns
+- Requires approval
+- Example: "Insert 3 rows above row 5"
+
+**remove_rows / remove_columns**
+- Delete rows or columns
+- Requires approval
+- **Warning**: Cannot be undone
+- Example: "Delete columns C through E"
+
+### VBA Operations
+
+**vba_read**
+- Read existing VBA macro code
+- Auto-approved
+- Example: "Show me the VBA in this workbook"
+
+**vba_create** (Experimental)
+- Create new VBA macros
+- Requires approval
+- **Use with caution**: Review generated code carefully
+- Example: "Create a macro to highlight duplicates"
+
+**vba_update** (Experimental)
+- Modify existing VBA macros
+- Requires approval
+- **Use with caution**: Review changes carefully
+- Example: "Update the Calculate macro to include tax"
+
+## Tool States
+
+### AUTO Badge
+
+Tools marked with **AUTO** execute immediately without approval:
+- read_values
+- read_format
+- vba_read
+
+These are safe operations that only read data.
+
+### Manual Approval
+
+All write operations require explicit approval:
+- Protects your data from unintended changes
+- Lets you review before execution
+- Provides preview capability
+
+## Managing Tools
+
+### Toggle Individual Tools
+
+Click the toggle switch next to any tool to enable/disable it:
+- **Green/On**: Tool available to AI
+- **Gray/Off**: Tool hidden from AI
+
+### When to Disable Tools
+
+**Structural changes:**
+Disable `add_sheets`, `remove_sheets`, `add_rows`, `remove_rows` if you want to prevent structure modifications.
+
+**VBA protection:**
+Disable `vba_create` and `vba_update` if you don't want AI-generated macros.
+
+**Read-only mode:**
+Disable all write tools (`write_values`, `write_format`, etc.) for analysis-only conversations.
+
+### Tool Search
+
+Use the search box to filter tools by name or description.
+
+## Tool Icons
+
+Tools are color-coded by operation type:
+
+- 🔵 **Blue**: Read operations
+- 🟢 **Green**: Write operations
+- 🟣 **Pink**: Format operations
+- 🔴 **Red**: Delete operations
+- ⚙️ **Gray**: Structure operations
+- 📝 **Yellow**: VBA operations
+
+## Best Practices
+
+### Start Conservative
+
+For new tasks:
+1. Enable only essential tools
+2. Test with read operations first
+3. Add write permissions as needed
+
+### Use Tool Sets
+
+Create mental "toolsets" for different scenarios:
+
+**Analysis Only:**
+- read_values ✓
+- read_format ✓
+- All write tools ✗
+
+**Data Entry:**
+- read_values ✓
+- write_values ✓
+- Formatting tools ✗
+- Structure tools ✗
+
+**Full Editing:**
+- All tools except VBA ✓
+- VBA tools ✗ (unless specifically needed)
+
+### VBA Safety
+
+Only enable VBA tools when:
+- You understand VBA code
+- You'll review generated macros
+- You can test safely
+- You have backups
+
+**Always** review VBA code before approving.
+
+## Tool Permissions Workflow
+
+When the AI needs a tool:
+
+1. **Tool appears** in pending actions
+2. **Preview** the operation (click View)
+3. **Review** parameters and target range
+4. **Approve** or **Reject**
+
+See [Tool Permissions](./tool-permissions) for detailed approval workflow.
+
+## Troubleshooting
+
+### Tool Not Working
+
+If a tool fails:
+1. Check it's enabled in the tools panel
+2. Verify the target range is valid
+3. Ensure the operation is allowed (e.g., can't delete last sheet)
+4. Review error message for specific issue
+
+### Too Many Permission Requests
+
+If you're constantly approving:
+- Enable **Auto-approve** toggle in input area
+- Or reduce scope of request
+- Or start with read-only exploration
+
+### Tool Missing
+
+Can't find a tool?
+- Check the search filter isn't active
+- Verify tool name spelling
+- Some tools may be experimental/hidden
+
+## Related Topics
+
+- [Tool Permissions](./tool-permissions) - Approval workflow details
+- [Tool Preview & Undo](./tool-preview-undo) - View before applying
+- [Reference: Available Tools](../reference/available-tools) - Complete tool reference

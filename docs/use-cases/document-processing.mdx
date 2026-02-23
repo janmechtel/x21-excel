@@ -1,0 +1,111 @@
+---
+title: "Document Processing"
+description: "Analyze PDFs and images with AI assistance"
+---
+
+# Document Processing
+
+X21 can process attached documents and images, extracting data and insights to use with your Excel workbooks.
+
+## Supported File Types
+
+### PDFs
+- **Limit**: Up to 100 pages total per request
+- **Use cases**: Invoices, reports, forms, statements
+- **Capabilities**: Text extraction, data analysis, comparison
+
+### Images
+- **Formats**: PNG, JPG, JPEG, GIF, WEBM
+- **Use cases**: Screenshots, charts, diagrams, scanned documents
+- **Capabilities**: Visual analysis, chart reading, OCR
+
+## How to Attach Files
+
+### Drag and Drop
+1. Drag file from file explorer
+2. Drop onto input area
+3. File chip appears showing name and size
+
+### Click to Browse
+1. Click paperclip icon
+2. Select file from dialog
+3. File attaches to message
+
+### Paste from Clipboard
+1. Copy file or image
+2. Paste into input area (Ctrl+V)
+3. Attachment appears
+
+## Common Use Cases
+
+### Invoice Processing
+
+```
+Attach: invoice.pdf
+Prompt: "Extract line items from this invoice and add to my spreadsheet"
+```
+
+### Chart Analysis
+
+```
+Attach: chart-screenshot.png
+Prompt: "Recreate this chart using the data in Sheet1"
+```
+
+### Document Comparison
+
+```
+Attach: report.pdf
+Prompt: "Compare the figures in this PDF with column B in my selection"
+```
+
+### Data Extraction
+
+```
+Attach: form.pdf
+Prompt: "Extract all customer information into a table"
+```
+
+## Best Practices
+
+### File Size
+- Keep PDFs under 100 pages
+- Compress large images
+- Split multi-part documents
+
+### Clear Prompts
+```
+✓ "Extract the 'Total Amount' from page 3 of the attached invoice"
+✗ "Get the total"
+```
+
+### Multiple Files
+- Attach related documents together
+- Reference specific files in prompt
+- Process in logical order
+
+## Limitations
+
+- **PDF page limit**: 100 pages total across all attachments
+- **File types**: Only PDFs and images supported
+- **Processing time**: Larger files take longer
+- **Accuracy**: OCR quality depends on document clarity
+
+## Tips
+
+### For PDFs
+- Ensure text is selectable (not scanned images)
+- High-quality scans work better
+- Structure matters - tables process better than paragraphs
+
+### For Images
+- High resolution improves accuracy
+- Clear, unobstructed views
+- Good lighting for photos
+- Screenshots work great
+
+## Related Topics
+
+- [File Attachments](../user-guide/file-attachments) - Attachment details
+- [Data Operations](./data-operations) - Working with extracted data
+- [Best Practices](../best-practices/effective-prompting) - Effective document prompts
