@@ -65,6 +65,27 @@ function Publish-ClickOnce {
 
     Write-PublishLog "Project cleaned successfully." "Success"
 
+    # Restore NuGet packages before building.
+    # packages-config style projects require the packages/ directory to exist at build time;
+    # the csproj guard target will hard-error if it does not.
+    Write-PublishLog "Restoring NuGet packages..." "Info"
+    $restoreArgs = @(
+        $projectPath,
+        "/t:Restore",
+        "/p:Configuration=$Configuration",
+        "/p:Platform=AnyCPU"
+    )
+    if ($VerboseOutput) {
+        $restoreArgs += "/verbosity:diagnostic"
+    } else {
+        $restoreArgs += "/verbosity:minimal"
+    }
+    $restoreProcess = Start-Process -FilePath $MSBuildPath -ArgumentList $restoreArgs -Wait -PassThru -NoNewWindow
+    if ($restoreProcess.ExitCode -ne 0) {
+        throw "NuGet restore failed with exit code: $($restoreProcess.ExitCode)"
+    }
+    Write-PublishLog "NuGet restore completed successfully." "Success"
+
     # Prepare MSBuild properties for publishing
     $publishProperties = @{
         "Platform" = "AnyCPU"
