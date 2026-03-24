@@ -115,6 +115,9 @@ try {
     $currentVersion = Get-CurrentVersion
     $newVersion = Update-Version -CurrentVersion $currentVersion -AutoIncrementRevision $envConfig.AutoIncrementRevision
 
+    # Install frontend dependencies before building
+    Install-FrontendDependencies
+
     # Publish ClickOnce application
     $publishProperties = @{
         "PublishDir" = $envConfig.PublishDir

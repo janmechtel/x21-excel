@@ -4,6 +4,30 @@
 
 <#
 .SYNOPSIS
+    Installs frontend and Deno dependencies before building
+
+.DESCRIPTION
+    Runs `npm ci` for the React UI and `deno cache` for the Deno backend.
+    Both must succeed; a non-zero exit code aborts the publish.
+#>
+function Install-FrontendDependencies {
+    Write-PublishLog "Installing web-ui dependencies (npm ci)..." "Info"
+    $npmProcess = Start-Process -FilePath "npm" -ArgumentList @("ci") -WorkingDirectory "X21\web-ui" -Wait -PassThru -NoNewWindow
+    if ($npmProcess.ExitCode -ne 0) {
+        throw "npm ci failed with exit code: $($npmProcess.ExitCode)"
+    }
+    Write-PublishLog "web-ui dependencies installed." "Success"
+
+    Write-PublishLog "Caching deno-server dependencies (deno cache)..." "Info"
+    $denoProcess = Start-Process -FilePath "deno" -ArgumentList @("cache", "mod.ts") -WorkingDirectory "X21\deno-server" -Wait -PassThru -NoNewWindow
+    if ($denoProcess.ExitCode -ne 0) {
+        throw "deno cache failed with exit code: $($denoProcess.ExitCode)"
+    }
+    Write-PublishLog "deno-server dependencies cached." "Success"
+}
+
+<#
+.SYNOPSIS
     Publishes ClickOnce application using MSBuild
 
 .DESCRIPTION
@@ -243,6 +267,7 @@ function Clear-PublishDirectory {
 
 # Export functions
 Export-ModuleMember -Function @(
+    'Install-FrontendDependencies',
     'Publish-ClickOnce',
     'Rename-SetupExecutable',
     'Copy-GenericVstoFile',
