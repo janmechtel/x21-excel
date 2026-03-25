@@ -11,18 +11,65 @@
     Both must succeed; a non-zero exit code aborts the publish.
 #>
 function Install-FrontendDependencies {
-    Write-PublishLog "Installing web-ui dependencies (npm ci)..." "Info"
-    $npmProcess = Start-Process -FilePath "npm" -ArgumentList @("ci") -WorkingDirectory "X21\web-ui" -Wait -PassThru -NoNewWindow
-    if ($npmProcess.ExitCode -ne 0) {
-        throw "npm ci failed with exit code: $($npmProcess.ExitCode)"
+    # --- web-ui (npm install, cached by package-lock.json) ---
+    $webUiDir = Join-Path $PSScriptRoot "..\..\X21\web-ui" | Resolve-Path
+    $nodeModulesDir = Join-Path $webUiDir "node_modules"
+    $lockFile = Join-Path $webUiDir "package-lock.json"
+    $lockHashFile = Join-Path $nodeModulesDir ".package-lock.hash"
+
+    if (-not (Test-Path $lockFile)) {
+        throw "Missing package-lock.json in web-ui. Run npm install once to generate it."
     }
-    Write-PublishLog "web-ui dependencies installed." "Success"
+
+    $currentLockHash = (Get-FileHash -Algorithm SHA256 -Path $lockFile).Hash
+    $storedLockHash = $null
+    if (Test-Path $lockHashFile) {
+        $storedLockHash = (Get-Content -Path $lockHashFile -ErrorAction SilentlyContinue | Select-Object -First 1)
+    }
+
+    $canSkipNpmInstall = (Test-Path $nodeModulesDir) -and $storedLockHash -and ($storedLockHash -eq $currentLockHash)
+
+    if ($canSkipNpmInstall) {
+        Write-PublishLog "web-ui dependencies unchanged (package-lock.json hash match); skipping npm install." "Info"
+    }
+    else {
+        Write-PublishLog "Installing/updating web-ui dependencies (npm install)..." "Info"
+
+        # On Windows, `npm` is typically a PowerShell shim (npm.ps1). Start-Process can't execute .ps1 directly,
+        # which results in: "%1 is not a valid Win32 application." Execute via `pwsh` instead.
+        $npmCmd = "npm install"
+        $npmProcess = Start-Process -FilePath "pwsh" -ArgumentList @("-NoProfile", "-NonInteractive", "-Command", $npmCmd) -WorkingDirectory $webUiDir -Wait -PassThru -NoNewWindow
+        if ($npmProcess.ExitCode -ne 0) {
+            throw "npm install failed with exit code: $($npmProcess.ExitCode)"
+        }
+
+        if (-not (Test-Path $nodeModulesDir)) {
+            throw "npm install completed but node_modules folder was not found."
+        }
+
+        Set-Content -Path $lockHashFile -Value $currentLockHash -Encoding ASCII
+        Write-PublishLog "web-ui dependencies installed/updated." "Success"
+    }
+
+    # --- deno-server (use Deno's own cache, persisted across runs) ---
+    $denoDir = Join-Path $PSScriptRoot "..\..\X21\deno-server" | Resolve-Path
+
+    # Persist Deno cache across runs so re-running publish doesn't re-download.
+    # (Deno will re-use cached modules unless you pass --reload.)
+    $denoCacheDir = Join-Path $PSScriptRoot "..\..\.cache\deno"
+    if (-not (Test-Path $denoCacheDir)) {
+        New-Item -ItemType Directory -Force -Path $denoCacheDir | Out-Null
+    }
 
     Write-PublishLog "Caching deno-server dependencies (deno cache)..." "Info"
-    $denoProcess = Start-Process -FilePath "deno" -ArgumentList @("cache", "mod.ts") -WorkingDirectory "X21\deno-server" -Wait -PassThru -NoNewWindow
+
+    # Execute via pwsh for consistency (shims). Use Start-Process -Environment to avoid quoting issues.
+    $denoCmd = "deno cache mod.ts"
+    $denoProcess = Start-Process -FilePath "pwsh" -ArgumentList @("-NoProfile", "-NonInteractive", "-Command", $denoCmd) -WorkingDirectory $denoDir -Environment @{ DENO_DIR = $denoCacheDir } -Wait -PassThru -NoNewWindow
     if ($denoProcess.ExitCode -ne 0) {
         throw "deno cache failed with exit code: $($denoProcess.ExitCode)"
     }
+
     Write-PublishLog "deno-server dependencies cached." "Success"
 }
 

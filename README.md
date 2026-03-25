@@ -1,6 +1,3 @@
-> [!WARNING]
-> This project is unmaintained and no longer actively developed.
-
 # X21 - Excel Add-in
 
 An Excel VSTO add-in that provides AI-powered formula fixing and chat
@@ -15,6 +12,7 @@ functionality using AI.
 - Node.js
 - Deno
 - git
+- nuget
 - **Microsoft Excel 2016 or later**
 - optional: Docker (optionally required for Semgrep security checks in pre-commit hooks)
 
@@ -55,7 +53,7 @@ For development run the 3 components locally Web UI, Deno server, and VSTO add-i
 
 - Install the `X21_TemporaryKey.pfx` (no password) before publishing
 - Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-
+- run `nuget restore X21.sln`
 - Publish to local with `.\Publish.ps1 -Environment Dev`
 
 

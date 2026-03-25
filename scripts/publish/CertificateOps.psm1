@@ -66,15 +66,44 @@ function Get-SigningCertificate {
 
         return $cert
     } else {
-        # Local: Use certificate from store
-        Write-PublishLog "Local context detected - loading certificate from Windows store" "Info"
+        # Local: Ensure certificate exists in store before attempting MSBuild signing
+        Write-PublishLog "Local context detected - checking Windows certificate store" "Info"
 
-        $certPath = "Cert:\CurrentUser\My\$Thumbprint"
+        $normalizedThumbprint = ($Thumbprint -replace "\s", "").ToUpperInvariant()
+
+        $certPath = "Cert:\CurrentUser\My\$normalizedThumbprint"
         if (-not (Test-Path $certPath)) {
-            throw "Certificate not found in Windows certificate store at: $certPath"
+            # Additional hint: it might be installed under LocalMachine
+            $localMachinePath = "Cert:\LocalMachine\My\$normalizedThumbprint"
+            $isInLocalMachine = Test-Path $localMachinePath
+
+            Write-PublishLog "Signing certificate not found in CurrentUser\\My store." "Error"
+            Write-PublishLog "Expected thumbprint: $normalizedThumbprint" "Error"
+            if ($isInLocalMachine) {
+                Write-PublishLog "Note: A certificate with this thumbprint WAS found in LocalMachine\\My." "Warning"
+                Write-PublishLog "MSBuild/ClickOnce signing often expects the cert in CurrentUser\\My (Personal) for the publishing user." "Warning"
+            }
+
+            Write-PublishLog "To fix:" "Info"
+            Write-PublishLog "  1) Import the PFX into *Current User* certificate store (Personal):" "Info"
+            Write-PublishLog "     - Double-click the .pfx -> Install Certificate... -> Current User -> Place in 'Personal'" "Info"
+            Write-PublishLog "     - Or run: Import-PfxCertificate -FilePath <path-to.pfx> -CertStoreLocation Cert:\\CurrentUser\\My" "Info"
+            Write-PublishLog "  2) Ensure the imported cert includes the PRIVATE KEY (you should see a key icon in certmgr.msc)." "Info"
+            Write-PublishLog "  3) Verify the thumbprint in certmgr.msc (Certificates - Current User -> Personal -> Certificates)." "Info"
+            Write-PublishLog "  4) Re-run Publish.ps1" "Info"
+
+            throw "Certificate with thumbprint $normalizedThumbprint is not installed in Cert:\\CurrentUser\\My"
         }
 
+        Write-PublishLog "Certificate found in CurrentUser\\My: $certPath" "Success"
         $cert = Get-Item $certPath
+
+        # Validate private key presence (required for signing)
+        if (-not $cert.HasPrivateKey) {
+            Write-PublishLog "Certificate found but does NOT have a private key (cannot sign)." "Error"
+            Write-PublishLog "Re-import the PFX and ensure 'Mark this key as exportable' is enabled if needed." "Info"
+            throw "Certificate $normalizedThumbprint is missing a private key"
+        }
 
         Write-PublishLog "Certificate loaded successfully from Windows store" "Success"
         Write-PublishLog "Certificate subject: $($cert.Subject)" "Info"

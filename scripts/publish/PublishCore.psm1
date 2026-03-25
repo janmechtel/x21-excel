@@ -48,100 +48,28 @@ function Get-EnvironmentConfig {
         [string]$Environment
     )
 
-    # Try to load from JSON config file first
+    # Single source of truth: JSON config
     $configPath = Join-Path $PSScriptRoot "..\config\environments.json"
 
-    if (Test-Path $configPath) {
-        Write-PublishLog "Loading environment configuration from JSON: $configPath" "Info"
-        $jsonContent = Get-Content $configPath -Raw | ConvertFrom-Json
-
-        # Check if the environment exists in JSON
-        if ($jsonContent.PSObject.Properties.Name -contains $Environment) {
-            # Convert PSCustomObject to Hashtable for consistency
-            $config = @{}
-            $jsonContent.$Environment.PSObject.Properties | ForEach-Object {
-                $config[$_.Name] = $_.Value
-            }
-
-            Write-PublishLog "Loaded configuration for $Environment from JSON" "Info"
-            return $config
-        } else {
-            Write-PublishLog "Environment $Environment not found in JSON, falling back to legacy config" "Warning"
-        }
-    } else {
-        Write-PublishLog "JSON config not found at $configPath, using legacy configuration" "Info"
+    if (-not (Test-Path $configPath)) {
+        throw "Environment config not found at: $configPath"
     }
 
-    # Fallback to legacy hashtable configuration
-    $EnvironmentConfigs = @{
-        Dev = @{
-            Configuration = "Release"
-            PublishDir = ".\publish\dev\"
-            PublishUrl = ".\publish\dev\"
-            UpdateUrl = ".\publish\dev\"
-            SupportUrl = "https://kontext21.com/excel"
-            AutoIncrementRevision = $true
-            ManifestCertificateThumbprint = "7c8b744a56c51d5d99f74865c1bfaa3d6edd9dd3" # pragma: allowlist secret
-            RequiredBranch = "*"
-            SkipGitOperations = $true
-            SkipUpload = $true
-        }
-        Internal = @{
-            Configuration = "Release"
-            PublishDir = ".\publish\internal\"
-            PublishUrl = "https://dl.kontext21.com/internal/"
-            InstallUrl = "https://dl.kontext21.com/internal/"
-            UpdateUrl = "https://dl.kontext21.com/internal/"
-            SupportUrl = "https://kontext21.com/excel"
-            AutoIncrementRevision = $true
-            ManifestCertificateThumbprint = "2fedae05b4c33f4ce548488017ce7055bf6de41b" # pragma: allowlist secret
-            RcloneBucket = "x21/internal"
-            RequiredBranch = "*"
-        }
-        Staging = @{
-            Configuration = "Release"
-            PublishDir = ".\publish\staging\"
-            PublishUrl = "https://dl.kontext21.com/staging/"
-            InstallUrl = "https://dl.kontext21.com/staging/"
-            UpdateUrl = "https://dl.kontext21.com/staging/"
-            SupportUrl = "https://kontext21.com/excel/"
-            AutoIncrementRevision = $false
-            ManifestCertificateThumbprint = "2fedae05b4c33f4ce548488017ce7055bf6de41b" # pragma: allowlist secret
-            RcloneBucket = "x21/staging"
-            RequiredBranch = "staging"
-        }
-        Production = @{
-            Configuration = "Release"
-            PublishDir = ".\publish\production\"
-            PublishUrl = "https://dl.kontext21.com/"
-            InstallUrl = "https://dl.kontext21.com/"
-            UpdateUrl = "https://dl.kontext21.com/"
-            SupportUrl = "https://kontext21.com/excel"
-            AutoIncrementRevision = $false
-            ManifestCertificateThumbprint = "2fedae05b4c33f4ce548488017ce7055bf6de41b" # pragma: allowlist secret
-            RcloneBucket = "x21"
-            RequiredBranch = "production"
-        }
-        ProductionLocal = @{
-            ClearBeforeBuild = $true
-            RequiredBranch = "*"
-            Configuration = "Release"
-            PublishDir = "C:\x21\"
-            PublishUrl = "C:\x21\"
-            UpdateUrl = "C:\x21\"
-            SupportUrl = "https://kontext21.com/excel"
-            AutoIncrementRevision = $false
-            ManifestCertificateThumbprint = "2fedae05b4c33f4ce548488017ce7055bf6de41b" # pragma: allowlist secret
-            CreateZip = $true
-            RcloneBucket = "x21/local"
-        }
+    Write-PublishLog "Loading environment configuration from JSON: $configPath" "Info"
+    $jsonContent = Get-Content $configPath -Raw | ConvertFrom-Json
+
+    if (-not ($jsonContent.PSObject.Properties.Name -contains $Environment)) {
+        $available = ($jsonContent.PSObject.Properties.Name | Sort-Object) -join ", "
+        throw "Environment '$Environment' not found in $configPath. Available: $available"
     }
 
-    $config = $EnvironmentConfigs[$Environment]
-    if (-not $config) {
-        throw "Invalid environment: $Environment"
+    # Convert PSCustomObject to Hashtable for consistency
+    $config = @{}
+    $jsonContent.$Environment.PSObject.Properties | ForEach-Object {
+        $config[$_.Name] = $_.Value
     }
 
+    Write-PublishLog "Loaded configuration for $Environment from JSON" "Info"
     return $config
 }
 

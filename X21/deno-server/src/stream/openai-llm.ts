@@ -880,7 +880,7 @@ export async function streamNativeOpenAIResponseToWebSocket(
       stack: error.stack?.substring(0, 500),
       troubleshooting: {
         likelyIssue:
-          "The endpoint https://api.aihub.nonprod.gwc.azure.wts.internal might not support the Responses API path (/openai/v1/responses)",
+          "The endpoint might not support the Responses API path (/openai/v1/responses)",
         checkEndpoint:
           "Verify this is the correct endpoint URL and that it's accessible from your network",
         checkPath:
@@ -888,7 +888,7 @@ export async function streamNativeOpenAIResponseToWebSocket(
         checkApiKey:
           "Verify API key format and that it's valid for this endpoint",
         checkNetwork:
-          "Check if VPN or network access is required for internal endpoints (.wts.internal)",
+          "Check if VPN or network access is required for internal endpoints (.internal)",
         checkApiVersion:
           "The API might require a specific api-version query parameter",
         alternativeApproach:

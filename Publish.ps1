@@ -68,6 +68,9 @@ try {
     }
 
     Write-PublishLog "Environment: $Environment" "Info"
+    if ($envConfig.ManifestCertificateThumbprint) {
+        Write-PublishLog "Config ManifestCertificateThumbprint (from env config): $($envConfig.ManifestCertificateThumbprint)" "Info"
+    }
 
     $Configuration = $envConfig.Configuration
     Write-PublishLog "Configuration: $Configuration" "Info"
@@ -132,7 +135,30 @@ try {
     # Add certificate thumbprint to publish properties if available
     if ($envConfig.ManifestCertificateThumbprint) {
         $publishProperties["ManifestCertificateThumbprint"] = $envConfig.ManifestCertificateThumbprint
+        # Avoid csproj-level ManifestKeyFile interfering with thumbprint-based signing.
+        # When MSBuild sees ManifestKeyFile it may try to use it, leading to signing errors.
+        $publishProperties["ManifestKeyFile"] = ""
         Write-PublishLog "Including certificate thumbprint in ClickOnce publish: $($envConfig.ManifestCertificateThumbprint)" "Info"
+
+        # Proactively verify the cert exists locally so MSBuild signing doesn't fail late with MSB3482.
+        # Note: MSBuild/ClickOnce may use either CurrentUser\My or LocalMachine\My depending on how the cert was installed.
+        Write-PublishLog "Pre-flight: verifying ClickOnce signing certificate is available before MSBuild publish..." "Info"
+        try {
+            $cert = Get-SigningCertificate -Thumbprint $envConfig.ManifestCertificateThumbprint
+            Write-PublishLog "Pre-flight: signing cert OK. Subject='$($cert.Subject)'; Store=CurrentUser\\My; Thumbprint=$($cert.Thumbprint)" "Success"
+        } catch {
+            # Fallback: also check LocalMachine\My to provide better guidance.
+            $tp = ($envConfig.ManifestCertificateThumbprint -replace "\s", "").ToUpperInvariant()
+            $lmPath = "Cert:\\LocalMachine\\My\\$tp"
+            if (Test-Path $lmPath) {
+                Write-PublishLog "Certificate is installed in LocalMachine\\My but not in CurrentUser\\My." "Error"
+                Write-PublishLog "MSBuild signing in your context likely expects CurrentUser\\My." "Error"
+                Write-PublishLog "Fix: re-import the PFX for the CURRENT USER (Personal store), or export+import from LocalMachine to CurrentUser." "Info"
+            }
+
+            Write-PublishLog "Pre-flight certificate check FAILED. Aborting publish before MSBuild." "Error"
+            exit 1
+        }
     }
 
     Publish-ClickOnce -MSBuildPath $msbuildPath -Configuration $Configuration -Properties $publishProperties -VerboseOutput:$VerboseOutput
