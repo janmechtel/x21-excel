@@ -228,9 +228,13 @@ try {
 
     # Construct and display download URL
     if ($envConfig.CreateZip -and $zipFilePath) {
-        # For ProductionLocal, show the zip file name
-        $zipFileName = Split-Path $zipFilePath -Leaf
-        $downloadUrl = "https://dl.kontext21.com/local/$zipFileName"
+        # If we didn't upload (e.g. ProductionLocal), show local file path.
+        if ($envConfig.SkipUpload) {
+            $downloadUrl = $zipFilePath
+        } else {
+            $zipFileName = Split-Path $zipFilePath -Leaf
+            $downloadUrl = "https://dl.kontext21.com/local/$zipFileName"
+        }
     } else {
         # For other environments, show setup.exe
         $downloadUrl = "$($envConfig.PublishUrl.TrimEnd('/'))/setup.exe"
