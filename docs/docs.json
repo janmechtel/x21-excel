@@ -111,6 +111,7 @@
             "group": "Deployment (IT Admin)",
             "pages": [
               "deployment/installation-methods",
+              "deployment/local-installation",
               "deployment/process-lifecycle",
               "deployment/data-storage-locations"
             ]

@@ -1,0 +1,64 @@
+---
+title: "Local (Offline) Installation"
+description: "Install X21 from a local ZIP archive — no internet required after download."
+---
+
+## Steps
+
+1. Obtain a ZIP archive for example
+
+   ```
+   http://dl.kontext21.com/local/x21-setup-v1.8.0.0.zip
+   ```
+
+2. Extract the archive to `C:\` — it will unpack into `C:\x21`.
+
+3. Run the setup executable. Windows may show a SmartScreen warning — click **More info** and then **Run anyway**.
+
+   ![SmartScreen — More info / Don't run](/images/install_security_warning.png)
+
+   ![Run anyway](/images/install_run_anyway.png)
+
+4. If the installer warns that the certificate is missing or untrusted, proceed to install the certificate manually (see below).
+
+   ![Certificate missing warning](/images/install_no_cert_warning.png)
+
+---
+
+## Installing the Certificate
+
+The add-in is signed with a code-signing certificate. If Windows does not already trust it must be installed manually. Obtain the certificate file (.pfx) from the person who signed the installer.
+
+<Steps>
+  <Step title="Double-click the .pfx file">
+    Double-click the `.pfx` certificate file. When prompted, select **Local Machine** (not Current User) and click **Next**.
+
+    ![Install cert — Local Computer, not Current User](/images/install_cert_local_computer.png)
+
+  </Step>
+
+  <Step title="Proceed through the wizard">
+    Click **Next** to continue.
+
+    ![Certificate import — Next](/images/install_cert_next.png)
+
+  </Step>
+
+  <Step title="Select the certificate store">
+    Choose **Place all certificates in the following store**, then click **Browse**.
+
+    ![Select store — Browse](/images/install_cert_store_browse.png)
+
+  </Step>
+
+  <Step title="Add to Trusted Root and Trusted Publishers">
+    Import the certificate into both **Trusted Root Certification Authorities** and **Trusted Publishers**.
+
+    ![Trusted Root Certification Authorities and Trusted Publishers](/images/install_cert_trusted_stores.png)
+
+  </Step>
+</Steps>
+
+Once the certificate is trusted, run the setup executable again to complete the installation.
+
+For updates extract the .zip into the C:\ location and restart Excel
