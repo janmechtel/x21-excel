@@ -43,8 +43,8 @@
     "ManifestCertificateThumbprint": "9142057d420993f7e2dd44838b453a51531f8a29",
     "PublishDir": "C:\\x21\\",
     "PublishUrl": "C:\\x21\\",
-    "RcloneBucket": "x21/local",
     "RequiredBranch": "*",
+    "SkipUpload": true,
     "SupportUrl": "https://github.com/janmechtel/x21-excel",
     "UpdateUrl": "C:\\x21\\"
   },
