@@ -136,3 +136,5 @@ ha.pem
 sample-ca-bundle.pem
 
 *.exe.tmp*
+*.pfx
+ideas.md
