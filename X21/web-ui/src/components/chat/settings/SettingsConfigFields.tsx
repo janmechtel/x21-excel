@@ -83,11 +83,15 @@ interface AzureConfigFieldsProps {
   deploymentName: string;
   model: string;
   reasoningEffort: string;
+  caBundlePath: string;
   onEndpointChange: (value: string) => void;
   onApiKeyChange: (value: string) => void;
   onDeploymentNameChange: (value: string) => void;
   onModelChange: (value: string) => void;
   onReasoningEffortChange: (value: string) => void;
+  onCaBundlePathChange: (value: string) => void;
+  onPickCaBundle: () => void;
+  onClearCaBundle: () => void;
   disabled: boolean;
 }
 
@@ -97,11 +101,15 @@ export const AzureConfigFields = ({
   deploymentName,
   model,
   reasoningEffort,
+  caBundlePath,
   onEndpointChange,
   onApiKeyChange,
   onDeploymentNameChange,
   onModelChange,
   onReasoningEffortChange,
+  onCaBundlePathChange,
+  onPickCaBundle,
+  onClearCaBundle,
   disabled,
 }: AzureConfigFieldsProps) => (
   <div className="space-y-4">
@@ -185,6 +193,42 @@ export const AzureConfigFields = ({
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
+    </FormField>
+
+    <FormField
+      id="azureCaBundlePath"
+      label="CA Bundle (PEM) File (optional)"
+      tooltip="Optional CA bundle for TLS verification (useful for corporate proxies or TLS-intercepting endpoints). Select a .pem file."
+    >
+      <div className="flex gap-2">
+        <input
+          id="azureCaBundlePath"
+          type="text"
+          value={caBundlePath}
+          onChange={(e) => onCaBundlePathChange(e.target.value)}
+          placeholder="C:\\path\\to\\bundle.pem"
+          className={getInputClassName(disabled, "flex-1")}
+          disabled={disabled}
+        />
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onPickCaBundle}
+          disabled={disabled}
+        >
+          Browse
+        </Button>
+        {caBundlePath ? (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onClearCaBundle}
+            disabled={disabled}
+          >
+            Clear
+          </Button>
+        ) : null}
+      </div>
     </FormField>
   </div>
 );
