@@ -158,6 +158,9 @@ function Publish-ClickOnce {
     Write-PublishLog "NuGet restore completed successfully." "Success"
 
     # Prepare MSBuild properties for publishing
+    # IMPORTANT: We publish the *project* (X21.csproj) directly, not the solution.
+    # In the csproj the platform is "AnyCPU" (no space). Using "Any CPU" causes:
+    # "BaseOutputPath/OutputPath property is not set".
     $publishProperties = @{
         "Platform" = "AnyCPU"
     }

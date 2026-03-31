@@ -32,6 +32,7 @@ interface ConfigSnapshot {
     deploymentName: string;
     model: string;
     reasoningEffort: string;
+    caBundlePath: string;
   };
   anthropic: {
     baseUrl: string;
@@ -49,6 +50,7 @@ const areSnapshotsEqual = (left: ConfigSnapshot, right: ConfigSnapshot) =>
   left.azure.deploymentName === right.azure.deploymentName &&
   left.azure.model === right.azure.model &&
   left.azure.reasoningEffort === right.azure.reasoningEffort &&
+  left.azure.caBundlePath === right.azure.caBundlePath &&
   left.anthropic.baseUrl === right.anthropic.baseUrl &&
   left.anthropic.apiKey === right.anthropic.apiKey &&
   left.anthropic.caBundlePath === right.anthropic.caBundlePath &&
@@ -84,6 +86,7 @@ export function SettingsConfigDialog({
   const [deploymentName, setDeploymentName] = useState("gpt-5.2");
   const [model, setModel] = useState("gpt-5.2");
   const [reasoningEffort, setReasoningEffort] = useState("medium");
+  const [azureCaBundlePath, setAzureCaBundlePath] = useState("");
   const [anthropicApiKey, setAnthropicApiKey] = useState("");
   const [anthropicBaseUrl, setAnthropicBaseUrl] = useState("");
   const [anthropicCaBundlePath, setAnthropicCaBundlePath] = useState("");
@@ -110,6 +113,7 @@ export function SettingsConfigDialog({
       deploymentName,
       model,
       reasoningEffort,
+      caBundlePath: azureCaBundlePath,
     },
     anthropic: {
       baseUrl: anthropicBaseUrl,
@@ -184,6 +188,7 @@ export function SettingsConfigDialog({
           azureConfig.openaiReasoningEffort || "medium"
         ).toLowerCase(),
         isActive: !!azureConfig.isActive,
+        caBundlePath: azureConfig.anthropicCaBundlePath || "",
       };
 
       const nextAnthropic = {
@@ -208,6 +213,7 @@ export function SettingsConfigDialog({
       setDeploymentName(nextAzure.deploymentName);
       setModel(nextAzure.model);
       setReasoningEffort(nextAzure.reasoningEffort);
+      setAzureCaBundlePath(nextAzure.caBundlePath);
       setAnthropicApiKey(nextAnthropic.apiKey);
       setAnthropicBaseUrl(nextAnthropic.baseUrl);
       setAnthropicCaBundlePath(nextAnthropic.caBundlePath);
@@ -222,6 +228,7 @@ export function SettingsConfigDialog({
           deploymentName: nextAzure.deploymentName,
           model: nextAzure.model,
           reasoningEffort: nextAzure.reasoningEffort,
+          caBundlePath: nextAzure.caBundlePath,
         },
         anthropic: {
           baseUrl: nextAnthropic.baseUrl,
@@ -251,6 +258,7 @@ export function SettingsConfigDialog({
       deploymentName: string;
       model: string;
       reasoningEffort: string;
+      azureCaBundlePath: string;
       anthropicApiKey: string;
       anthropicBaseUrl: string;
       anthropicCaBundlePath: string;
@@ -263,6 +271,7 @@ export function SettingsConfigDialog({
     const nextDeploymentName = overrides.deploymentName ?? deploymentName;
     const nextModel = overrides.model ?? model;
     const nextReasoningEffort = overrides.reasoningEffort ?? reasoningEffort;
+    const nextAzureCaBundlePath = (overrides.azureCaBundlePath ?? azureCaBundlePath).trim() || null;
     const nextAnthropicApiKey = overrides.anthropicApiKey ?? anthropicApiKey;
     const nextAnthropicBaseUrl = overrides.anthropicBaseUrl ?? anthropicBaseUrl;
     const nextAnthropicCaBundlePath =
@@ -291,6 +300,7 @@ export function SettingsConfigDialog({
             azureOpenaiDeploymentName: nextDeploymentName,
             azureOpenaiModel: nextModel,
             openaiReasoningEffort: nextReasoningEffort,
+            anthropicCaBundlePath: nextAzureCaBundlePath,
             isActive: nextIsActive,
           }
         : {
@@ -370,6 +380,25 @@ export function SettingsConfigDialog({
       });
       if (picked) {
         setAnthropicCaBundlePath(picked);
+      }
+    } catch (error: any) {
+      console.warn("Failed to pick CA bundle:", error);
+      setMessage({
+        type: "error",
+        text: "Failed to pick CA bundle file",
+      });
+    }
+  };
+
+  const handlePickAzureCaBundle = async () => {
+    try {
+      const picked = await webViewBridge.pickFile({
+        extensions: [".pem", ".crt", ".cer"],
+        title: "Select CA bundle",
+        filterLabel: "CA bundle files",
+      });
+      if (picked) {
+        setAzureCaBundlePath(picked);
       }
     } catch (error: any) {
       console.warn("Failed to pick CA bundle:", error);
@@ -536,11 +565,15 @@ export function SettingsConfigDialog({
                         deploymentName={deploymentName}
                         model={model}
                         reasoningEffort={reasoningEffort}
+                        caBundlePath={azureCaBundlePath}
                         onEndpointChange={setEndpoint}
                         onApiKeyChange={setApiKey}
                         onDeploymentNameChange={setDeploymentName}
                         onModelChange={setModel}
                         onReasoningEffortChange={setReasoningEffort}
+                        onCaBundlePathChange={setAzureCaBundlePath}
+                        onPickCaBundle={handlePickAzureCaBundle}
+                        onClearCaBundle={() => setAzureCaBundlePath("")}
                         disabled={saving || loading}
                       />
                     ) : (
