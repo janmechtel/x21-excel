@@ -44,7 +44,7 @@ function Test-ExecutionContext {
 function Get-EnvironmentConfig {
     param(
         [Parameter(Mandatory=$true)]
-        [ValidateSet("Dev", "Internal", "Staging", "Production", "ProductionLocal")]
+        [ValidateSet("Dev", "Internal", "Staging", "Production", "ProductionLocal", "NetworkShare")]
         [string]$Environment
     )
 
