@@ -3,7 +3,16 @@ title: "Local (Offline) Installation"
 description: "Install X21 from a local ZIP archive — no internet required after download."
 ---
 
-## Steps
+## Overview
+
+Uninstall any previous installation of X21 before proceeding.
+
+1. Double click .pfx certificate into (repeat this 2x)
+   - "Trusted Root Certification Authorities"
+   - "Trusted Publishers" for the Local Computer (not Current User).
+2. Run the setup executable from the extracted ZIP archive.
+
+## Installation Steps
 
 1. Obtain a ZIP archive for example
 
@@ -18,6 +27,8 @@ description: "Install X21 from a local ZIP archive — no internet required afte
    ![SmartScreen — More info / Don't run](/images/install_security_warning.png)
 
    ![Run anyway](/images/install_run_anyway.png)
+
+**Troubleshooting**: If you don't see the "run anyway" option you want to "unblock" the setup.exe by right-clicking the file, selecting "Properties", and then clicking "Unblock" at the bottom of the General tab.
 
 4. If the installer warns that the certificate is missing or untrusted, proceed to install the certificate manually (see below).
 
