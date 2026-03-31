@@ -21,6 +21,7 @@ export interface AzureOpenAIConfig {
   reasoningEffort: ReasoningEffort;
   isActive: boolean;
   apiVersion?: string;
+  caBundlePath?: string;
 }
 
 export interface AnthropicConfig {
@@ -84,6 +85,7 @@ export function getAzureOpenAIConfig(): AzureOpenAIConfig | null {
       reasoningEffort,
       isActive: true,
       apiVersion: "2024-08-01-preview", // Default API version for Responses API
+      caBundlePath: dbConfig.anthropicCaBundlePath?.trim() || undefined,
     };
   }
 

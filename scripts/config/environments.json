@@ -60,4 +60,17 @@
     "SupportUrl": "https://kontext21.com/excel/",
     "UpdateUrl": "https://dl.kontext21.com/staging/"
   }
+  ,"NetworkShare": {
+    "AutoIncrementRevision": true,
+    "Configuration": "Release",
+    "ManifestCertificateThumbprint": "9142057d420993f7e2dd44838b453a51531f8a29",
+    "PublishDir":  ".\\publish\\networkshare\\",
+    "PublishUrl":  "\\\\server\\x21\\",
+    "InstallUrl":  "\\\\server\\x21\\",
+    "UpdateUrl":   "\\\\server\\x21\\",
+    "RequiredBranch": "*",
+    "SkipGitOperations": true,
+    "SkipUpload": true,
+    "SupportUrl": "https://github.com/janmechtel/x21-excel"
+  }
 }

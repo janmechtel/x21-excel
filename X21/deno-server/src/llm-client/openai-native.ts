@@ -4,6 +4,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getChatConversationSystemMessage } from "../prompts/chat.ts";
 import { createLogger } from "../utils/logger.ts";
 import { getAzureOpenAIConfig } from "./provider.ts";
+import { getFetchWithCaBundle } from "./ca-bundle.ts";
 import { ClaudeContentTypes, ContentBlockTypes } from "../types/index.ts";
 
 const logger = createLogger("OpenAINative");
@@ -137,6 +138,8 @@ export function createNativeOpenAIClient(): {
     );
   }
 
+  const fetchOverride = getFetchWithCaBundle(config.caBundlePath);
+
   // Try Responses API path first (v1 endpoint)
   const apiVersion = config.apiVersion || "2024-08-01-preview";
   const baseURL = `${config.endpoint}/openai/v1/`;
@@ -148,6 +151,11 @@ export function createNativeOpenAIClient(): {
       "api-key": config.apiKey,
       "api-version": apiVersion,
     },
+    // OpenAI SDK's Core.Fetch type conflicts with Deno's typeof fetch due to
+    // node-fetch's URLLike in RequestInfo. The cast is safe: at runtime Deno's
+    // fetch handles all valid RequestInfo values the SDK will ever pass.
+    // deno-lint-ignore no-explicit-any
+    ...(fetchOverride ? { fetch: fetchOverride as any } : {}),
   };
 
   logger.info(
@@ -162,6 +170,7 @@ export function createNativeOpenAIClient(): {
       modelMatchesDeployment: config.model === config.deploymentName,
       reasoningEffort: config.reasoningEffort,
       hasApiKey: !!config.apiKey,
+      hasCaBundlePath: !!config.caBundlePath,
       apiKeyLength: config.apiKey.length,
       apiKeyPrefix: config.apiKey.substring(0, 4) + "...",
       headers: {

@@ -4,7 +4,7 @@
 
 param(
     [Parameter(Mandatory=$false)]
-    [ValidateSet("Dev", "Internal", "Staging", "Production", "ProductionLocal")]
+    [ValidateSet("Dev", "Internal", "Staging", "Production", "ProductionLocal", "NetworkShare")]
     [string]$Environment = "Dev",
 
     [Parameter(Mandatory=$false)]
