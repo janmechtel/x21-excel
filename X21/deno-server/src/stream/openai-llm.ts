@@ -213,7 +213,7 @@ export async function streamNativeOpenAIResponseToWebSocket(
     // Log the actual API call details
     logger.info("🔌 Attempting connection to Azure OpenAI:", {
       requestId,
-      endpoint: "[will use client baseURL]",
+      baseUrl: "[will use client baseURL]",
       model: azureModel,
       streamEnabled: true,
     });

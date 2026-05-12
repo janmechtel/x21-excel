@@ -142,7 +142,8 @@ export function createNativeOpenAIClient(): {
 
   // Try Responses API path first (v1 endpoint)
   const apiVersion = config.apiVersion || "2024-08-01-preview";
-  const baseURL = `${config.endpoint}/openai/v1/`;
+  // config.baseUrl is normalized to always include the trailing slash.
+  const baseURL = config.baseUrl;
 
   const clientConfig = {
     apiKey: config.apiKey,
@@ -161,7 +162,7 @@ export function createNativeOpenAIClient(): {
   logger.info(
     "✓ Creating Azure OpenAI Responses API client:",
     {
-      endpoint: config.endpoint,
+      baseUrl: config.baseUrl,
       baseURL: baseURL,
       apiVersion: apiVersion,
       fullResponsesPath: `${baseURL}responses`,
@@ -193,7 +194,7 @@ export function createNativeOpenAIClient(): {
   } catch (error: any) {
     logger.error("❌ Failed to create Azure OpenAI client", {
       error: error.message,
-      endpoint: config.endpoint,
+      baseUrl: config.baseUrl,
       baseURL: baseURL,
     });
     throw error;
