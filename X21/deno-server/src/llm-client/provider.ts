@@ -74,7 +74,9 @@ export function getAzureOpenAIConfig(): AzureOpenAIConfig | null {
       apiKeyLength: dbConfig.azureOpenaiKey?.length || 0,
       apiKeyPrefix: dbConfig.azureOpenaiKey?.substring(0, 4) + "...",
       isActive: dbConfig.isActive,
-      fullBaseUrl: `${cleanEndpoint}/openai/v1/`,
+      // Note: the OpenAI SDK expects baseURL to be the v1 root. It will append
+      // "/responses" automatically.
+      fullBaseUrl: `${cleanEndpoint}/`,
     });
 
     return {
@@ -319,7 +321,7 @@ export function reloadLLMConfig(): void {
         endpoint: llmConfig.endpoint,
         deploymentName: azureConfig.deploymentName,
         model: llmConfig.model,
-        modelSource: azureConfig.azureOpenaiModel
+        modelSource: dbConfig.azureOpenaiModel
           ? "explicit"
           : "from deployment",
         reasoningEffort: azureConfig.reasoningEffort,

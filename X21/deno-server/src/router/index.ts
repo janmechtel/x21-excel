@@ -1124,23 +1124,47 @@ export class Router {
           }
 
           if (provider === "azure_openai") {
-            // Validate Azure OpenAI endpoint URL format
-            if (azureOpenaiEndpoint) {
-              try {
-                const url = new URL(azureOpenaiEndpoint);
-                if (!url.protocol.startsWith("http")) {
+            // Normalize Azure OpenAI base URL.
+            // We allow 2 input styles:
+            // 1) "baseURL" for OpenAI SDK:   .../openai/v1/        (preferred)
+            // 2) "fullURL" incl. /responses: .../responses        (will be normalized to baseURL)
+            //
+            // Motivation: Some gateways already expose the v1 endpoint at
+            // .../openai-v1/v1/ (WITHOUT an extra /openai/v1 prefix). If we
+            // force a /v1 suffix here, the OpenAI SDK will append /responses
+            // and we end up with duplicated segments.
+            let normalizedAzureBaseUrl: string | null = null;
+
+            if (typeof azureOpenaiEndpoint === "string") {
+              const trimmed = azureOpenaiEndpoint.trim();
+              if (trimmed) {
+                // Validate URL
+                try {
+                  const url = new URL(trimmed);
+                  if (!url.protocol.startsWith("http")) {
+                    return ErrorHandler.createResponse(
+                      new Error(
+                        "Azure OpenAI base URL must be a valid HTTP(S) URL",
+                      ),
+                      400,
+                    );
+                  }
+                } catch {
                   return ErrorHandler.createResponse(
-                    new Error(
-                      "Azure OpenAI endpoint must be a valid HTTP(S) URL",
-                    ),
+                    new Error("Invalid Azure OpenAI base URL format"),
                     400,
                   );
                 }
-              } catch {
-                return ErrorHandler.createResponse(
-                  new Error("Invalid Azure OpenAI endpoint URL format"),
-                  400,
-                );
+
+                const noTrailing = trimmed.replace(/\/+$/, "");
+
+                // If user pasted the full Responses URL, normalize back to baseURL
+                // because the OpenAI SDK will add "/responses" itself.
+                if (noTrailing.endsWith("/responses")) {
+                  normalizedAzureBaseUrl = `${noTrailing.slice(0, -"/responses".length)}/`;
+                } else {
+                  normalizedAzureBaseUrl = `${noTrailing}/`;
+                }
               }
             }
 
@@ -1199,7 +1223,7 @@ export class Router {
 
             logger.info("💾 Saving Azure OpenAI configuration:", {
               provider,
-              endpoint: azureOpenaiEndpoint || "[not set]",
+              baseUrl: normalizedAzureBaseUrl || "[not set]",
               deploymentName: azureOpenaiDeploymentName || "[not set]",
               model: azureOpenaiModel || "[not set]",
               modelMatchesDeployment:
@@ -1212,7 +1236,7 @@ export class Router {
 
             const id = upsertLlmKeysConfigByProvider({
               provider,
-              azureOpenaiEndpoint: azureOpenaiEndpoint || null,
+              azureOpenaiEndpoint: normalizedAzureBaseUrl || null,
               azureOpenaiKey: azureOpenaiKey || null,
               azureOpenaiDeploymentName: trimmedDeploymentName || null,
               azureOpenaiModel: azureOpenaiModel || null,

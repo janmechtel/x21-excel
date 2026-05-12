@@ -115,15 +115,25 @@ export const AzureConfigFields = ({
   <div className="space-y-4">
     <FormField
       id="endpoint"
-      label="Azure OpenAI Endpoint"
-      tooltip="Base URL of your Azure OpenAI resource (no /openai/... path). Example: https://your-resource.openai.azure.com. Note: This app uses the Responses API (/openai/v1/responses) which requires GPT-5.x models and may not be available on all Azure endpoints."
+      label="Azure OpenAI Base URL"
+      tooltip={`OpenAI-compatible base URL (MUST end with /v1/; MUST NOT include /responses).
+
+You can enter it with or without the final trailing slash — it will be normalized automatically.
+
+Variant A (standard Azure OpenAI):
+  https://your-resource.openai.azure.com/openai/v1/
+
+Variant B (custom gateway like aihub):
+  https://api.aihub.nonprod.gwc.azure.wts.internal/openai-v1/v1/
+
+The client will call: <baseUrl>responses`}
     >
       <input
         id="endpoint"
         type="text"
         value={endpoint}
         onChange={(e) => onEndpointChange(e.target.value)}
-        placeholder="https://your-resource.openai.azure.com/"
+        placeholder="https://your-resource.openai.azure.com/openai/v1/"
         className={getInputClassName(disabled)}
         disabled={disabled}
       />
