@@ -1221,6 +1221,42 @@ export class Router {
               );
             }
 
+            // Validate and normalize Azure CA bundle path
+            const trimmedAzureCaBundlePath =
+              typeof anthropicCaBundlePath === "string"
+                ? anthropicCaBundlePath.trim()
+                : "";
+
+            if (trimmedAzureCaBundlePath) {
+              if (!/\.(pem|crt|cer)$/i.test(trimmedAzureCaBundlePath)) {
+                return ErrorHandler.createResponse(
+                  new Error(
+                    "CA bundle must be a .pem, .crt, or .cer file",
+                  ),
+                  400,
+                );
+              }
+
+              try {
+                const info = await Deno.stat(trimmedAzureCaBundlePath);
+                if (!info.isFile) {
+                  return ErrorHandler.createResponse(
+                    new Error(
+                      "CA bundle path must point to a file",
+                    ),
+                    400,
+                  );
+                }
+              } catch (_error) {
+                return ErrorHandler.createResponse(
+                  new Error(
+                    "CA bundle file was not found or is not readable",
+                  ),
+                  400,
+                );
+              }
+            }
+
             logger.info("💾 Saving Azure OpenAI configuration:", {
               provider,
               baseUrl: normalizedAzureBaseUrl || "[not set]",
@@ -1231,6 +1267,7 @@ export class Router {
               hasApiKey: !!azureOpenaiKey,
               apiKeyLength: azureOpenaiKey?.length || 0,
               reasoningEffort: openaiReasoningEffort || "[not set]",
+              hasCaBundlePath: !!trimmedAzureCaBundlePath,
               isActive: isActive !== false,
             });
 
@@ -1244,7 +1281,7 @@ export class Router {
               anthropicApiKey: null,
               anthropicModel: null,
               anthropicBaseUrl: null,
-              anthropicCaBundlePath: null,
+              anthropicCaBundlePath: trimmedAzureCaBundlePath || null,
               isActive: isActive !== false,
             });
 
