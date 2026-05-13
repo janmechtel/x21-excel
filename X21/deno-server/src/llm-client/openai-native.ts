@@ -142,7 +142,7 @@ export function createNativeOpenAIClient(): {
 
   // Try Responses API path first (v1 endpoint)
   const apiVersion = config.apiVersion || "2024-08-01-preview";
-  // config.baseUrl is normalized to always include the trailing slash.
+  // config.baseUrl is normalized with trailing slash. SDK appends "responses".
   const baseURL = config.baseUrl;
 
   const clientConfig = {
@@ -163,7 +163,6 @@ export function createNativeOpenAIClient(): {
     "✓ Creating Azure OpenAI Responses API client:",
     {
       baseUrl: config.baseUrl,
-      baseURL: baseURL,
       apiVersion: apiVersion,
       fullResponsesPath: `${baseURL}responses`,
       deploymentName: config.deploymentName,
@@ -195,7 +194,6 @@ export function createNativeOpenAIClient(): {
     logger.error("❌ Failed to create Azure OpenAI client", {
       error: error.message,
       baseUrl: config.baseUrl,
-      baseURL: baseURL,
     });
     throw error;
   }

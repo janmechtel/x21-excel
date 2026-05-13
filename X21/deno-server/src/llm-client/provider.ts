@@ -15,7 +15,8 @@ type ReasoningEffort = "low" | "medium" | "high";
 
 export interface AzureOpenAIConfig {
   apiKey: string;
-  endpoint: string;
+  /** SDK-ready base URL with trailing slash. The OpenAI SDK appends "/responses" to this. */
+  baseUrl: string;
   deploymentName: string;
   model: string;
   reasoningEffort: ReasoningEffort;
@@ -58,12 +59,14 @@ export function getAzureOpenAIConfig(): AzureOpenAIConfig | null {
     const reasoningEffort = normalizeReasoningEffort(
       dbConfig.openaiReasoningEffort,
     );
-    const cleanEndpoint = dbConfig.azureOpenaiEndpoint.replace(/\/+$/, "");
+    // Normalize to trailing-slash form once, so downstream code never has to worry about it.
+    // The DB value may or may not have a trailing slash depending on when it was saved.
+    const baseUrl = dbConfig.azureOpenaiEndpoint.replace(/\/+$/, "") + "/";
 
     logger.info("✓ Azure OpenAI config loaded from database", {
       configId: dbConfig.id,
       provider: dbConfig.provider,
-      endpoint: cleanEndpoint,
+      baseUrl,
       deploymentName: deployment,
       model: model,
       modelSource: dbConfig.azureOpenaiModel
@@ -74,14 +77,12 @@ export function getAzureOpenAIConfig(): AzureOpenAIConfig | null {
       apiKeyLength: dbConfig.azureOpenaiKey?.length || 0,
       apiKeyPrefix: dbConfig.azureOpenaiKey?.substring(0, 4) + "...",
       isActive: dbConfig.isActive,
-      // Note: the OpenAI SDK expects baseURL to be the v1 root. It will append
-      // "/responses" automatically.
-      fullBaseUrl: `${cleanEndpoint}/`,
+      sdkResponsesPath: `${baseUrl}responses`,
     });
 
     return {
       apiKey: dbConfig.azureOpenaiKey,
-      endpoint: cleanEndpoint,
+      baseUrl,
       deploymentName: deployment,
       model,
       reasoningEffort,
@@ -260,7 +261,7 @@ export function getLLMConfig(): {
       logger.debug("🔍 Retrieved Azure OpenAI config for logging", {
         deploymentName: config.deploymentName,
         model: config.model,
-        endpoint: config.endpoint,
+        baseUrl: config.baseUrl,
         reasoningEffort: config.reasoningEffort,
       });
 
@@ -268,7 +269,7 @@ export function getLLMConfig(): {
         provider,
         model: config.model,
         apiKey: maskApiKey(config.apiKey),
-        endpoint: config.endpoint,
+        endpoint: config.baseUrl,
       };
     }
 
@@ -318,12 +319,9 @@ export function reloadLLMConfig(): void {
     if (azureConfig) {
       logger.info("✓ LLM Configuration reloaded (Azure OpenAI):", {
         provider: llmConfig.provider,
-        endpoint: llmConfig.endpoint,
+        baseUrl: azureConfig.baseUrl,
         deploymentName: azureConfig.deploymentName,
-        model: llmConfig.model,
-        modelSource: dbConfig.azureOpenaiModel
-          ? "explicit"
-          : "from deployment",
+        model: azureConfig.model,
         reasoningEffort: azureConfig.reasoningEffort,
         apiKey: llmConfig.apiKey,
         isActive: azureConfig.isActive,
