@@ -210,10 +210,20 @@ export async function streamNativeOpenAIResponseToWebSocket(
       "Connecting to Azure OpenAI...",
     );
 
-    // Log the actual API call details
+    // Log the actual API call details (sanitized)
+    const azureCfg = getAzureOpenAIConfig();
+    const sanitizedBaseUrl = azureCfg?.baseUrl;
+    const apiVersion = azureCfg?.apiVersion || "2024-08-01-preview";
+    const resolvedResponsesUrl = sanitizedBaseUrl
+      ? `${sanitizedBaseUrl}responses`
+      : undefined;
+
     logger.info("🔌 Attempting connection to Azure OpenAI:", {
       requestId,
-      baseUrl: "[will use client baseURL]",
+      baseUrl: sanitizedBaseUrl,
+      responsesUrl: resolvedResponsesUrl,
+      apiVersion,
+      deploymentName: azureCfg?.deploymentName,
       model: azureModel,
       streamEnabled: true,
     });
@@ -864,6 +874,13 @@ export async function streamNativeOpenAIResponseToWebSocket(
       throw error;
     }
 
+    const azureCfg = getAzureOpenAIConfig();
+    const sanitizedBaseUrl = azureCfg?.baseUrl;
+    const apiVersion = azureCfg?.apiVersion || "2024-08-01-preview";
+    const resolvedResponsesUrl = sanitizedBaseUrl
+      ? `${sanitizedBaseUrl}responses`
+      : undefined;
+
     logger.error("❌ Error during Azure OpenAI streaming:", {
       requestId,
       errorMessage: error.message,
@@ -873,6 +890,11 @@ export async function streamNativeOpenAIResponseToWebSocket(
       statusCode: error.status,
       model: azureModel,
       workbookName,
+      // Log the actual URL we attempted (sanitized; no secrets)
+      baseUrl: sanitizedBaseUrl,
+      responsesUrl: resolvedResponsesUrl,
+      apiVersion,
+      deploymentName: azureCfg?.deploymentName,
       // Try to extract more details from the error
       errorCause: error.cause?.message || error.cause,
       errorResponse: error.response,
