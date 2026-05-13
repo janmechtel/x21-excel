@@ -1485,11 +1485,10 @@ export class Router {
               );
             }
 
-            const baseURL = `${config.endpoint}/openai/v1/`;
+            const baseURL = config.baseUrl;
 
             logger.info("🔍 Connection test details:", {
-              endpoint: config.endpoint,
-              baseURL: baseURL,
+              baseUrl: config.baseUrl,
               fullURL: `${baseURL}responses`,
               deploymentName: config.deploymentName,
               model: config.model,
@@ -1503,8 +1502,7 @@ export class Router {
                 message:
                   "Configuration loaded. Check server logs for connection details.",
                 config: {
-                  endpoint: config.endpoint,
-                  baseURL: baseURL,
+                  baseUrl: config.baseUrl,
                   fullURL: `${baseURL}responses`,
                   deploymentName: config.deploymentName,
                   model: config.model,
