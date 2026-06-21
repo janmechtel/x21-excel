@@ -138,3 +138,10 @@ sample-ca-bundle.pem
 *.exe.tmp*
 *.pfx
 ideas.md
+
+.kontext/thread.jsonl
+.kontext/current.md
+.kontext/prompts.md
+.kontext/*_current.md
+.kontext/*_thread_ws*.jsonl
+.kontext/session_ws_map.json
